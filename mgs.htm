@@ -1,0 +1,76 @@
+@version[]
+2009-02-27	ѕерва€
+
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[Module global settings in $env:SERVER_NAME]
+$document.pagetitle[^lang[505]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[]
+^if(def ^cando[editor]){^connect[$scs]{
+	^if(def $form:module && (-f "/modules/${form:module}.p" || -f "/login/modules/${form:module}.p")){^edit1[$form:module]}{^modlist[]}
+}}{
+^die[No permission]
+}
+
+@modlist[]
+<h3>^lang[506]</h3>
+$modlst[^file:list[/modules;\.p^$]]
+^modlst.join[^file:list[/login/modules]]
+^modlst.menu{
+<a href="/login/mgs.htm?module=^file:justname[$modlst.name]">^pseudoname:find[$modlst.name]</a><br>
+}
+
+@edit1[module]
+^use[node_editor.p]
+^use[^modpath[${module}.p]]
+
+$inhopt[^table::create{param	value	color
+0	511	#FFFFFF
+1	512	#EEEEFF
+2	513 regexp(/path/)=1	#DDDDFF
+3	514	#9999FF}]	
+$document.pagetitle[^pseudoname:find[${module}.p] - $document.pagetitle <a href="/login/mgs.htm">(^lang[507])</a>]
+$ms[^process{^^${module}_settings[]}]
+$tabindex(1)
+
+^if(def $form:save){
+	$modval[^ms.menu{$mp[$ms.param]$.$mp[
+		$.value[$form:_$mp]
+		$.use[$form:use$mp]
+		$.r[$form:r$mp]
+	]}]
+	$fileset[^h2s:h2s[$modval]]
+	^fileset.save[/my/deriv/module_settings/${module}.p.mgs]
+	^msg[»зменени€ сохранены]
+}{
+$modval[^bmodval[$form:module;^ms.menu{$.[$ms.param][$.value[]]}]]
+}
+<style>
+input.modsetstr{width:450px}
+.globalset {background-color:#FFFFFF}
+</style>
+<table ^admin_tbl_design[]><form action="$uri?module=$module&save=1" method="POST">
+<tr><td><b>^lang[508]</td><td><b>^lang[509]</td><td><b>^lang[510]</td><td><b>regexp(/path/)</td></tr>
+^ms.menu{<tr>
+<td>$ms.descr</td>
+<td>^mod_set_switch[$ms.fields;$modval.[$ms.param].value]</td>
+<td><select name="use$ms.param">
+^inhopt.menu{
+	<option style="background-color:$inhopt.color"
+	value="$inhopt.param" ^if($inhopt.param eq $modval.[$ms.param].use){selected}>^lang[$inhopt.value]</option>
+}</select></td>
+<td><input type=text name="r$ms.param" value="$modval.[$ms.param].r"></td>
+</tr>}
+</table>
+<input type=submit value="—охранить изменени€">
+</form>
+Regexp(path) - ^lang[515]<br>
+^lang[516]:<br>
+^^/shop - ^lang[517] /shop...<br>
+(music|video) - сработает, если в любой позиции в адресе присутствуют music или video<br>
+tion^$ - сработает там, где адрес кончаетс€ на tion: /partition, /etc/suction, но не /actions

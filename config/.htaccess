@@ -1,0 +1,7 @@
+
+RewriteEngine off
+
+<Files ~ "\.(p|cfg|txt)$">
+Order allow,deny
+Deny from all
+</Files>

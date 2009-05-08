@@ -1,0 +1,8 @@
+@main[]
+^use[rating.p]
+$rating:rboxjsflag(1)
+
+^manage_session[]
+$voteid[^default[$user.id;^inet:aton[$env:REMOTE_ADDR]]]
+
+^rating:box[$form:objId;$voteid;^if($form:color){-1;1};$form:markId]  

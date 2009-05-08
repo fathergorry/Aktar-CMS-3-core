@@ -1,0 +1,7 @@
+column	sql_type	comment	key	form_handler	onshow	onedit	onsave	special_handler
+id	INT(9) NOT NULL AUTO_INCREMENT	ID	primary	hidden				
+gid	VARCHAR(32)	Gal ID	key	hidden				
+name	VARCHAR(64)	File name		hidden				
+picname	VARCHAR(64)	Pic name		text				
+picdesc	VARCHAR(255)	Pic desc		textarea				
+ldate	DATETIME	modified	key	hidden				

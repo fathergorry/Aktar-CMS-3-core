@@ -1,0 +1,8 @@
+column	sql_type	comment	key	form_handler	special_handler
+id	INT(8) NOT NULL AUTO_INCREMENT	id	primary	hidden
+link	VARCHAR(255) NOT NULL	Broken link	key	text
+redirect	VARCHAR(255) NOT NULL	Redirect to		text
+hits	INT(8) NOT NULL	Hits amount		hidden
+pohui	ENUM ('yes', 'no') DEFAULT 'no'	Ignore	key	checkbox
+useragent	VARCHAR(127) NOT NULL	User-agent		hidden
+referer	VARCHAR(255) NOT NULL	HTTP_REFERER		hidden

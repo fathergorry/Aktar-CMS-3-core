@@ -1,0 +1,128 @@
+@USE
+collection.p
+
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[196] in $env:SERVER_NAME]
+$document.pagetitle[^lang[196]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][tmp]
+
+^if(def ^cando[editor demo]){
+  ^typo_menu[]
+  ^if(def $form:grpfield){
+    $tmp[^grp.locate[field;$form:grpfield]]
+    ^if(def $tmp){^groupedit[$grp.field]}{
+      ^if($form:grpfield eq autoreplace){^autoreplace[]}{^die[380;Поле не разрешено к показу]}
+    }
+  }
+}{^die[^lang[305]]}
+
+^if($grpup_ok){^log[performed grouped operation on	$form:grplimit/+$form:grpnum ($form:grpfield)] $grpup_ok(0)}
+@autoreplace[]
+^if($env:REQUEST_METHOD eq POST){
+ ^if(def ^cando[$.editor(1)]){^doautoreplace[]}{^die[268]}
+}
+<form action="/login/groupedit.htm" method=post>
+^connect[$scs]{$rcount[^int:sql{SELECT COUNT(sect_key) FROM ^dtp[structure] WHERE
+path LIKE '$form:grplimit%' ^if(^form:grpnum.int(2) < 2){AND level < ^eval(^pathlevel[$form:grplimit] + ^form:grpnum.int(2) + 2)}}]}
+^if($rcount > 50){^lang[381] 50}
+^keepvalue[grpfield grplimit grpnum grpmodify]<table ^admin_tbl_design[]><tr><td>^lang[382]</td><td>^lang[383]</tr>
+^for[i](0;9){<tr><td><input type=text size=50 name="from$i"></td><td><input type=text size=50 name="to$i"></td></tr>}
+</table>
+<input type=submit value="^lang[382;Провести автозамену!]">
+@doautoreplace[][rep;rept;repp;rcn]
+^connect[$scs]{
+$rept[^table::sql{SELECT s.sect_key, s.path, se.content FROM ^dtp[structure] s LEFT JOIN ^dtp[sections] se ON s.sect_key = se.sect_key WHERE
+path LIKE '$form:grplimit%' ^if(^form:grpnum.int(2) < 2){AND level < ^eval(^pathlevel[$form:grplimit] + ^form:grpnum.int(2) + 2)}}[$.limit(50)]]
+$rep[^table::create{from	to^for[i](0;9){^if(def $form:from$i){
+$form:from$i	^content_prepare[$form:to$i]}}}]
+
+^rept.menu{
+$repp[$rept.content] ^void:sql{UPDATE ^dtp[sections] SET content = '^repp.replace[$rep]' WHERE sect_key = '$rept.sect_key'}
+$rcn[${rcn}^noser_div[, ;zpt]$rept.path]
+}
+
+}^msg[^lang[384;replaced...] ${rcn}.]^log[made autoreplacement	in $form:grplimit]
+
+@groupedit[field]
+^if(def $form:keyoption){^if(def ^cando[editor]){
+ ^grpupdate[]
+}{^die[305]}}
+<form action="/login/groupedit.htm" method=post>
+^keepvalue[grpfield grplimit grpnum grpmodify]
+^connect[$scs]{
+$eftree[^table::sql{SELECT s.sect_key, s.path, s.menutitle, s.level, $field FROM ^dtp[structure] s LEFT JOIN ^dtp[sections] se ON s.sect_key = se.sect_key WHERE
+  ^if(def $form:eftree){^eft[]}{path LIKE '$form:grplimit%' ^if(^form:grpnum.int(2) < 2){AND level < ^eval(^pathlevel[$form:grplimit] + ^form:grpnum.int(2) + 2)}} ORDER BY path
+}]
+}
+$ef
+
+$vp[^pathlevel[$form:grplimit]]
+<table border=0><tr><td><b>^lang[385;Section]</b></td><td><b>$grpf.descr</b></td></tr>
+<input type=hidden name=keyoption value="^eftree.menu{$eftree.sect_key}[,]">
+$fi{groupedit$eftree.sect_key}
+^eftree.menu{
+<tr><td style="padding-left:^eval(($eftree.level - $vp) * 30)px"><a href="$eftree.path">$eftree.menutitle</a></td><td>
+<td>
+^switch[$form:grpfield]{
+  ^case[s.language]{^select_language[$fi;$eftree.language]}
+  ^case[se.keywords]{<textarea name="$fi" cols=90 rows=2>$eftree.keywords</textarea>}
+  ^case[se.description]{<textarea name="$fi" cols=90 rows=2>$eftree.description</textarea>}
+  ^case[s.sect_order]{<input type=text name=$fi value="$eftree.sect_order" size=4>}
+  ^case[se.title]{<input type=text name=$fi value="$eftree.title" size=30>}
+  ^case[se.pagetitle]{<input type=text name="$fi" value="$eftree.pagetitle" size=30>}
+  ^case[s.visiblity]{
+   <input type=radio name=$fi value="yes"^if(!def $eftree.visiblity || $eftree.visiblity eq yes){ checked}>^lang[145]
+   <input type=radio name=$fi value="no"^if($eftree.visiblity eq no){ checked}>^lang[146]
+   <input type=radio name=$fi value="nomenu"^if($eftree.visiblity eq nomenu){ checked}>^lang[147]
+  }
+  ^case[DEFAULT]{$form:grpfield}
+}
+</td></tr>}
+
+</table>
+
+<input type=submit value="^lang[152]">
+</form>
+
+
+
+@grpupdate[][ko;koko;st;sp]
+$ko[$form:keyoption] $st[$form:grpfield]
+$koko[^ko.split[,;v]]
+^connect[$scs]{
+^koko.menu{$sp[$koko.piece]
+^void:sql{UPDATE ^if(^st.left(2) eq se){^dtp[sections] se}{^dtp[structure] s} SET $st = '$form:groupedit$sp' WHERE sect_key = '$sp' }
+}
+}
+$grpup_ok(1)
+@eft[][e]
+$e[$form:tables.eftree]
+(^e.menu{s.sect_key = '$e.field' }[OR ])
+$ef[^e.menu{<input type=hidden name=eftree value=$e.field>}]
+@typo_menu[]
+<form action="/login/groupedit.htm" method=get>
+^lang[386;Показать]
+<select name="grpfield">
+$grp[^table::load[/login/config/grpfields.txt]]
+^grp.menu{<option value="$grp.field"^if($grp.field eq $form:grpfield){ selected}>^lang[$grp.descr]</option>}
+<option value="autoreplace"^if(autoreplace eq $form:grpfield){ selected}>^lang[387;Автозамена текста страниц]</option>
+</select>, ^lang[396]
+^connect[$scs]{$grps[^table::sql{SELECT path, menutitle, level FROM ^dtp[structure] WHERE level <= '2' ORDER BY path}]}
+
+<select name="grplimit">
+^grps.menu{<option value="$grps.path"^if($form:grplimit eq $grps.path){ selected}>^for[1](0;^eval($grps.level * 2)){&nbsp^;}$grps.menutitle</option>}
+</select>, ^lang[388;углубляясь]
+<select name="grpnum">
+<option value="0">^lang[389;на 1 уровень]</option>
+<option value="1"^if($form:grpnum eq 1){ selected}>^lang[390]</option>
+<option value="2"^if($form:grpnum eq 2){ selected}>^lang[391]</option>
+</select>
+
+<input type=submit value=" OK ">
+</form>

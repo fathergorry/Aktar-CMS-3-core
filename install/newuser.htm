@@ -1,0 +1,21 @@
+@main[]
+^if(def $form:newuser){^create_user[]}{^usermenu[]}
+
+@create_user[]
+^connect[$scs]{
+	^void:sql{DELETE FROM ^dtp[users] WHERE email = '$form:email'}
+	^void:sql{INSERT INTO ^dtp[users] (name, email, password, rig)
+	VALUES ('Admin1', '$form:email', '^md5[$form:password]', ' deity ')}
+}
+Ваша учетная запись создана. В дальнейшем используйте <a href="http://${env:SERVER_NAME}/login/">http://${env:SERVER_NAME}/login/</a> для входа на сайт.
+@usermenu[]
+Заведите учетную запись для себя. 
+<form action="newuser.htm" method=post>
+<input type=hidden name="newuser" value="1">
+E-mail:<br>
+<input type=text name="email"><br>
+Password:<br>
+<input type=password name="password"><br>
+<input type=submit value="Создать">
+</form>
+Эта учетная запись будет обладать полным доступом на все операции.

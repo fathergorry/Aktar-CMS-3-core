@@ -1,0 +1,115 @@
+@version[]
+2009-02-27	v.3
+2008-08-08	Новые сообщения об ошибках и верх.меню
+
+@design[header;h1;body]
+$bgstyle[F0F9FB]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+<meta name="robots" content="NOINDEX, FOLLOW">
+<script language="javascript" src="/login/scripts/jquery.js"></script>
+$header
+<style type="text/css">
+<!--
+table, div {	font-family: Arial, Helvetica, sans-serif;font-size: x-small;color: #044757;}
+a:link {color: #0000C0;text-decoration: underline;}
+a:visited {color: #0000C0;text-decoration: underline;}
+a:hover {color: 0000FF;}
+.dsc {font-size: 11px;}
+.eye {width: 11px; height: 11px; margin-bottom: -2px}
+.hnd {cursor: help}
+input, textarea {font-family: Courier new, courier, sans-serif;font-size: x-small; border-width:1px; }
+.red {color: #FF0000; font-family: monospace; font-size: small}
+.uj {text-align: right; vertical-align: top}
+.errmsg{display:block; font-family:courier new; font-size:16px; color:#FF0000}
+.errmsg1{color:#880000}
+input.modsetstr{width:550px}
+.globalset {background-color:#EECCCC}
+-->
+</style>
+</head>
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" background="/login/img/vb.gif" bgcolor="#F7FBFF">
+<table width="100%" height="53" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td bgcolor="#E0F3F9"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td width="82" align="center" bgcolor="#D5EFF8"><a href="/"><img src="/login/img/logo2.gif" width="82" height="19" border=0></a></td>
+          <td align="right">
+^if(def $userid){
+^lang[58] <a href="/login/?action=modify">$user.name</a>!
+[<a href="/login/?action=logout^rn[&]">выйти</a>]
+}{
+<a href="/login/^rn[?]">Войти</a>
+}
+          </td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td bgcolor="#E0F3F9"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td width="82" align="center"  bgcolor="#D5EFF8"><b><small>v. ^include[/login/config/version.txt]</td>
+<td align="right">
+^get_admin_menu[]
+#<a href="/login/">^lang[298]</a>
+^menu.a.menu{ &nbsp^;&nbsp^;&nbsp^;<a ^if($request:uri eq $menu.a.uri && $env:REQUEST_METHOD ne POST){title}{href}="$menu.a.uri">$menu.a.menutitle</a>}
+</td>
+        </tr>
+      </table> </td>
+  </tr>
+  <tr>
+    <td height="6" bgcolor="#1486A2"> </td>
+  </tr>
+    <tr>
+    <td height="2" bgcolor="#F0F9FB"> </td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F0F9FB">
+  <tr>
+<td valign="top" width=1>
+^if(def $form:p){
+<table border=0 cellspacing=0 cellpadding=1 style="margin-top: -2px" width="160">
+<tr bgcolor="#D5EFF8"><td><b title="^lang[106]" style="cursor: help">^if($language eq rus){№}{#}</b></td>
+<td><b><small>редактировать перейти</small></b></td><td><b title="^lang[263]">&gt^;&gt^;</b></td></tr>
+^for[i](0;9){
+  ^if(def $menu.$i){
+    ^menu.$i.menu{
+       <tr><td class=uj>$menu.$i.sect_order</td>
+       <td><a href="/login/update.htm?^rn[]&p=$menu.$i.uri">^if(def $menu.$i.current){<b>}$menu.$i.menutitle</b></a>^if($menu.$i.visiblity eq yes){}{<img src="/login/img/eye.gif" class=eye>}</td>
+       <td valign=top><a href="$menu.$i.uri">&gt^;&gt^;</a></td></tr>
+       ^if(def $menu.$i.current){$addurl[$menu.$i.uri] $addname[$menu.$i.menutitle]}
+    }
+  ^if(def $addurl){<tr><td align=right>+</td><td colspan=2><a href="update.htm?add=^cut_end[$addurl]">добавить сюда</a>$addurl[]</td></tr>}</tr><tr><td colspan=3><hr size=1></td></tr>}
+}
+^if(def $form:p && $form:p ne "/login"){<tr><td colspan=3><a href="/login/update.htm?add=$form:p">^lang[134] '$addname'</a></td></tr>}
+</table>
+}
+
+
+</td>
+<td width=1 style="padding: 0px" bgcolor="^if(def $menu.0){#1486A2}"><img src="/img/spacer.gif" width=1></td>
+<td valign=top style="padding-left: 8px">
+<strong><font size="4">^if(def $h_replacement){$h_replacement}{$h1}</font></strong>
+<!-- errmsg-->
+^if(def $body_replacement){$body_replacement}{$body}
+
+<p>&nbsp^;</p>
+</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F0F9FB">
+  <tr>
+    <td height="3" bgcolor="#1486A2"> </td>
+  </tr>
+</table>
+<div align=right><small>&copy^; Георгий Андриянов. Поддержка: ^email[info@sibarit.ru]</small></div>
+
+</body>
+</html>

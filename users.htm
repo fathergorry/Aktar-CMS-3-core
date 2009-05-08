@@ -1,0 +1,179 @@
+@version[]
+2009-01-07	Под datawork.p. Доделать.
+
+@USE
+collection.p
+datawork.p
+
+@main[]
+$ignore_404[yes]
+^environment[] 
+
+$document.content{^body[]}
+$document.title[^lang[199] in $env:SERVER_NAME]
+$document.pagetitle[^lang[301]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][tmp]
+$perm[^table::load[/my/config/_permissions.txt]]
+^connect[$scs]{
+
+
+^if(def $form:uid){
+  ^if(def ^cando[$.users(1) $.useredit(1)]){^if(def $form:deluser){^deluser[]}{^useredit[]}}{^die[268]}
+}{
+  ^if(def ^cando[$.users(1)$.demo(1)]){
+	^if(def $form:groups){$document.pagetitle[^lang[369;Группы пользователей]]^groupedit[]}{
+      	^showmenu[]<br>^showusers[]
+	}
+  }{^die[^lang[316]]}
+}
+
+}
+
+^if($updated_users){^log[updated user groups] $updated_users(0)}
+@groupedit[]
+^if(def $form:gid){^groupedit2[$form:gid]}{^groupselect[]}
+
+@groupselect[]
+ $groups[^table::sql{SELECT g.*, COUNT(u.id) AS cnt FROM ^dtp[usergroups] g LEFT JOIN ^dtp[users] u ON g.groupid = u.groupid GROUP BY groupid}]
+  <div align=right>[<a href="users.htm?groups=on&gid=new">^lang[370;Новая группа]</a>]</div>
+  <table ^admin_tbl_design[]><tr><td>^lang[371;Наименование]</td><td>^lang[372;Описание]</td><td>^lang[373;Членов]</td><td>^lang[Права доступа]</td></tr>
+ ^groups.menu{<tr><td><a href="users.htm?groups=on&gid=$groups.groupid">^default[$groups.name;^lang[374;неизвестная группа]]</a></td>
+ <td>$groups.descr</td><td>$groups.cnt</td><td>$groups.rig &nbsp^;</td></tr>}
+ </table>
+
+@groupedit2[gid]
+^if($gid eq new){$document.pagetitle[^lang[370;Новая группа пользователей]]}
+^if(def ^cando[users]){
+<form action="" method=post>
+$they[^collection::create[usergroups]]
+^they.editOne[groupid;$gid]
+^if($env:REQUEST_METHOD eq POST){^redirect[/login/users.htm?groups=on^rn[&]]}
+^if(^form:gid.int(0) > 0){
+  ^if((def $form:permission || def $form:addperm) && def ^cando[users]){^update_permission[$form:gid;usergroups] ^msg[updated]}
+^permissions[^s2h[^string:sql{SELECT rig FROM ^dtp[usergroups] WHERE groupid = '$form:gid'}]]}
+<br><input type=submit>
+</form>
+[<a href="users.htm?groups=on">^lang[369;К списку групп]</a>]
+}{^die[268]}
+@deluser[]
+$uid[$form:uid]
+$deluser[^table::sql{SELECT rig, name FROM ^dtp[users] WHERE id = '^uid.int[]'}]
+$userrig[^s2h[$deluser.rig]]
+^if(def $userrig.deity && !def ^cando[]){^die[375;Вы не можете удалить пользователя с полным доступом]}{
+^delete_user[$uid]^msg[^lang[226] ($deluser.name).] ^log[deleted user	$deluser.name]}
+
+@showusers[][r;pp]
+$r(^int:sql{SELECT COUNT(id) FROM ^dtp[users] })
+$pp[^pagination::create[$r;40]]
+
+$users[^table::sql{SELECT id, name, lastname, groupid, ^if(def ^cando[users]){email}{(0) AS email}, rig FROM ^dtp[users] ^if(def $form:usermatch){WHERE email LIKE '%$form:usermatch%' OR name LIKE '%$form:usermatch%'}
+ORDER BY ^if(def $form:order){$form:order ASC}{id DESC}}[^pp.q[limits]]]
+$groups[^table::sql{SELECT groupid, name, rig FROM ^dtp[usergroups]}]
+<form action="/login/users.htm?order=$form:order&page=$form:page&usermatch=$form:usermatch" method=post>
+
+<table ^admin_tbl_design[]><caption>^lang[199] (^lang[376] $r)</caption>
+<tr><td><a href="users.htm?order=id">ID</a></td>
+<td><a href="users.htm?order=lastname">^lang[166]</a></td>
+<td><a href="users.htm?order=email">^lang[222]</a></td>
+<td><a href="users.htm?order=rig">^lang[223]</a></td>
+<td><a href="users.htm?order=groupid">^lang[369]</a></td>
+</tr>
+^users.menu{
+<tr><td>$users.id</td><td><a href="?uid=$users.id&^rn[]">$users.lastname $users.name </td><td>$users.email</td><td>$users.rig</td>
+<td>
+$a[group_$users.id]
+$udrig[^s2h[$users.rig]]
+^if(def $form:$a && def ^cando[users]){
+	^if($form:$a == -136 && !def $udrig.deity && !def $udrig.editor && !def $udrig.users){
+		^void:sql{DELETE FROM ^dtp[users] WHERE id = '$users.id' }
+		Пользователь удалён.<br>
+	}{
+		^void:sql{UPDATE ^dtp[users] SET groupid = '^form:$a.int(1)' 
+		WHERE id = '$users.id'}
+	}
+	$updated_users(1)
+}
+<select name="$a">
+^groups.menu{<option value="^if($groups.groupid != $users.groupid){$groups.groupid}"^if(^default[$form:$a;$users.groupid] == $groups.groupid){ selected}>$groups.name ^if(def $groups.rig){($groups.rig)}</option>}
+^if(!def $udrig.deity && !def $udrig.editor && !def $udrig.users){
+<option value="-136">УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ</option>}
+</select></td></tr>
+}
+<tr><td colspan=5 align=right><input type=submit value="^lang[377]"></td></tr>
+</table></form><p>
+^pp.listpages[ | ;$.url[users.htm?order=${form:order}&] $.prescript[^lang[16] ]]
+@showmenu[]
+<form action="/login/users.htm">^lang[220]<br>
+<input type=text name=usermatch value="$form:usermatch"><input type=submit value="^lang[221]">
+&nbsp^;&nbsp^;&nbsp^;&nbsp^;&nbsp^;&nbsp^;  [<a href="users.htm?groups=on">^lang[378;Редактировать группы]</a>]
+</form>
+@useredit[]
+#$user1[^collection::create[users;^if(def $form:alternate){1}]]
+^use[datawork.p]
+$user2[^datawork::create[users;^if($env:REQUEST_METHOD ne "POST"){$.id($form:uid)};;
+	$.exclude[password]
+	^if($env:REQUEST_METHOD eq "POST" && ^form:uid.int(-1) >= 1){
+		$.from_form[instance_name]
+		^try{$tmp[$form:tables.permission]
+			$formrig[^tmp.menu{$tmp.field } $form:addperm]
+		}{
+			^blad[]
+			$formrig[$form:permission $form:addperm]
+		}
+	}
+]]
+$user2d[^user2.returnHash[]]
+$user2rig[^s2h[$user2d.rig]]
+^if(def $user2rig.deity && !def ^cando[]){
+$nosave(1)^die[Вам запрещено редактировать пользователя с полным доступом.]
+}
+^if($env:REQUEST_METHOD eq "POST" && ^form:uid.int(-1) >= 1){$user2rig[^s2h[$formrig]]}
+^user2d.delete[rig]
+
+#$user1Id[$form:uid]
+<form action="/login/users.htm?uid=$form:uid^rn[&]" method=post>
+^keepvalue[alternate]
+<table width=95% ^admin_tbl_design[]><tr><td valign=top>
+
+
+^if($env:REQUEST_METHOD eq "POST" && ^form:uid.int(-1) >= 1 && def ^cando[users] && !$nosave){
+
+^user2.save[$user2d;;$.id(^form:uid.int(-1))]
+^update_permission[$form:uid]}
+^user2.form[;$.reveal(1)]
+</td>
+^if(def ^cando[users]){
+<td valign=top>
+^lang[259]<br>
+^permissions[$user2rig]
+<br><div align=right><input type=checkbox name=deluser value=1> ^lang[379;Удалить пользователя]</div>
+</td>
+}
+</tr></table>
+<input type=submit onClick="if(this.form.deluser.checked=='checked'){return confirm('Удалить этого пользователя?')}"></form>
+
+
+@permissions[myrig]
+^if(def $form:groups){$perm[^perm.select($perm.permission ne deity && $perm.permission ne editor && $perm.permission ne users)]}
+^perm.menu{
+<input type=checkbox name=permission value="$perm.permission"^if(def $myrig.[$perm.permission]){ checked^myrig.delete[$perm.permission]}> ^lang[$perm.description] ($perm.permission)
+}[<br>]
+<p>
+^lang[231]<br>
+<input type=text name=addperm value="^myrig.foreach[k;v]{$k}[ ]">
+
+@update_permission[usid;tbl]
+$allp[$form:tables.permission]
+$addperm[^s2h[^translit[$form:addperm] ^if(def $allp){^allp.menu{$allp.field}[ ]}]]
+^if($tbl ne users && !def ^cando[users editor]){^addperm.delete[deity] ^addperm.delete[users] ^addperm.delete[editor]}
+^if(def $addperm.deity && !def ^cando[]){
+  ^die[268;Вы не имеете права редактировать права пользователя с полным доступом]
+}{
+  ^log[updated user	<a href="users.htm?uid=$user1Id">$user1Id</a>]
+  $a0[^table::sql{UPDATE ^dtp[^default[$tbl;users]] SET rig = ' ^addperm.foreach[k;v]{$k}[ ] ' WHERE ^if($tbl eq usergroups){group}id = '^usid.int(-1)'}]
+  $a1[^a0.columns[]]
+  ^a1.menu{$a1.column}
+}

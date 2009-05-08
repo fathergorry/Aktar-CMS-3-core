@@ -1,0 +1,30 @@
+var	value	comment	type
+_	Общие		
+site_name		479	text
+site_admin		216	text
+defaultrig	z	308	text
+enablePrint	yes	447	bool
+jqueryOn	yes	Включить jquery и связанные функции	bool
+nodepicsizex		480	num
+_	481		
+timezone	3	436	text
+ue		437	text
+language	rus	439	language
+mailcharset	windows-1251	302	charsets
+_	482		
+SubstElderSon	yes	440	bool
+includeNoMenu		441	bool
+IUseFiles	yes	442	bool
+ignore_404		483	bool
+_	484		
+sessiontime	90	444	num
+regenerate_ses		446	bool
+sessionlimit8		485	text
+capass		570	text
+_	486		
+cache_time	9999	438	num
+cache_level	3	487	num
+timeout	3	443	num
+nocache	yes	445	bool
+debug_load_msg		488	text
+numerate_msgs		Numerate system messages	bool

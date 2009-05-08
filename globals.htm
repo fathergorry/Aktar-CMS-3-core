@@ -1,0 +1,49 @@
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[201] $env:SERVER_NAME]
+$document.pagetitle[^lang[201]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[]
+<p>
+$global[^table::load[/login/config/_globals.txt]]
+^if(def $form:saveg){^if(def ^cando[$.editor(1)]){^save_globals[]}{^die[316]}}
+^if(def ^cando[demo]){^edit_globals[]}{^die[Нельзя]}
+
+@save_globals[][gsave]
+$gsave[^hash::create[]]
+^global.menu{
+  $gsave.[$global.var][^check_field[]]
+}
+$gsave[^h2s:h2s[$gsave]]
+^gsave.save[/my/deriv/globals.p] ^msg[489]
+^log[edited global settings		!]
+@edit_globals[]
+^try{$globalh[^file::load[binary;/my/deriv/globals.p]]
+$globalh[^h2s:createh[$globalh.text]]}{$exception.handled(1)}
+<form action="globals.htm" method=post>
+<table ^admin_tbl_design[]>
+<input type=hidden name=saveg value=1>
+^global.menu{<tr title="$global.var">^switch[$global.type]{
+ ^case[text]{<td>^ftext[$global.var;$globalh.[$global.var]]</td><td> ^lang[$global.comment]}
+ ^case[bool]{<td>^fbool[$global.var;yes;$globalh.[$global.var]]</td><td> ^lang[$global.comment]}
+ ^case[num]{<td>^ftext[$global.var;$globalh.[$global.var];4] </td><td>^lang[$global.comment]}
+ ^case[language]{<td>^select_language[$global.var;$globalh.[$global.var]]</td><td> ^lang[$global.comment]}
+ ^case[charsets]{<td>^fradio[$global.var;windows-1251 KOI8-r;$globalh.[$global.var]] </td><td>^lang[$global.comment]}
+ ^case[DEFAULT]{
+ 	^if($global.var eq _){<td colspan=2><h4>^lang[$global.value]</td>}
+ }
+}</td></tr>}
+</table><input type=submit>
+</form>
+
+@check_field[][f]
+^switch[$global.type]{
+ ^case[num]{$f[$form:[$global.var]]$result[^f.int(0)]}
+ ^case[DEFAULT]{^if($global.var eq site_admin){
+   ^if(^is_email[$form:[$global.var]]){$result[$form:[$global.var]]}{$result[$global.value]^die[некорректный Email]}
+ }{$result[$form:[$global.var]]}}
+}

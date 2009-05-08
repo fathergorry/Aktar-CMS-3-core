@@ -1,0 +1,5 @@
+sect_key	title	pagetitle	keywords	description	content	comment	this_settings	module_settings	asfile	picture
+1	Главная страница	Главная страница								
+2	Раздел пользователя	Раздел пользователя		У этого раздела не должно быть подразделов.			exec	reqfields==name address phone,,hiddenfields==flag_a language,,defrig==z,,editrig==users,,reg_ok==Регистрация завершена. Скоро вам придет письмо.,,submit==Готово!,,regmsg==Ввод персональной информации		
+3		Поиск по сайту						res==10		
+4	Карта сайта	Карта сайта						path==/,,limit==3		mitsubishi4_1.jpg

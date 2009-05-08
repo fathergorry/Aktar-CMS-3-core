@@ -1,0 +1,21 @@
+@main[]
+<!-- errmsg-->
+^manage_session[]
+$document[^hash::create[]]
+^use[/login/modules/forum.p]
+$forum:ajaxcalled(1)
+^connect[$scs]{
+^if(def $form:fdisplay){^forum:post_answer[];^forum:post_message[]}
+}
+<script>
+
+^$("input#forumsubmit").css("background", "")^if($forum:forum_err){.attr("disabled","")};
+^if($forum:forum_err){
+var ic = ^$("img#captchaforum")^;
+ic.attr("src", ic.attr("src")+"?sdf")^;
+}{
+timerID=setTimeout('location.reload(true)',1000)^;
+}
+
+</script>
+^if(!$forum:forum_err){<meta http-equiv="refresh" content="2">}

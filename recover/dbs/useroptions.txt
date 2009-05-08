@@ -1,0 +1,5 @@
+column	sql_type	comment	key	form_handler	special_handler
+id	INT(8) NOT NULL	id	key	hidden
+param	VARCHAR(64) NOT NULL	A param	key	text
+value	VARCHAR(255) NOT NULL	A value	key	text
+comment	VARCHAR(128) NOT NULL	A commn		text

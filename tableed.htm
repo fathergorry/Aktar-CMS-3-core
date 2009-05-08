@@ -1,0 +1,91 @@
+@version[]
+2008-08-27	support for permissions
+2008-08-08	первый
+
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[Tables in $env:SERVER_NAME]
+$document.pagetitle[^lang[490]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][list]
+<div style="float:right; width:200px"><a href="$uri?mytable=new">^lang[491]</a></div>
+$folders[^table::create{fold	desc	permission
+/my/blocks	492	editor blocks
+/my/config	493	editor
+/login/config	494	deity
+/my/dbs	495	deity}]
+
+^if(def $form:mytable && def ^cando[editor blocks]){^mytable[]}
+^if(def $form:ttype && def $form:table){^tableed0[]}{^tmenu[]}
+
+@mytable[]
+^if($form:mytable eq new){^newtable[]}
+^if($form:mytable eq del){^file:delete[/my/blocks/$form:tab] ^die[$form:tab - таблица удалена]}
+@newtable[]
+^if(def $form:myfields){
+$a[^str2tbl[$form:myfields;*]]
+^a.save[/my/blocks/^saveable[$form:tblname].txt]
+^msg[^lang[497] 
+^lang[498] [tablica^;^saveable[$form:tblname]]]
+}{
+	<form action="$uri?mytable=new" method=POST>
+	^lang[499]<br>
+	<input type=text size=60 name="myfields" value="$form:myfields"><br>
+	^lang[500]:<br>
+	<input type=text size=20 name="tblname">
+	<br><input type=submit value="^lang[501]">
+	</form>
+}
+@tmenu[]
+
+^folders.menu{^if(def ^cando[$folders.permission]){$hasmenu(1)
+	<h3>^lang[$folders.desc]</h3>
+	$tmp[^file:list[$folders.fold;\.txt^$]]
+	^tmp.menu{
+		<a href="tableed.htm?ttype=file&table=$folders.fold/$tmp.name">^pseudoname:find[$tmp.name]</a>
+		^if($folders.fold eq "/my/blocks"){<a href="$uri?mytable=del&tab=$tmp.name" onClick="return confirm('^lang[502] $tmp.name?')">^lang[502]</a>}
+	}[<br>]
+}}
+^if(!$hasmenu){Looks like you didn't gain enough permission}
+
+@tableed0[]
+^if($form:ttype eq file){
+	^if(^folders.locate[fold;^file:dirname[$form:table]]){
+		^tableed_file[$folders.permission]
+	}{^die[503]}
+}
+@tableed_file[perm]
+$document.pagetitle[^lang[504] $form:table]
+^use[table_editor.p]
+^table_editor:edit[$form:table;$.keep[^keepvalue[ttype	table]];$perm]
+<p>
+^if(^file:dirname[$form:table] eq "/my/dbs"){
+	^dbs_opt[]
+}
+@dbs_opt[][locals]
+$tname[^file:justname[$form:table]]
+Если поменяли column, sql_type или key, то нужно <a href="/login/backup.htm?r=$tname&updonly=y">обновить таблицу</a>
+$fh[^mergeftext[/my/p/field_handlers.p
+/my/dbs/${tname}.p]]
+$fh[^table::create{str
+^untaint{$fh}}]
+
+$fht[^table::create{handler	desc}]
+^fh.menu{
+	^if(^fh.str.pos[@] == 0){
+		$fs[^fh.str.split[^[;lh]] $fs2[^fh.str.split[#;rh]]
+		^fht.append{^fs.0.trim[left;@]	^if(^fs2.0.pos[@] < 0 ){$fs2.0}}
+	}
+} 
+^if(^fht.count[] > 0){
+^fht.sort{$fht.handler}
+<p><b>Некоторые доступные обработчики onedit, onsave, onshow</b>
+<table>
+
+^fht.menu{<tr><td>$fht.handler</td><td>$fht.desc</td></tr>}
+</table>
+}

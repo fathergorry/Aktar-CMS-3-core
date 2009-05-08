@@ -1,0 +1,99 @@
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[246] on $env:SERVER_NAME]
+$document.pagetitle[^lang[246]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][]
+
+^if(def ^cando[$.demo(1) $.errpg(1)]){
+^connect[$scs]{
+^if(def $form:clear404){^clear404[]}
+^err404[]
+
+}
+}{^die[158]}
+
+@err404[][r]
+
+$r(^int:sql{SELECT COUNT(id) FROM ^dtp[pages404] WHERE pohui ^if(!def $form:poh){!}= 'yes'})
+$pp[^pagination::create[$r;40]]
+
+^if(def $form:doupdate){^if(def ^cando[$.errpg(1)]){^doupdate[]}{^die[^lang[305]]}}{^void:sql{DELETE FROM ^dtp[pages404] WHERE hits = 1}}
+
+$p4[^table::sql{SELECT * FROM ^dtp[pages404] WHERE pohui ^if(!def $form:poh){!}= 'yes' ORDER BY ^if(def $form:ob){hits}{id} DESC}[^pp.q[limits]]]
+<form action="/login/pages404.htm" method=post>
+<input type=hidden name=doupdate value="yes">
+<input type=hidden name=poh value="$form:poh">
+^pp.post_form[]
+<table ^admin_tbl_design[]>
+<tr><td>^lang[241]</td><td><a href="/login/pages404.htm?ob=hits">^lang[242]</td><td>^lang[243]</td><td>^lang[244]</td><td>^lang[245]</td></tr>
+^p4.menu{
+<tr><td><a ^if(def $p4.referer){href="$p4.referer"} title="$p4.useragent">^taint[html][$p4.link]</a></td>
+<td>^if(def $p4.redirect){&nbsp^;}{$p4.hits}</td>
+<td valign=top><input type=text size=29 name="r$p4.id" value="$p4.redirect">
+^if(def $p4.redirect){$y[$p4.redirect]^if(^y.left(7) ne "http://" && ^y.left(1) eq "/"){^checkpath[$y]}}</td>
+<td><input type=checkbox name=d$p4.id value=1><input type=hidden name=is$p4.id value="1"></td>
+<td align=right><input type=checkbox name=p$p4.id value="1"^if(def $nopohui){ disabled}{^if(def $form:poh){checked}}$nopohui[]></td></tr>
+}
+
+<tr><td colspan=5>
+  <table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td>
+   <td width=300 align=right><br><input type=submit style="height: 40px"><br><br></td><td align=right valign=top>
+   $allpoh(^int:sql{SELECT COUNT(*) FROM ^dtp[pages404] WHERE pohui = 'yes'})
+   ^if(def $form:poh){^lang[306] <input type=checkbox name=deletepohui value=1>}{
+   <a href="pages404.htm?poh=yes">^lang[247]</a> - $allpoh
+   }
+  </td></tr></table>
+</td></tr>
+
+</table>
+</form>
+^pp.listpages[ | ;$.url[pages404.htm?poh=$form:poh&ob=$form:ob&]$.prescript[^lang[16] ]]
+
+
+<br>
+^if($gotring){<span class=red><b>*</b></span> - ^lang[250]}
+<p>
+^lang[251]
+<p>
+^lang[Delete records by]
+<form action="/login/pages404.htm">
+<input type=text name="clear404"><br>
+<input type=radio name=h value="ua">User-agent
+<input type=radio name=h value="cn">&lt^;= hits
+<input type=radio name=h value="re">Refer link begins with%  
+<input type=radio name=h value="er">%404 url contains% <br> 
+<input type=submit>
+</form>
+@clear404[][tmh]
+^try{
+^void:sql{DELETE FROM ^dtp[pages404] WHERE 
+ ^if($form:h eq ua){useragent = '$form:clear404'}
+ ^if($form:h eq cn){hits <= '^form:clear404.int(0)'}
+ ^if($form:h eq re){referer LIKE '$form:clear404%'}
+ ^if($form:h eq er){link LIKE '%$form:clear404%'}
+}^msg[Clear OK]
+}{
+$exception.handled(1)^die[Error in request]
+}
+
+@doupdate[][total]
+^if(def $form:deletepohui){^void:sql{DELETE FROM ^dtp[pages404] WHERE pohui = 'yes'}}
+$total[^table::sql{SELECT id FROM ^dtp[pages404]}]
+^void:sql{LOCK TABLES ^dtp[pages404] WRITE}
+^total.menu{$j($total.id)
+^if(def $form:is$j){
+ ^if(def $form:d$j){^void:sql{DELETE FROM ^dtp[pages404] WHERE id = '$j'}}{
+  ^void:sql{UPDATE ^dtp[pages404] SET redirect = '$form:r$j', pohui = '$form:p$j' WHERE id = '$j'}
+ }
+}
+}
+^void:sql{UNLOCK TABLES}
+
+@checkpath[path][patht]
+$patht[^string:sql{SELECT sect_key FROM ^dtp[structure] WHERE path = '$path'}[$.default{}]]
+^if(!def $patht){<span class=red><b>*</b></span> $gotring(1) $nopohui[yes]}

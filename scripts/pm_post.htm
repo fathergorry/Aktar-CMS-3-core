@@ -1,0 +1,45 @@
+@main[]
+#^sleep(6)
+^manage_session[]
+^if(def $user.id){
+	^connect[$scs]{^m2[]}
+}{
+	Не авторизован.
+}
+@m2[]
+^switch[$form:pmaction]{
+	^case[movemsg]{^movemsg[$form:msgid;$form:fld;$user.id]}
+	^case[pmsend]{^userinfo[]^pmsend[]}
+	^case[DEFAULT]{
+		^if(def $form:uid){^userinfo[$form:uid];Что Вы хотели? $request:uri}
+	}
+}
+
+@pmsend[recipe;title;content]
+<!-- errmsg-->
+^use[datawork.p]
+$pm[^datawork::create[privmsg;;title content recipe;
+	^if(def $form:nospam){$.from_form[instance_name]$.required[content]}
+]]
+^if(def $form:nospam && !$pm.data_error){
+	$pmd[^pm.returnHash[]]
+	$pmd.author[$user.id]
+	$pmd.folder[un]
+	$pmd.recipe($form:uid)
+	$pmd.msgdate[^now.sql-string[]]
+	$pm.saved_ok_msg[Сообщение отправлено]
+	^pm.save[$pmd;;insert]
+}{
+<form id="pmform" style="display:inline">
+<input type=hidden name=nospam value=^eval(^math:random(9999)+1)>
+^keepvalue[uid pmaction]
+^pm.form[;$.tstyle[width: 280px]]
+<br><input type=submit class=sbm onClick="sendPM('pmform')^; return false" value="Отправить"/>
+</form>
+}
+@userinfo[id][locals]
+^connect[$scs]{$usr[^table::sql{SELECT * FROM ^dtp[users] WHERE id = '$id'}]}
+$usr.lastname $usr.name $usr.rig
+@movemsg[msg;tofld;user]
+^void:sql{UPDATE ^dtp[privmsg] SET folder = '$tofld' WHERE id = '$msg' AND recipe = '$user'}
+Перемещено.

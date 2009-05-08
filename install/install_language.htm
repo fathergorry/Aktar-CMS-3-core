@@ -1,0 +1,15 @@
+@version[]
+2009-02-28	3.0
+@main[]
+
+$tlang[^table::load[/login/config/_language.txt]]
+$columns[^tlang.columns[]]
+$columns[^columns.select($columns.column ne "id" && $columns.column ne "exist")]
+^columns.menu{
+	$hflang[^hashfile::open[/my/deriv/$columns.column]]
+	^tlang.menu{$hflang.[$tlang.id][$tlang.[$columns.column]]}
+	^hflang.release[]
+}
+Created languages: ^columns.menu{$columns.column}[, ].<br>
+1st record is
+<b>$hflang.1</b>

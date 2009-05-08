@@ -1,0 +1,18 @@
+column	sql_type	comment	key	form_handler	special_handler
+id	INT(8) NOT NULL AUTO_INCREMENT	id	primary	hidden	
+fid	VARCHAR(32) NOT NULL	Forum id	key1	special	
+mydate	DATETIME NOT NULL	Creation date	key1	special	
+postid	VARCHAR(12)	Post id	key	special	
+title	VARCHAR(255) NOT NULL	Название записи	fulltext	text	
+author	VARCHAR(70) NOT NULL	Ваше имя		text	
+userid	INT(8) NOT NULL	User id	key	special	
+email	VARCHAR(50) NOT NULL	Ваш e-mail (будет защищен от спама)		text	
+visiblity	ENUM('yes', 'no') DEFAULT 'yes'	Visiblity		bool	
+has_answer	ENUM('yes', 'no', 'more') DEFAULT 'no'	if_has_answers		special	
+answers	SMALLINT(4) NOT NULL DEFAULT '0'	Answers		special	
+content	TEXT NOT NULL	Сообщение		textarea	
+picture	VARCHAR(32) NOT NULL	Прикрепить файл		special	
+iwantcomment	ENUM('yes', 'no') DEFAULT 'no'	Я хочу получать по почте комментарии		bool	
+custom1	VARCHAR(64) NOT NULL	Custom1		special	
+custom2	VARCHAR(64) NOT NULL	Custom2		special
+frate	INT(4)	Rate		special

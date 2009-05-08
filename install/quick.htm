@@ -1,0 +1,10 @@
+@main[] 2204355 ГЦПТ. Интеллектуальный прорыв детей.
+^recover_files[config/_permissions.txt
+config/indexes.txt
+templates/happy.htm
+img/.htaccess
+config/adbase_tables.txt]
+
+^conf_init[]
+^tStruc.count[]
+^redirect[/login/install/backup.htm?^tStruc.menu{$ts[$tStruc.name]^if(-f "/my/dbs/${ts}.txt" && -f "/my/tabak/${ts}.tabak"){r=${ts}&}}finish=1]

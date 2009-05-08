@@ -1,0 +1,9 @@
+field	descr
+#s.menutitle	105
+s.sect_order	106
+se.pagetitle	107
+se.title	108
+se.keywords	109
+s.visiblity	110
+se.description	111
+s.language	129

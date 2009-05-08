@@ -1,0 +1,80 @@
+@main[]
+<!-- errmsg-->
+^conf_init[]
+
+
+^if($form:action eq yes)[^this_action[]^conf_init[]]
+
+<form action="configure.htm">
+<input type=hidden name="action" value="yes">
+<table bgcolor="#FFFFFF">
+<tr bgcolor="#EEEEEE"><td><b>Table</td><td><b>Safe update</td><td><b>Prepare to reset data</td>
+<td><b>Clear data</td><td><b>Install</td><td><b>Delete from DB</td><td>[x]</td></tr>
+
+^tStruc.menu{<tr bgcolor="#^if(!^math:frac(^tStruc.line[]/2)){CCCCCC;FFFFFF}">
+	$ts[$tStruc.name]
+	<td>$tStruc.name</td>
+	<td>^if(-f "/my/dbs/${ts}.txt" && ^t.locate[$tc.column;^dtp[]$ts]){<input type=radio name="$ts" value="update">}</td>
+	<td>^if(-f "/login/recover/dbs/${ts}.txt"){<input type=radio name="$ts" value="reset">}</td>
+	<td>^if(^t.locate[$tc.column;^dtp[]$tStruc.name]){<input type=radio name="$ts" value="clear">}</td>
+	<td>^if(-f "/my/dbs/${ts}.txt"){<input type=radio name="$ts" value="install">}</td>
+	<td>^if(^t.locate[$tc.column;^dtp[]$ts]){<input type=radio name="$ts" value="delete">}</td>
+	<td><input type=radio name="$ts" value=""></td>
+</tr>}
+
+
+</table>
+<input type=submit>
+</form>
+
+
+Update - обновляет БД-таблицу на основе описания (UPDATE TABLE).<br>
+Prepare to reset data - создает или замещает резервные копии таблиц копиями со структурой по умолчанию. <br>
+Clear data - очищает таблицу БД от данных.<br>
+Install - создает таблицу БД на основе ее описания в /my/dbs (DROP/CREATE TABLE).<br>
+Delete from DB - используйте для удаления сайта с хостинга.<br>
+
+
+@this_action[]
+^tStruc.menu{
+	$ts[$tStruc.name]
+	^switch[$form:$ts]{
+		^case[update;install]{^dbob[$ts;$form:$ts]}
+		^case[reset]{
+			^resetts[$ts]
+		}
+		^case[clear]{^connect[$scs]{
+			^void:sql{DELETE FROM ^dtp[$ts]}
+			^die[Table ^dtp[$ts] cleared from data.]
+		}}
+		^case[delete]{^connect[$scs]{
+			^void:sql{DROP TABLE IF EXISTS ^dtp[$ts]}
+			^die[Table ^dtp[$ts] dropped.]
+		}}
+		^case[DEFAULT]{ }
+	}
+}
+
+
+@conf_init[]
+$hStruc[^hash::create[]]
+#list of site-related tables in DB
+^connect[$scs]{
+	$t[^table::sql{SHOW TABLES}]
+	$tc[^t.columns[]]
+	$dtp0[^dtp[]]
+	$dtp0[^dtp0.length[]]
+	$t[^t.select(^t.[$tc.column].pos[^dtp[]] == 0)]
+	^t.menu{$hStruc.[^t.[$tc.column].mid($dtp0;255)](1)}
+}
+#list of structure tables
+	$dbs[^file:list[/my/dbs;\.txt^$]]
+	^dbs.menu{$hStruc.[^file:justname[$dbs.name]](1)}
+	$predef[^file:list[/login/recover/dbs]]
+	^predef.menu{$hStruc.[^file:justname[$predef.name]](1)}
+	$tabak[^file:list[/my/tabak;\.txt^$]]
+	^tabak.menu{$hStruc.[^file:justname[$tabak.name]](1)}
+
+$tStruc[^table::create{name
+^hStruc.foreach[k;v]{$k}[
+]}]

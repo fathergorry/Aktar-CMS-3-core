@@ -1,0 +1,33 @@
+@main[]
+
+^manage_session[]
+^if(def ^cando[editor users moder]){
+^switch[$form:a]{
+	^case[del]{
+		^connect[$scs]{
+			^if(def $form:id){
+			^void:sql{DELETE FROM ^dtp[forum] WHERE id = '^form:id.int(0)'}
+			^void:sql{DELETE FROM ^dtp[ans] WHERE id = '^form:id.int(0)'}
+			}
+			^if(def $form:ansid){
+			^void:sql{DELETE FROM ^dtp[ans] WHERE ansid = '^form:ansid.int(0)'}
+			}
+		}
+		deleted
+		<script>
+		^$("#forumbox${form:ansid}$form:id").hide("slow")^;
+		</script>
+	}
+	^case[screen]{^connect[$scs]{
+		^switch[$form:show]{
+			^case[on]{^al[off]скрыть</a>^void:sql{UPDATE ^dtp[forum] SET visiblity = 'yes' WHERE id = '$form:id'}}
+			^case[off]{^al[on]<img src="/login/img/eye.gif" border=0>показать</a>^void:sql{UPDATE ^dtp[forum] SET visiblity = 'no' WHERE id = '$form:id'}}
+		}
+		<script>
+		XurlInit()^;
+		</script>
+	}}
+}}{No permission}
+
+@al[arg]
+<a href="/login/modules/forum/moder.htm?a=screen&id=$form:id&show=$arg" class="ajaxhandledx">

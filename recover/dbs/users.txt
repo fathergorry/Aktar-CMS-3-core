@@ -1,0 +1,24 @@
+column	sql_type	comment	key	form_handler	onedit	onshow	onsave
+id	INT(8) NOT NULL AUTO_INCREMENT	id	primary	hidden			
+city	VARCHAR(64) NOT NULL	Город	key	select	select_city		set_user_city
+district	VARCHAR(255) NOT NULL	Район (если Вашего района нет в выпадающем списке, выбирайте основной район доставки)		select	select_district		set_user_distr
+address	VARCHAR(128) NOT NULL	Адрес (улица, дом, номер квартиры или офиса)		text	edit_addresses		
+phone	VARCHAR(64) NOT NULL	Мобильный телефон (в формате 8 *** ***-**-**)		text			is_federal_phone
+name	VARCHAR(128) NOT NULL	Имя		text	start_addform		
+lastname	VARCHAR(128) NOT NULL	Фамилия		text			
+parname	VARCHAR(128) NOT NULL	Отчество		text			
+email	VARCHAR(48) NOT NULL	E-mail (будет защищен от спама)	key	text			check_em_exist
+workphone	VARCHAR(48) NOT NULL	Домашний телефон		text			
+birthdate	DATE NOT NULL	Дата рождения		special	birthdate		check_birth
+vkontakte	VARCHAR(48) NOT NULL	Адрес Вашей странички ВКонтакте (Если Вы состоите в клубе <a href=/vkontakte target=_blank>Фудзи ВКонтакте</a>, то получите скидку 5%)		text			
+osebe	TEXT NOT NULL	Пара слов о себе (хобби, интересы и т.д.)		textarea			
+country	TEXT NOT NULL	Пожелания и отзывы о Фудзи		textarea			
+org	VARCHAR(32) NOT NULL	Род занятий		text			
+postcode	VARCHAR(16) NOT NULL	Почтовый индекс		text			
+flag_a	VARCHAR(128) NOT NULL	Скидка %		text			
+language	ENUM('en', 'rus')	Язык		enum			
+rig	VARCHAR(128) NOT NULL	Permission	fulltext	hidden			
+extid	INT(8)	Внешний ID		special			
+groupid	INT(4) NOT NULL DEFAULT '1'	Группа	key	hidden			
+regdate	DATETIME	Дата регистрации	key	hidden			
+password	CHAR(32) NOT NULL	Пароль (не обязательно)		special2	users_password		check_password

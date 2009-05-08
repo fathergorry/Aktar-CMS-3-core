@@ -1,0 +1,62 @@
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[330] in $env:SERVER_NAME]
+$document.pagetitle[^if(def $form:delete){^lang[290]}{^lang[261]}]
+^document[$.design[/login/templates/_ayoo1.html] ]
+^if(!-f"/my/files/.htaccess"){$h[RewriteEngine off]^h.save[/my/files/.htaccess]}
+
+@body[]
+$fco(0)
+$pic_ext[$.jpg(1) $.gif(1) $.png(1)]
+^connect[$scs]{
+ ^if(def $form:delete){
+   ^if(def ^cando[demo pic delpic]){^delfiles[]}{^die[268]}
+ }{
+   ^if(def ^cando[demo pic]){^loadfiles[]}{^die[268]}
+ }
+}
+^if($fco){^msg[^if(def $form:delete){^lang[332]}{^lang[331]}: $fco ]}
+^if($loaded is table){^loaded.menu{^msg[<a href="$loaded.path">$loaded.path</a>]}}
+@loadfiles[][e;filem]
+$loaded[^table::create{path}]
+<form action="/login/files.htm" method=post enctype="multipart/form-data">
+^for[i](1;15){
+  ^if(def $form:f$i){ $fco(^eval($fco + 1))
+    $filem[$form:f$i] $filename[^filem.name.lower[]]
+    $e[^file:justext[$filename]]
+    $fpath[/my/^if(def $pic_ext.$e){$ispic[1]^if(def ^cando[]){img/a}{img/b}}{files$ispic[]}/^saveable[$filename]]
+     ^if(def ^cando[delpic editor] || (def ^cando[pic] && !-f "$fpath")){
+    		^filem.save[binary;$fpath]
+		^loaded.append{$fpath} 
+		^f2passport[$fpath;$user.id;$ispic]
+	}{$fco(0)^die[261]}
+  }
+  <input type=file name="f$i"><br>
+}
+<input type=submit value="^lang[334;upload]">
+</form>
+<a href="files.htm?delete=yes">^lang[333]</a>
+^if($fco){^log[uploaded files	(count: $fco)]}
+@delfiles[]
+<form action="files.htm?delete=1" method=post>
+<table ^admin_tbl_design[]>
+<tr>^getfiles[img/a]^getfiles[img/b]^getfiles[files;add stat]</tr></table>
+^if($fco){^log[deleted files	(count: $fco)	!]}
+<input type=submit>
+</form>
+@getfiles[folder;fsize][list;ifo;fft]
+<td valign=top>
+<h3>$folder</h3>
+$list[^file:list[/my/$folder]]
+^list.sort{$list.name}[desc]
+^if($env:REQUEST_METHOD eq "POST"){^if(def ^cando[delpic editor]){
+^list.menu{$fft[${folder}$list.name]^if(def $form:$fft){$ifo[/my/$folder/$list.name]^file:delete[$ifo] ^delpassport[$ifo;$userid] ^fco.inc(1)}  }
+$list[^file:list[/my/$folder]]
+}{^die[269;no delete!]}}
+
+^list.menu{^if($list.name ne ".htaccess"){<input type=checkbox name="${folder}$list.name" value="y"> <a href="/my/$folder/$list.name" target=_blank>$list.name</a>
+ ^if(def $fsize){$tmp[^file::stat[/my/$folder/$list.name]] (^eval($tmp.size / 1000)[%.0f]Kb)}
+<br>}}
+</td>

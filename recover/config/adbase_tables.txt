@@ -1,0 +1,10 @@
+cls	adt	name
+su	person	Персоны
+su	adsite	Рекламные площадки
+su	adagent	Рекламные агентства
+s	news	Новости
+su	hot	Горячие предложения
+su	tender	Тендеры
+su	vacancy	Вакансии
+su	resume	Резюме
+su	freelancer	Freelancer

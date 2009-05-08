@@ -1,0 +1,4 @@
+<Files ~ "\.(p|cfg|txt|htm)$">
+Order allow,deny
+Deny from all
+</Files>

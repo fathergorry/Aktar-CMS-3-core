@@ -1,0 +1,10 @@
+column	sql_type	comment	key	form_handler	special_handler
+mailid	INT(5) NOT NULL AUTO_INCREMENT	ID	primary	hidden
+mail	TEXT NOT NULL	Текст сообщения		special
+subj	VARCHAR(255)	Тема		text
+cdate	DATETIME NOT NULL	Дата создания		special
+mdate	DATETIME NOT NULL	Дата модификации		special
+sdate	DATETIME NOT NULL	Дата отправки		special
+gcount	INT(5) NOT NULL	Получателей		special
+sent	INT(5) NOT NULL	Отправлено		special	
+groups	VARCHAR(255)	Группы		text

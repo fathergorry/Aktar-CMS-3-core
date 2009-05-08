@@ -1,0 +1,101 @@
+@main[]
+^if(def $form:p){^environment[$form:p]}{
+^if(def $form:add){^environment[$form:add]}{^environment[/]^redirect[/login/update.htm?p=/^rn[&]]}
+}
+$body_replacement[^body[]]
+$h_replacement[^if(def $form:add){^lang[397;Добавление раздела в]}{^lang[192;edit of]} "$document.menutitle" ( <a href="$form:p">$form:p $form:add</a> )]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+@body[]
+^if(def ^cando[editor $epermission demo] && (def $form:p || def $form:add)){^node[]}{^die[316;У вас нет прав для редактирования этой страницы]
+$document.content[ ]
+}
+
+@node[]
+^connect[$scs]{
+^use[node_editor.p]
+^use[collection.p]
+^if(def $form:add){^add_node[]}{^if(def $form:p){^if(def $form:delete_move_node){^delete_move_node[]}{
+	^edit_node[]
+}}}
+
+}
+@delete_move_node[]
+$nodelist[^table::sql{SELECT sect_key, path, parent, level, menutitle FROM ^dtp[structure] WHERE path LIKE '$uri' OR path LIKE '$uri/%' ORDER BY path}]
+^if(def $form:ac){^if(def ^cando[$.editor(1)]){
+  ^if($form:ac eq del){^delete_node[]}{^move_node[]}
+}{^die[^lang[398;У вас нет прав на удаление/перемещение]]}}{
+<form action="/login/update.htm?p=$form:p" method=post>
+<b>^lang[399;Выбранные страницы:]</b><br>
+^die[400;Вы уверены, что хотите это сделать?]^die[401;В рабочем веб-сайте изменение адреса разделов приводит к снижению посещаемости.]
+^nodelist.menu{^for[i](0;$nodelist.level){&nbsp^;&nbsp^;}$nodelist.menutitle<br>}
+<input type=radio name=ac value=del> ^lang[93;Удалить]<br>
+<input type=radio name=ac value=move> ^lang[402;Переместить под] http://$env:SERVER_NAME/<input type=text name=moveinto> (^lang[164;путь к разделу])
+<br><input type=submit value="Готово">
+<input type=hidden name="delete_move_node" value="y">
+</form>
+}
+@move_node[][tbm;tbp;tmp;check;check1;cp;pp]
+<form action="/login/update.htm?p=$form:p" method=post>
+<input type=hidden name="moveinto" value="$form:moveinto"><input type=hidden name=ac value=move>
+<input type=hidden name="delete_move_node" value="y"><input type=hidden name="move_confirm" value="y">
+$stm[^form:moveinto.match[/+][ig]{g6719ioj}]$stm[^saveable[$stm]]$stm[^stm.match[g6719ioj][ig]{/}]
+$stm[^stm.trim[both;/]]
+$tbm[^stm.split[/;v]]
+$stp[^form:p.trim[both;/]]$tbp[^stp.split[/;v]]
+<br>
+<b>^lang[403;Производится переименование/перенос]:</b><br>
+^nodelist.menu{$nodelist.path -&gt^; $tmp[$nodelist.path] $cp[/${stm}^tmp.match[^^/$stp][ig]{}]$cp ^if(!def $pp){$pp[$cp]} <br>}
+
+$check[^table::sql{SELECT sect_key FROM ^dtp[structure] WHERE path LIKE '^cut_end[$pp]'}]
+$check1[^table::sql{SELECT sect_key FROM ^dtp[structure] WHERE path LIKE '$pp'}]
+^if(def $check1.sect_key){$errors(1)^die[^lang[270;Раздел] $pp ^lang[404;уже существует].]}
+^if(!def $check.sect_key){$errors(1)^die[^lang[270;Раздел] ^cut_end[$pp] ^lang[405;отсутствует. Создайте его, прежде чем переносить]]}
+^if(!def $form:moveinto){$errors(1)^die[406;Отсутствует целевой раздел. Куда переносить будем?]}
+^if(^pp.pos[/$stp] == 0 && ^pathlevel[$pp] > ^pathlevel[/$stp]){$errors(1)^die[407;Нельзя переносить внутрь себя]}
+^if($errors){}{
+<input type=submit value=" OK ">
+^if(def $form:move_confirm){
+  ^nodelist.menu{ $tmp[$nodelist.path]$cp[/${stm}^tmp.match[^^/$stp][ig]{}]
+    ^void:sql{UPDATE ^dtp[structure] SET path = '$cp', level = '^pathlevel[$cp]' WHERE sect_key = '$nodelist.sect_key'}
+    ^void:sql{INSERT IGNORE INTO ^dtp[pages404] (link, hits, redirect, pohui) VALUES ('$nodelist.path', '2', '$cp', 'yes')}
+  }
+  ^void:sql{UPDATE ^dtp[structure] SET parent = '$check.sect_key' WHERE path = '$pp'}
+  ^redirect[/login/update.htm?p=$pp&movemsg=1^rn[&]] ^log[^lang[Перенес раздел $form:p в $pp]]
+}
+
+}
+
+</form>
+@delete_node[]
+^if(def $nodelist){
+  ^void:sql{DELETE FROM ^dtp[structure] WHERE ^nodelist.menu{sect_key = '$nodelist.sect_key'}[ OR ]}
+  ^void:sql{DELETE FROM ^dtp[sections] WHERE ^nodelist.menu{sect_key = '$nodelist.sect_key'}[ OR ]}
+}^msg[408;Разделы удалены]^log[deleted sections	^nodelist.menu{^if(^nodelist.line[] < 3){$nodelist.path }}]
+@add_node[]
+<br>
+^if(def $form:newnode){^if(def ^cando[editor $epermission]){^addnewnode[]}{^die[316;Нельзя создавать узел]}}
+$plmax(^int:sql{SELECT MAX(sect_order) FROM ^dtp[structure] WHERE path LIKE '$form:add%' AND level = '^eval(^pathlevel[$form:add] + 1)'})
+<form action="/login/update.htm?add=$form:add" method=post>
+<table border=0 cellspacing=0 cellpadding=0><tr><td>&nbsp^;</td><td>
+^lang[303;Адрес нового раздела]:</td></tr>
+<tr><td align=right>http://${env:SERVER_NAME}$form:add^if($form:add ne "/"){/}</td><td><input type=text name=newnode size=20 maxlength=16> (^lang[409])</td></tr>
+<tr><td align=right>&nbsp^;</td><td>&nbsp^;</td></tr>
+<tr><td align=right>^lang[105;Имя в меню]: &nbsp^;</td><td>
+<input type=text name=menutitle size=35  maxlength=64 >
+<tr><td align=right>^lang[106;Порядковый номер]: &nbsp^;</td><td> <input type=text name=sect_order size=4 value="^eval($plmax + 10)"></td></tr>
+<tr><td>&nbsp^;</td><td><input type=checkbox name=visiblity value="no">
+^lang[410;Закрыть этот раздел от посетителей]</td></tr>
+<tr><td>&nbsp^;</td><td><br><input type=submit value="Добавить"></td></tr></table>
+</form>
+
+@addnewnode[]
+$newnode[^saveable[$form:newnode]]
+$newnode[^newnode.lower[]] $newnode[$form:add^if($form:add ne "/"){/}$newnode]
+$already[^table::sql{SELECT path FROM ^dtp[structure] WHERE path = '$newnode'}]
+^if(def $already){^die[Раздел $newnode уже есть]}{
+^void:sql{INSERT INTO ^dtp[structure] (path, level, menutitle, visiblity, sect_order, created, parent, language) VALUES ('$newnode', '^pathlevel[$newnode]',
+'^default[$form:menutitle;new]', '^default[$form:visiblity;yes]', '^form:sect_order.int(1)', '^now.sql-string[]', '$document.sect_key', '$document.language')}
+$lastnode[^int:sql{SELECT LAST_INSERT_ID() }]
+^void:sql{INSERT INTO ^dtp[sections] (sect_key) VALUES ('$lastnode')}
+^redirect[/login/update.htm?p=$newnode&^rn[]] }

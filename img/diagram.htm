@@ -1,0 +1,56 @@
+@main[]
+$example_of_diagram[
+$.x[500]
+$.y[300]
+$.bgcolor[EEEEEE]
+$.ls[** ]
+$.lw(2)
+$.lines[
+	$.example_line[
+		$.lw[4]
+		$.color[FF0000]
+		$.line[0=20,100=22,200=40,300=20,400=37]
+	]
+]
+]
+
+$pikk[^diagram:draw[^h2s:createh[$form:img]]]
+$response:body[^pikk.gif[]]
+
+
+
+
+
+
+
+
+@CLASS
+diagram
+
+@draw[graph]
+$g[$.x(500)$.y(300)$.bgcolor[FFFFFF]$.lw(1)$.ls[*]]
+#making graph with
+^g.add[$graph]
+$g.bgcolor[0x$g.bgcolor]
+^if(def $g.base && -f "$g.base"){
+		$pic[^image::load[$g.base]]
+	}{
+		$pic[^image::create($g.x;$g.y;^g.bgcolor.int(0xEEEEEE))]
+	}
+^g.lines.foreach[k;v]{
+	^drawline[$g.lines.$k]
+}
+$result[$pic]
+@drawline[line]
+$l[$.lw($g.lw)$.color[000000]$.ls[$g.ls]]
+^l.add[$line]
+$pic.line-width($l.lw)
+$pic.line-style[$l.ls]
+$pg[^expand[$l.line;=;,]]
+$polygon[^table::create{x	y
+^pg.menu{$pg.param	^eval($g.y - $pg.value - 1)}[
+]}]
+$l.color[0x$l.color]
+^pic.polyline(^l.color.int(0x000000))[$polygon]
+#^h2s:h2s[$l]<br>
+

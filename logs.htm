@@ -1,0 +1,33 @@
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[198] in $env:SERVER_NAME]
+$document.pagetitle[^lang[198]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][list;log;lg;now;filename]
+^if(def ^cando[users editor demo log]){
+^body2[]
+}{^die[269]}
+
+@body2[]
+^if(def $form:log){$lg[$form:log]}{$lg[common.log]}
+^if(!def ^file:find[/cache/logs/$lg]){$now[ ]^now.save[/cache/logs/$lg]}
+<br>^lang[329] $lg<p>
+
+$log[^table::load[nameless][/cache/logs/$lg]]
+
+$now[^date::now[]]
+$filename[${now.year}_${now.month}_${now.day}_${now.hour}]
+^if(^log.count[] > 500 && !def $form:log){
+^file:delete[/cache/logs/common.log]
+^log.save[/cache/logs/${filename}.log] ^msg[^lang[328] ${filename}.log]}
+$list[^file:list[/cache/logs;\.log^$]]
+<table align=right><tr><td>Все логи:<br>^list.menu{<a href="logs.htm?log=$list.name">$list.name</a><br>}</td></tr></table>
+
+#^log.sort{$log.0}[desc]
+^log.menu{
+ ^if(def $log.5){<font color="red">}$log.0 <a href="users.htm?uid=$log.1">$log.2</a> $log.3 $log.4 ^if(def $log.5){</font>}<br>
+}

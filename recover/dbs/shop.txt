@@ -1,0 +1,24 @@
+column	sql_type	comment	key	form_handler	special_handler
+item_id	INT(8) NOT NULL AUTO_INCREMENT	ID товара	primary	hidden	
+shop_id	SMALLINT(4) NOT NULL	ID магазина	key	text	
+visible	ENUM('yes', 'no') DEFAULT 'yes'	Этот товар можно покупать		bool	
+itemname	VARCHAR(255) NOT NULL	Название товара		text	
+price	DECIMAL(6,2) NOT NULL	Цена	key	text	
+weight	INT(5) NOT NULL	Вес единицы товара, г		text	
+1cnum2	INT(8) NOT NULL	Калорийность (ккал/100г)		text	
+1cnum1	INT(8) NOT NULL	ID товара во внешней базе		hidden	
+creator	TEXT NOT NULL	Описание товара		textarea	
+manual_name	TEXT NOT NULL	Тэги		set	tags
+url	VARCHAR(255) NOT NULL	Кругляши (hit ost fit new ulu) через пробел		text
+picture1	VARCHAR(64) NOT NULL	Малая картинка (~190x150)		file	
+picture2	VARCHAR(64) NOT NULL	Большая картинка		file	
+instock	INT(8) NOT NULL	Порядок сортировки		text	
+description	CHAR(255) NOT NULL	Опции в формате Имя_опции==параметр1,параметр2		text	
+manual	VARCHAR(64) NOT NULL	Специальная характеристика(акция, спеццена и тд)		text	
+1ctext2	ENUM('yes', 'no') DEFAULT 'no'	Этот продукт не участвует в расчете скидок		bool
+1ctext1	DECIMAL(6,2) NOT NULL	Цена за полпорции		hidden
+min_sum	INT(8) NOT NULL	ID блюда-полпорции		text
+pack	ENUM('yes', 'no') DEFAULT 'no'	Этот товар является половиной порции		bool
+nds	DECIMAL(2,1) NOT NULL	НДС для этого продукта		hidden
+urltitle	VARCHAR(127) NOT NULL	Название ссылки		hidden
+min_qty	DECIMAL(6,2) NOT NULL	Мин. кол-во для заказа		hidden

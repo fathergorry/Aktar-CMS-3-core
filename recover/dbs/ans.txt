@@ -1,0 +1,16 @@
+column	sql_type	comment	key	form_handler	special_handler
+ansid	INT(8) NOT NULL AUTO_INCREMENT	Forum ans id	primary	hidden	
+id	INT(8) NOT NULL	Forum post id	key	hidden	
+postid	VARCHAR(12)	post id	key	special	
+mydate	DATETIME NOT NULL	post date		special	
+whois	ENUM('user', 'spec') DEFAULT 'user'	Who is		special	
+title	VARCHAR(255) NOT NULL	Заголовок ответа		text	
+author	VARCHAR(70) NOT NULL	Ваше имя		text	
+userid	INT(8) NOT NULL	User id	key	special	
+visiblity	ENUM('yes', 'no') DEFAULT 'yes'	Visiblity		special	
+email	VARCHAR(50) NOT NULL	Ваш e-mail (будет защищен от спама)		text	
+content	TEXT NOT NULL	Сообщение		textarea	
+scontent	TEXT NOT NULL	Сообщение		textarea	
+picture	VARCHAR(32) NOT NULL	Прикрепить файл		special	
+parentid	INT(8)	Parent id		special	
+frate	INT(4)	Rate		special	

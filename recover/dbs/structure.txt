@@ -1,0 +1,16 @@
+column	sql_type	comment	key	form_handler	special_handler
+sect_key	INT(8) NOT NULL AUTO_INCREMENT	Section key	primary	hidden
+parent	INT(8) NOT NULL	Parent key	key	special
+path	VARCHAR(127) NOT NULL	Path to section	key	hidden
+level	TINYINT(3) NOT NULL	Section level	key	special
+menutitle	VARCHAR(255) NOT NULL	Menu title		text
+epermission	VARCHAR(127) NOT NULL	Permission to edit	fulltext	text
+rpermission	VARCHAR(127) NOT NULL	Permission to read	fulltext	text
+module	VARCHAR(32) NOT NULL	Used main module	key	select
+design	VARCHAR(32) NOT NULL	Inherited design template		select
+visiblity	ENUM('yes', 'serv', 'nomenu', 'no') DEFAULT 'yes'	Page visiblity		select
+add_block	VARCHAR(255) NOT NULL	Inherited block		special
+sect_order	SMALLINT(4) NOT NULL	Section order in menu		num
+created	DATETIME NOT NULL	Creation date	key	hidden
+modified	DATETIME NOT NULL	Modification date	key	special
+language	CHAR(3)	Language inherited	key	select

@@ -1,0 +1,21 @@
+@main[]
+
+	^use[turing1.p]
+	$ug[^captcha_pic::create[съешь ты м€со/плоть своего отца (откушай отц€тинки) $globals.capass]]
+	$a[^ug.image[]]
+	$response:body[^a.gif[]]
+
+@capshow0[div]
+^if(!def $div){$div[<br>]}
+^lang[571]$div
+<img src="/login/captchadefault.htm^rn[?]">$div<input type="text" name="captchanum">
+
+@capchk0[]
+	^use[turing1.p]
+	$ug[^captcha_pic::create[съешь ты м€со/плоть своего отца (откушай отц€тинки) $globals.capass]]
+	^if($form:captchanum ne $ug.key){
+		$result(0)^die[572]
+	}{
+		^ug.clear_userkey[]
+		$result(1)
+	}

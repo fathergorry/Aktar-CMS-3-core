@@ -1,0 +1,61 @@
+@version[]
+2009-02-28	3.0
+
+@USE
+/login/classes/dbobj.p
+/login/backup.htm
+
+@main[]
+$dtp[^dtp[]]
+
+^if(def $form:finish){^finish_install[]}
+
+<h1>^dtp['table'] will be in the database</h1>
+^body[]
+
+
+
+@body[]
+<!-- errmsg-->
+
+^if(def $form:b){^backup[]}{^if(def $form:r){^restore[]}{}}
+^if(def $form:download){^download_i[]}
+^show_menu_i[]
+
+
+@download_i[][f]
+$f[/my/tabak/^file:justname[$form:download].tabak]
+^if(-f "$f"){
+ $response:download[^file::load[binary;$f]]
+}{^die[Something went really bad]}
+
+@show_menu_i[]
+
+
+^connect[$scs]{
+ $all_tables[^table::sql{SHOW TABLES}]
+}
+$cname[^all_tables.columns[]] $cname[$cname.column] ^all_tables.sort{$cname}
+<form action="backup.htm">
+Which tables you want to back-up?<br>
+ ^all_tables.menu{
+  ^if(^all_tables.$cname.pos[^dtp[]] == 0){<input type=checkbox name="b" value="$all_tables.$cname">$all_tables.$cname<br>}
+ }
+<input type=submit>
+</form>
+$list[^file:list[/my/tabak]]
+<div align=right>
+<form action="backup.htm">
+Which tables you want to restore?
+<table border=0>
+ ^list.menu{<tr><td>
+ $tfile[$list.name] $tstat[^file::stat[/my/tabak/$tfile]]
+ $tfile[^tfile.match[.tabak][ig]{}]
+  <input type=checkbox name="r" value="$tfile"><a href="backup.htm?download=$list.name">$list.name</a> </td><td>$tstat.size</td><td>^tstat.mdate.sql-string[]</td></tr>
+ }
+ </table>
+<input type=submit><p>
+</form>
+</div>
+
+

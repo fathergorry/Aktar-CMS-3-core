@@ -1,0 +1,13 @@
+column	sql_type	comment	key	form_handler	special_handler
+id	INT(8) NOT NULL AUTO_INCREMENT	id	primary	hidden
+postdate	DATETIME NOT NULL	postdate	key	special
+title	VARCHAR(255) NOT NULL	Заголовок новости		text
+newsid	VARCHAR(64) NOT NULL	Id новостной ленты	key	special
+content	TEXT NOT NULL	Содержание новости		textarea
+expires	DATE NOT NULL	Дата устаревания	key	text
+picture	VARCHAR(32) NOT NULL	Картинка		file
+autoformat	ENUM('yes', 'no') DEFAULT 'yes'	Автоформат	bool
+path	VARCHAR(128)	Url to locate	key	hidden			adb_compurl	
+lastmodified	DATETIME	Last modified		hidden			currentdate_sql	
+moderated	ENUM ('yes', 'no') DEFAULT 'yes'	Допущено к просмотру	key	checkbox	adb_ismoderated			
+editby	INT(8)	Редактируется пользователем	key	hidden			adb_edited_by	

@@ -1,0 +1,151 @@
+@USE
+dbobj.p
+
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[319]]
+$document.pagetitle[^lang[319]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+@body[]
+
+^if(def ^cando[]){
+^if(def $form:b){^backup[]}{^if(def $form:r){^restore[]}{}}
+^if(def $form:download){^download[]}
+^show_menu[]
+}{^die[269;нет прав]}
+
+
+@download[][f]
+$f[/my/tabak/^file:justname[$form:download].tabak]
+^if(-f "$f"){
+ $response:download[^file::load[binary;$f]]
+}{^die[320;not found]}
+
+@show_menu[]
+^connect[$scs]{
+ $all_tables[^table::sql{SHOW TABLES}]
+}
+$cname[^all_tables.columns[]] $cname[$cname.column] ^all_tables.sort{$cname}
+<form action="backup.htm">
+^lang[321;чё сохранить?]<br>
+<script type="text/javascript">
+function checkAll(oForm, cbName, checked)
+{
+for (var i=0; i < oForm[cbName].length; i++) oForm[cbName][i].checked = checked^;
+}
+</script>
+ &nbsp^;<input type="checkbox" onClick="checkAll(this.form,'b',this.checked)">Отметить все<br>
+
+ ^all_tables.menu{
+  ^if(^all_tables.$cname.pos[^dtp[]] == 0){<input type=checkbox name="b" value="$all_tables.$cname">$all_tables.$cname<br>}
+ }
+^lang[322;send to]<br>
+<input type=text name=mailtosend> ^lang[327]<input type=checkbox name=pictures value=yes>^lang[325]
+#<input type=checkbox name=files value=yes>^lang[326]
+<br>
+<input type=submit>
+</form>
+$list[^file:list[/my/tabak]] $list0[^table::create{tname	fsize	created	imgcreated}]
+^list.menu{
+	$f[^file:justname[$list.name]]
+	$a[^file::stat[/my/tabak/${f}.tabak]]
+	$b[^file::stat[/my/dbs/${f}.txt]]
+	^list0.append{$f	$a.size	^a.mdate.unix-timestamp[]	^b.mdate.unix-timestamp[]}
+}^list0.sort($list0.[^default[$form:rest_ob;created]])[desc]
+<div align=right>
+<form action="backup.htm">
+^lang[323;restore]
+<table border=0 cellpadding=3>
+<tr>
+^gridcontrol:list[rest_ob;tname, fsize, created, imgcreated;</a><input type="checkbox" onClick="checkAll(this.form,'r',this.checked)">Все, ^lang[fsize], created, image created;backup.htm?]
+</tr>
+ ^list0.menu{<tr><td>
+  <input type=checkbox name="r" value="$list0.tname"><a href="backup.htm?download=${list0.tname}.tabak">$list0.tname</a> </td>
+  <td>$list0.fsize</td><td>^dmyt[$list0.created]</td><td>^dmyt[$list0.imgcreated]</td></tr>
+ }
+ </table>
+ <input type=checkbox name="updonly" value="y"> ^lang[429]<br>
+<input type=submit><p>
+^lang[324;restore indexes] <br>
+$iii[^table::load[/my/config/indexes.txt]]
+^iii.menu{
+<input type=checkbox name="i" value="$iii.index">$iii.index ($iii.tab)<br>
+}
+
+<input type=submit>
+</form>
+</div>
+<a href="$uri?reinstall=1" onClick="return confirm('Are you sure you want to reinstall this site?')">Reinstall site</a>
+^if(def $form:reinstall && def ^cando[]){
+	^try{^file:delete[/login/install/.htaccess]}{^blad[]}
+	^redirect[/login/install/^rn[?]]
+}
+@backup[][alltables;bkp;bkptbl]
+$alltables[$form:tables.b]
+^alltables.menu{
+ $bkp[$alltables.field]
+ $bkp[^bkp.match[^dtp[]][ig]{}]
+$bkptbl[^dbobj::create[$bkp]]
+^bkptbl.backup[/my/tabak/${bkp}.tabak]
+$bkpsize[^file::stat[/my/tabak/${bkp}.tabak]]
+^msg[Table ^dtp[$bkp] saved to /my/tabak/${bkp}.tabak ($bkpsize.size bytes)]
+}
+^log[backed-up ^if(def $form:mailtosend){and emailed to $form:mailtosend} table(s)	^alltables.menu{$alltables.field}[, ]^if(def $form:pictures){ and pics}]
+^if(def $form:mailtosend && ^is_email[$form:mailtosend]){^mail:send[
+  $.from[web@$env:SERVER_NAME]
+  $.to[$env:SERVER_NAME Admin <$form:mailtosend>]
+  $.subject[Backup files from $env:SERVER_NAME]
+  $.text[Here are the backup flies]
+  ^alltables.menu{
+    $bkp[$alltables.field]
+    $bkp[^bkp.match[^dtp[]][ig]{}]
+    $num[^if(^alltables.line[] >= 2){^alltables.line[]}{}]]
+    $.file$num[^file::load[binary;/my/tabak/${bkp}.tabak]]
+  }
+  ^if(def $form:pictures){$num2(^num.int(0) + 1)
+    $list[^file:list[/my/img/b]]
+    ^list.menu{
+    $num($num2 + ^list.offset[])
+    $.file$num[^file::load[binary;/my/img/b/$list.name]]
+    }
+  }
+]}
+
+@restore[]
+#get all sql tables to restore
+^resmeter[backup;before restore]
+$alltables[$form:tables.r]
+^alltables.menu{
+ $rst[$alltables.field]
+ $rsttbl[^dbobj::create[$rst]]
+ ^if(def $form:updonly){
+     ^rsttbl.CreateDBImage[]
+     ^msg[Table $rst updated]
+ }{
+     ^rsttbl.restore[/my/tabak/${rst}.tabak]
+     ^msg[Table ${rst}.tabak restored to ^dtp[$rst] in ^rsttbl.restore_count.int(1) parts of $rsttbl.eachpart rows]
+ }
+
+}
+$sections[^dbobj::create[sections]]
+#^sections.repair[structure;sect_key;sect_key]
+
+^if(def $form:i){
+$io[$form:tables.i] $iio[^io.menu{$.[$io.field][1]}]
+^fulltexts[$iio]
+}
+^log[^if(def $form:updonly){updated}{restored data on} tables	^alltables.menu{$alltables.field}[, ]	!]
+^resmeter[backup;after restore]
+@get_bulky_dat[dir]
+^connect[$scs]{
+$dat[^file:list[$dir]]
+$result[^dat.menu{$tmp[^file::load[binary;$dir/$dat.name]]a194d400fc8539a6e6218 $dat.name
+^tmp.sql-string[]}[
+]]
+}
+@dmyt[unix][tmp]
+$tmp[^date::unix-timestamp(^unix.int(^now.unix-timestamp[]))]
+$result[^dmy[^tmp.sql-string[]]]

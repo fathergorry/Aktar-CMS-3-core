@@ -1,0 +1,149 @@
+@USE
+collection.p
+
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[346] in $env:SERVER_NAME]
+$document.pagetitle[^lang[346]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][tmp]
+$lettersOnce(60)
+^if(def ^cando[users mail demo]){
+^connect[$scs]{
+^switch[$form:mode]{
+ ^case[sendmail]{^if(def ^cando[users]){^sendmail[^form:sendmail.int(0);^form:portion.int(1)]}{^die[268]}}
+ ^case[edit]{^if(def ^cando[users editmail]){^editmail[^form:edit.int(0)]}{^die[268]}}
+ ^case[DEFAULT]{^maillist[]}
+}
+}
+}{^die[268]}
+
+@sendmail[id;portion][groups;uc;pt]
+
+$mails[^collection::create[mails]]
+$mail0[^mails.createInstance[;$id]]
+
+
+$users[^table::sql{SELECT id, name, lastname, parname, email FROM ^dtp[users] WHERE
+^if(def $form:forme){id = '$user.id'}{(^sql_request_hash[$mail0.groups;groupid])} ORDER BY id}[$.offset(^if(def $form:forme){0}{$mail0.sent})$.limit($lettersOnce)]]
+<p>
+$message[^ext_hrefs[^process{^untaint{$mail0.mail}};mail$id]]
+^users.menu{^mail:send[
+ $.from[$user.name $user.lastname <$user.email>]
+ $.to[$users.name $users.lastname <$users.email>]
+ $.subject[$mail0.subj]
+ $.html{$message}
+ $.charset[windows-1251]
+ $.errors-to[$user.email]
+ $.x-mailer[Aktar CMS (Parser-3) oops...]
+]}
+^if(!def $form:forme){^void:sql{UPDATE ^dtp[mails] SET sent = sent + ^users.count[] WHERE mailid = '$id'}}
+^if($users <= 0){
+^msg[^lang[347]]
+}{
+^if(!def $form:forme){
+$document.pagetitle[^lang[348]]
+$okmsg[^lang[349] ^eval($mail0.sent + ^users.count[]) ^lang[350;писем из] ${mail0.gcount}.]
+^msg[$okmsg] ^log[sent mail	$okmsg	!]
+$response:refresh[$.url[/login/mailer.htm?mode=sendmail&sendmail=1&forme=$form:forme^rn[&]]$.value[60]]
+}{^msg[351]}
+}
+
+@maillist[][this]
+$this[/login/mailer.htm?]
+<div align=right><a href="${this}mode=edit&edit=new">^lang[352;new mail]</a></div>
+<table ^admin_tbl_design[]>
+$mails[^table::sql{SELECT * FROM ^dtp[mails] ORDER BY ^default[$form:ob;cdate] DESC}]
+<tr>^gridcontrol:list[ob;subj, cdate, gcount;^lang[353;Тема рассылки], ^lang[354;дата создания], ^lang[355;получателей];mailer.htm?]<td>^lang[349;Отправлено]</td><td>Эффективность</td></tr>
+^mails.menu{<tr><td>
+<a href="mailer.htm?mode=edit&edit=$mails.mailid^if($mails.gcount <= $mails.sent && $mails.sent > 0){&preview=1&noed=1}^rn[&]">$mails.subj</a></td><td>^dmy[$mails.cdate]</td>
+<td>$mails.gcount</td><td>^if($mails.gcount <= $mails.sent && $mails.sent > 0){да}{^if($mails.sent == 0){^lang[356]}{^lang[357] ($mails.sent)}}</td>
+<td>^if($mails.sent > 0){неизвестно}{---}</td></tr>}
+</table>
+@editmail[id]
+$mails[^collection::create[mails]]
+$mail0[^mails.createInstance[;$id]]
+^if(def $form:preview){^previewmail[$id]}{^editmail_[$id]}
+
+
+
+@previewmail[id]
+$document.pagetitle[$mail0.subj ^if(!def $form:noed){<a href="mailer.htm?mode=edit&edit=$form:edit^rn[&]">^lang[94]</a>}] <p>
+
+$usercando0090672[^hash::create[$usercando]] $usercando[]
+^ext_hrefs[^process{^untaint{$mail0.mail}};mail$id]
+$usercando[$usercando0090672]
+
+
+@editmail_[id][inst;ugrp;sgrp;sdate;mail_error;gtmp;template;template_tab]
+
+$document.pagetitle[^lang[358]]
+#check for errors
+^if(!def $mail0.subj){$mail0.subj[^lang[352]]}
+
+^if(def $form:groups){$gtmp[$form:tables.groups] $mail0.groups[^gtmp.menu{$gtmp.field}[ ]]}{
+ ^if($id && $env:REQUEST_METHOD eq POST){^die[359;Нужно указать хотя бы одну группу получателей рассылки]$mail_error(1)}
+}
+$sgrp[^s2h[$mail0.groups default]]
+$mail0.gcount[^int:sql{SELECT COUNT(groupid) FROM ^dtp[users] WHERE ^sgrp.foreach[k;v]{groupid = '$k'}[ OR ] }}]
+$mail0.cdate[^sqldate[$mail0.cdate]]
+^if(def $form:template || def $form:select_template){
+^if(def $form:template){$template[$form:template.text]}
+^if(def $form:select_template){$tmp[^file::load[text;/templates/mail/$form:select_template]]$template[^process{$tmp.text}]}
+$mail0.mail[^content_foredit[$mail0.mail]]
+$template_tab[^template.split[::body::;lh]]
+$mail0.mail[$template_tab.0 $mail0.mail ^if(def $template_tab.1){$template_tab.1;^msg[360;Поместите в шаблон текст ::body:: в том месте, куда вставляется текст письма]}]
+}
+
+
+^if($env:REQUEST_METHOD eq POST && def $form:del && $id){^connect[$scs]{^void:sql{DELETE FROM ^dtp[mails] WHERE mailid = '$id'}} ^log[deleted mail	"$mail0.subj"] ^redirect[mailer.htm^rn[?]]}{
+^if($env:REQUEST_METHOD eq POST && !def $mail_error){
+	^if($id){
+		$mail0.mail[^content_prepare[$mail0.mail]]
+		^mails.updateInstance[$mail0;$id]
+		}{
+		$mail0.mail[^content_prepare[$mail0.mail]] 
+		^log[edited mail	"$mail0.subj"]
+		^mails.insertInstance[$mail0;mailer.htm?mode=edit&edit]
+		^redirect[/login/mailer.htm^rn[?]]
+		}
+	}
+}
+^if(def $form:now && !def $mail_error){^redirect[/login/mailer.htm?mode=sendmail&sendmail=$id] ^log[sent mail	"$mail0.subj"]}
+<form action="/login/mailer.htm?mode=edit&edit=$id" method=post enctype="multipart/form-data">
+<input type=hidden name="gcount" value="$mail0.gcount">
+<input type=hidden name=cdate value="^default[$mail0.cdate;^now.sql-string[]]">
+<input type=hidden name=mdate value="^now.sql-string[]">
+<table border=0 width=740>
+<tr><td colspan=2>^lang[353;Тема рассылки]:<br>
+^ftext[subj;$mail0.subj;90]<br>
+^if(!$id){^lang[354;Дата создания]: ^ftext[cdate;^now.sql-string[];]<br>}</td></tr>
+<tr><td valign=top>
+ ^if($form:edit ne new){^fbool[del;yes]^lang[361;удалить рассылку]<br>}
+  ^lang[362]:<input type=file size=5 name=template title="^lang[360]" style="cursor:help">
+  $tmp[^file:list[/templates/mail]]
+  ^if($tmp >0){^lang[363]<select name=select_template><option value=""></option>^tmp.menu{<option value="$tmp.name">$tmp.name</option>}</select>}
+  <br>
+<input type=submit value="^lang[364;Сохранить рассылку]"> <br>
+<a href="mailer.htm?mode=edit&edit=$id&preview=1^rn[&]">^lang[365;предпросмотр]</a>
+<br><a href="mailer.htm?mode=sendmail&sendmail=$id&forme=true^rn[&]">^lang[366;отправить письмо себе]</a>
+</td><td>$ugrp[^table::sql{SELECT * FROM ^dtp[usergroups]}]
+
+^lang[355]: <br>
+^ugrp.menu{
+ ^fbool[groups;$ugrp.groupid;^if(def $sgrp.[$ugrp.groupid]){$ugrp.groupid}] $ugrp.name <br>
+}</td></tr>
+</table>
+
+
+
+^use[visualeditor.p]
+^mshtml[$mail0.mail;mail;exec;740]
+
+<br>
+<input type=submit value="^lang[364]"> ^if($form:edit ne new){<input type=submit name="now" value="^lang[367;Отправить сейчас]">}{^lang[368;Рассылку необходимо сохранить и просмотреть перед отправкой]}
+</form>

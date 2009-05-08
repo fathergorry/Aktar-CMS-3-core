@@ -1,0 +1,5 @@
+column	sql_type	comment	key	form_handler	special_handler
+groupid	SMALLINT(4) NOT NULL AUTO_INCREMENT	group	primary	hidden
+name	VARCHAR(255) NOT NULL	Название группы		text
+descr	TEXT	Описание группы		textarea
+rig	VARCHAR(255) NOT NULL	Права		special

@@ -1,0 +1,20 @@
+
+@menu_def[m][tab]
+
+^menu.$m.menu{<a href="$menu.$m.uri">$menu.$m.menutitle</a> }<br>
+
+@design[header;h1;body]
+
+<head>
+$header
+</head>
+<body>
+
+^for[i](0;9){
+^if(def $menu.$i){^menu_def[$i]}
+}
+<h1>$h1</h1>
+$body
+<p>
+^admin_inpage[ &middot^; ]
+</body>

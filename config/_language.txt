@@ -1,0 +1,596 @@
+id	rus	en	exist
+0	?	?	
+1	Идентификатор форума (цифры или латинские буквы). Обязателен!	Forum ID (numbers or characters). Required!	
+2	Режим премодерации	Posts premoderation	
+3	Премодерация ответов на посты	Premoderation	
+4	Каждый может оставлять сообщения	Anybody can post comments and messages	
+5	Разрешить для всех html и дополнительные органы управления	Allow everybody to use html and additional html controls	
+6	Количество записей на странице	Records per page to display	
+7	Е-майл администратора форума	Admin email	
+8	Максимальный размер картинки (кб), 0 - картинки не разрешены	Maximum picture size (kbytes), type 0 if pics not allowed	
+9	Все невидимые записи в форуме стали видимыми	All invisible records become visible	
+10	Все записи проверены, сделать их видимыми!	All records are correct, make them visible!	
+11	Этот форум является консультацией специалиста	This forum is a specialist consultation	
+12	Отвечено	Answered	
+13	Идет обсуждение	Discussion	
+14	Ответов:	Replies:	
+15	Нет записей	No records here
+16	Страницы:	Pages:
+17	Ваше имя:	Your name:
+18	Ваш e-mail (будет автоматически защищен от спама)	Your e-mail (will be protected from spam):
+19	Уведомлять меня о поступлении ответа.	Notify me if somebody replies.
+20	Тема сообщения:	Message title:
+21	Текст сообщения:	Message body:
+22	Отправить!	Post it!
+23	Поля, обязательные для заполнения	Required fields
+24	Картинка:	Picture:
+25	Уведомить о поступлении ответа	Notify user
+26	Назад	Back
+27	Цвет	Color
+28	Размер	Font size
+29	Мелкий	x-small
+30	Небольшой	small
+31	Заголовок:	Header:
+32	Загрузить картинки	Load pictures
+33	Закрыть все теги	Close all tags
+34	Подстанавливаемый раздел (путь)	Section to substitute (path)
+35	Начиная с какого раздела искать?	Section to search in
+36	Результатов, не более	Results, at most
+37	Номер магазина (по умолчанию - 1)	Shop number (default - 1)
+38	Категория (можно указывать несколько, без пробелов, разделяя |)	Category (may have many categories, divided by |)
+39	Имеются картинки (вы должны будете их загрузить через <a href=/login/loadpix.html>менеджер картинок</a>)	Have pictures (you may upload them via picture manager)
+40	E-mail для приемки заказов	E-mail for orders
+41	Регистрация нового пользователя	Registration
+42	Профиль пользователя	User profile
+43	Не заполнены ФИО	User name required
+44	Не заполнен почтовый индекс	Area code required
+45	Не заполнен адрес	Address required
+46	Укажите хотя бы один способ связи с Вами: e-mail или телефон	E-mail or phone number required
+47	Вы неуверенно ввели пароль. Повторите ввод.	Password1 and password2 must be the same!
+48	Вы должны ввести e-mail или пароль. Если Вы не введете пароль, то он сгенерируется автоматически и будет выслан на e-mail.	You must input password or e-mail to autogenerate pasword.
+49	Вы не указали необходимую информацию:	You must fill out required:
+50	Изменение данных пользователя:	Edit user info:
+51	Ваши данные успешно введены.	Your personal info has been saved.
+52	Зарегистрировался	Registered him(her)self
+53	Закончить регистрацию	Finish!
+54	Если Вы ввели корректный e-mail, то вскоре на него придет сообщение о регистрации.	If you've entered correct e-mail, you'll soon get a message with your registration data.
+55	"Такой e-mail уже есть. Вы можете <a href=""/login/?recover=1&id=^form[email]"">восстановить</a> свой пароль."	"Such e-mail is alredy in our database. You may <a href=""/login/?recover=1&id=^form[email]"">recover</a> your password."
+56	Пароль НЕ БЫЛ изменен.	Password HASN'T BEEN changed.
+57	Вы должны войти, чтобы изменять данные	You must log in to change your info.
+58	Здравствуйте,	Hello
+59	Вы зарегистрировались на сайте	You've been registered at
+60	Ваш логин:	Your login is:
+61	Пароль:	Password:
+62	Вы можете отказаться от регистрации по этому адресу:	You may cancel registration here:
+63	Организация/должность:	Organisation/duty:
+64	Город:	City:
+65	Почтовый индекс:	Area (zip) code:
+66	Страна:	Country:
+67	Контактный телефон:	Phone:
+68	Факс:	Fax:
+69	Изменить пароль:	Change password:
+70	Старый пароль:	Old password:
+71	Новый пароль:	New password:
+72	Повторите пароль:	Confirm password:
+73	Готово!	Submit!
+74	Операции	Available actions
+75	Результаты операций	Action results
+76	Начальная страница	Initial page
+77	Поздравляем, Вы включили сайт. Теперь Вы можете <a href=/login/update2.html?p=/>редактировать эту страницу</a>, <a href=update2.html?add_sibling=new>создавать новые разделы</a> и пользоваться <a href=/login/>панелью управления</a>. Имя/пароль администратора - god/god. Не забудьте сменить пароль!	Greetings! You have turned on your website. Now you can <a href=/login/update2.html?p=/>edit this page</a>, <a href=update2.html?add_sibling=new>create new sections</a> and use the <a href=/login/>control panel</a>. Your administrator login/password is god/god. Do not forget to change this password!
+78	Не заполнена тема сообщения.	Message title required.
+79	Нет текста сообщения.	Message text required.
+80	Сообщение добавлено.	Message added.
+81	Вы сможете увидеть его после проверки модератором.	You will see it after moderator finds it correct.
+82	Название дополнительного поля (если нужно)	Custom field name (if you want one)
+83	Форматировать это поле как (например, < a>&1< /a>)	Format this field like (for example, < a>&1</ a>)
+84	Извините, документ закрыт	Sorry, the document is closed
+85	анонимно	anonymous
+86	Нет такого сообщения	No such message
+87	Ответы	Replies
+88	Написать ответ	Post reply
+89	Не указан автор сообщения	Your name required
+90	Novoe soobschenie v forume	New message in the forum
+91	Такое сообщение уже есть.	Such message already exists.
+92	написал(а)	wrote
+93	удалить	delete
+94	редактировать	edit
+95	Здравствуйте! Специалист только что ответил на Ваш вопрос.	Hello! You've got specialist's answer.
+96	Прочитать ответ можно здесь:	You can read it here:
+97	Вы можете отписаться от комментариев, пройдя по этой ссылке:	To unsubscribe, click here:
+98	Вы отписались от комментариев	You've been unsubscribed.
+99	Легенда	Legend
+100	Права доступа для<br>редактирования ветви	Permission to edit this branch
+101	Наследуемый дизайн-шаблон	Design template for this branch
+102	Подпрограмма	Applet
+103	Дополнительное меню	Additional menu
+104	Ветвь или раздел закрыт	This branch or page is closed
+105	Имя в меню	Menu title
+106	Порядковый номер в меню	Section order in menus
+107	Заголовки страниц	Page title
+108	Заголовок для поисковиков	< title > tag
+109	Ключевые слова	Keywords
+110	Видимость	Visiblity
+111	Описание страницы	Meta description
+112	Извещение отправлено на	Notification sent to
+113	Идентификатор новостной ленты (цифры или латинские буквы). Обязателен!	News ID (numbers or characters). Required!
+114	Анонсируемый раздел (если нужно). Будут анонсироваться только статические страницы.	Section to announce (if you want). Only static pages will be announced.
+115	Заголовок новости:	The new header:
+116	Содержание новости:	The new content:
+117	Анонсируемый период для разделов (дней)	Days back for pages announce
+118	При таких настройках количество новых и обновленных статей, которые увидит пользователь, будет равно	With such setings the amount of the new and renewed pages will be
+119	Дата:	Date:
+120	Дата устаревания:	Expiration date:
+121	Разбивка	Break
+122	Сообщение обновлено.	Record updated.
+123	Редактирование записи	Edit record
+124	Подробнее	More
+125	Новая запись	New record
+126	Новые разделы	New sections
+127	Обновленные разделы	Updated sections
+128	Без названия	Untitled
+129	Язык страницы	Page language
+130	Включать только страницы с соответствующим языком	Include only pages with corresponding to that page language
+131	Нет такой страницы	No such page
+132	Скрытый раздел	Hidden
+133	Добавить сюда	Add here
+134	Добавить подраздел к	Add subsection to
+135	Показать настройки этой страницы	Show this page settings
+136	Показать	Show
+137	Настройки страницы	Settings of
+138	Короткое название для разделов в меню	Short title for menu links
+139	Задавайте с большим шагом - 10, 20, 30 и т.д. - тогда можно будет вставлять дополнительный раздел между имеющимися.	Assign it with large steps - 10, 20, 30 etc, so you can then insert pages between.
+140	Заголовок (для посетителей):	Page title:
+141	Заголовок может быть достаточно длинным. Пишите в нем ключевые слова и название города, если необходимо.	This title can be long enough. Type here also your city and organisation.
+142	Пишите только те ключевые слова, которые присутствуют в тексте. Это повышает релевантность страниц для поисковиков.	Use only significant words that appear in the titles and page text.
+143	Аннотация используется в ряде подпрограмм, и она очень важна для Яндекса, Google	Meta description is used for announces.
+144	В каких случаях эта страница будет видна обычным пользователям - везде, в меню или не видна вся ветвь?	Cases users will not see that page or branch
+145	Всегда	Ever
+146	Только для админа	Only for admin
+147	Кроме меню	Except menus
+148	Закрыть всю ветвь	Close all branch
+149	Используйте эти кнопки для редактирования текста страницы.	Use those buttons to edit page text
+150	Содержание страницы:	Page content:
+151	не использовать	don't use
+152	Сохранить!	Save settings!
+153	Права на редактирование ветви (через пробел)	Permission to edit this branch (divide with spaces)
+154	Это привилегия администратора. Эти же права можно назначить какому-либо пользователю через панель управления, и тогда он сможет редактировать эту ветвь	This is admin privilege. Permissions are created via control panel and assigned here.
+155	То, под каким дизайном будут выводиться страницы. Подробнее о создании шаблонов см. в документации	See manual for more about design templates
+156	Дизайн-шаблон	Design template
+157	Наследовать свыше	Inherit from above
+158	Вы не можете пользоваться этой службой	You cannot use this service
+159	Меню	Menu
+160	Удалить или переместить этот раздел и подразделы	Delete or move this section and all subsections
+161	Поехали	Go
+162	Новое меню	New menu
+163	порядковый №	Menu order
+164	Путь к разделу (URL)	Path to section (URL)
+165	Уровень меню	Menu level
+166	Имя	Name
+167	Наименование этого меню (только латинские буквы, без пробелов):	Menu name (only latin characters, without spaces):
+168	Редактируется меню	Editing menu
+169	Дополнительные меню	Additional menu editing
+170	Удалить	Delete
+171	Перед Вами конструктор меню. Элемент меню представлен ссылкой (путем к разделу, УРЛом), ее названием и порядковым номером. Ссылка обязательна, если ее нет - элемент меню удаляется. Созданные меню можно затем использовать на страницах сайта.	There is menu builder. Each menu element consists of a link (url, path), a link name and an order. Link is required: if you leave it empty, the menu element will be deleted. Tose menus you've built can later be used in page editor.
+172	Настройки ветви	Branch settings
+173	вместо	replace
+174	Редактировать/добавить	Edit/add
+175	Редактировать у отмеченных:	Edit selected:
+176	Обнаружен загружаемый файл…	Found a file to download…
+177	добавил раздел	added section
+178	изменил раздел	changed section
+179	ПОПЫТКА ВЗЛОМА	HACKING ATTEMPT
+180	Нельзя таким способом грузить парсерный код!	You cannot load parser code this way
+181	загрузил страницу	uploaded page
+182	попытался загрузить страницу	tried to upload a page
+183	, но не смог	but didn't succeed
+184	Загруженный документ испорчен или содержит парсерный код, поэтому оставлена старая страница	Uploaded file may be broken or contain parser code. Upload wasn't successful.
+185	Установки подпрограммы:	Applet settings:
+186	Не задан идентификатор раздела или задано неправильно. Допускаются только латинские символы.	Section id is empty or incorrect. Only latin characters allowed.
+187	Такой элемент уже есть. Переключаемся на редактирование…	Such a section already exists. Switching to editor…
+188	Попытка удаления узла…	Trying to delete section…
+189	Сейчас будут удалены разделы	Deleting sections
+190	Здравствуйте	Hello
+191	выйти	logout	
+192	Редактирование раздела	Editing section	
+193	Вы не вошли!	You are not logged in!	
+194	В системе AYOO понятия страницы, узла, раздела тождественны. Уникальным идентификатором страницы является путь. <p>Введите последнюю часть пути новой страницы, каким он будет появляться в ссылке. Это слово должно состоять только из латинских букв нижнего регистра и может заканчиваться цифрами. <br>Например, если вы хотите создать страницу '/тест/раздел1', то это слово должно писаться как 'section1', а весь путь к странице будет выглядеть, соответственно, /test/section1.	In AYOO terms, page, section and node are the same. The unique page identificator is path. <p> Input the last part of the path of the new page how it will appear in the link to that page. This word should consist of latin characters and may end with digits.<br> For example, if you want to create page with path '/test/section1' that word will be 'section1'.	
+195	Дерево сайта	Tree view	
+196	Групповые операции	Grouped operations	
+197	Доп. меню	Add. menus	
+198	Журнал	Adm.log	д
+199	Пользователи	Manage users	
+200	Ок	Ok	
+201	Глобальные настройки	Global variables	
+202	Изменить персональные данные	Edit personal data	
+203	Ваша корзина	Your cart	
+204	шт.	items	
+205	Управление	User menu	
+206	email:	email:	
+207	Пароль:	Password:
+208	Зарегистрироваться	Register
+209	Войти	Log in
+210	Редактировать эту страницу	Edit this page
+211	Загрузить эту страницу:	Upload this page:
+212	Извините, но администратор сайта запретил поиск.	Sorry, the search is not available.
+213	Настройки	Variable list
+214	редактировал глобальные переменные	edited global variables
+215	Язык системы по умолчанию	Default system language
+216	E-mail администратора сайта	Site admin e-mail
+217	Время кэширования статичных страниц (0 - ничего не кешируется)	Cache time for static pages (0 - no caching)
+218	Генерировать меню только для одного языка	Generate menus for only one language
+219	Использовать мастер при создании новых страниц (для новичков)	Use wizard when creating new pages (for newbies)
+220	Введите имя или e-mail:	Name or e-mail:
+221	Найти похожие	Find matches
+222	E-mail:	E-mail:
+223	Права	Permission
+224	Самоубийство не позволено	Suicide not allowed
+225	удалил пользователя	deleted user
+226	Пользователь удален.	User deleted.
+227	Вы не имеете права удалять пользователей.	You have no permission to delete users.
+228	изменил права пользователя	changed permissions of user
+229	Информация о	Info about
+230	Адрес:	Address:
+231	Установить права доступа на раздел <nobr>(можно несколько, разделяя пробелом)</nobr>. Раздел также должен иметь эти права (они устанавливаются в настройках ветви).	Set permission to a section <nobr>(may have multiple permissions, divided by space)</nobr>. This section must have that permission too and it is set in 'branch settings' block.
+232	Извините, документ не найден.	Sorry, document not found.
+233	Картировать, начиная с раздела	Map from path..
+234	Анонсировать новые и обновленные разделы за период	Announce new sections, period (days back)
+235	Нет ответов	No replies
+236	Обновили	Updated
+237	Имеющиеся идентификаторы (непустые):	Used id's:
+238	Kартинки	pics
+239	Пользователи, которые смотрят сайт в текстовом виде	Users that prefer to view site in textonly mode
+240	Специалист	Specialist
+241	Ошибочная ссылка (клик - перейти на реферрала)	Broken link (click to go to the referrer)
+242	Хитов	Hits
+243	Перенаправлять на	Redirect to
+244	Удалить	Delete
+245	Игнорировать	Ignore forever
+246	Ошибочные страницы	Broken links
+247	Игнорируемых ссылок	Ignored links
+248	редактировал ошибочные ссылки	edited broken links
+249	Документ найден по другому адресу, перенаправляем…	Document found in another location, redirecting…
+250	Предупреждение: это похоже на страницу сайта, но в базе данных не найдено. Подобная ситуация может привести к взаимным или кольцевым перенаправлениям между ошибочными страницами.	Warning: redirect is like a path, but no such path found. This can result in backward redirection which is very bad.
+251	Примечание: опция удаления удаляет страницу из списка ошибочных, но только до тех пор, пока она снова не будет найдена. 	Note: the delete option deletes record only from this list, next time found this record will be shown again
+252	Отключить возможность встроенного поиска (drop fulltext)	Disallow built-in search (drop fulltext)
+253	Включить возможность встроенного поиска (add fulltext)	Allow for built-in site search (add fulltext)
+254	Поиск запрещен	Search disabled
+255	Поиск разрешен	Search enabled
+256	Страниц слишком много, поэтому показаны уровни	Too much pages. So, levels shown:
+257	Показать все страницы	Show all pages
+258	Полный доступ	Full access
+259	Права на действия	Permissions to actions
+260	Клиент-менеджер (создание групп посетителей)	Client manager (can create visitor groups)
+261	Загрузка картинок, др. файлов	Upload pictures and other files
+262	Может редактировать меню	Can edit menus
+263	перейти	go to page
+264	Подтверждаю удаление	I confirm
+265	Всё, страницы удалены.	Pages deleted.
+266	Ваши разделы	Your sections
+267	Блоки	blocks
+268	Вы не имете прав на эту операцию или находитесь в демо-режиме<br>	You have no permission to do this or you are in demo mode.<br>
+269	Вам нельзя редактировать этот раздел. [<a href=/login/>Список ваших разделов</a>]	You cannot edit this section. [<a href=/login/>Your sections list</a>]
+270	Разделы	Sections
+271	Создание новой страницы/раздела	New section
+272	Показаны не все пользователи	Not all users shown
+273	настроить	set up
+274	Отмена регистрации	Cancel registration
+275	Восстановление пароля	Password recover
+276	Вам был выслан ваш пароль.	Your password has been sent to you.
+277	Впишите ваш e-mail, который вы вводили при регистрации, и ваш пароль будет вам выслан	Type in your email that you have entered at registration and your password will be sent to you
+278	Нет такого пользователя. Сначала нужно <a href=/login/profile.html?action=register>зарегистрироваться</a>.	No such user. You must <a href=/login/profile.html?action=register>register</a> first.
+279	Неверный пароль	Incorrect password
+280	Забыли пароль?	Forgot your password?
+281	Нет такого e-mail	No such email
+282	Дополнительная информация (можно использовать html)	Additional info (you can use html)
+283	Путь к разделу о специалистах (где стоит подпрограмма profile)	path to all specialists's userinfo (where `profile` applet installed)
+284	Сохранить как	Save as
+285	Редактируется блок	Editing block
+286	Совршил групповую операцию над	Performed group operation on
+287	Информация обновлена	Info updated
+288	Вы не имеете права изменять права этого пользователя	You cannot update this user.
+289	Просмотр журнала	Can view admins log
+290	Удаление картинок и др. файлов	Delete pics and other files
+291	Всего картинок:	Pictures total:
+292	Найдено и исправлено:	Found and corrected:
+293	Вы можете сохранить эту страницу у себя на диске, редактировать её и загрузить обратно	You may save this page on local, edit it and upload back.
+294	Редактировать содержание визуально	Edit content in visual mode
+295	Искать только в	Search only in
+296	Результаты поиска	Search results for
+297	По вашему запросу ничего не найдено	No matches for
+298	старт	begin
+299	Дополнительные блоки	Additional blocks
+300	Управление картинками	Picture management
+301	Управление пользователями	User management
+302	Кодировка писем	Mail encoding
+303	Адрес нового раздела	New section name
+304	Cохранено успешно	Save successful
+305	У вас нет прав на сохранение<br>	You have no permission to save<br>
+306	Очистить список игнорируемых	Delete all ignored
+307	удалил меню	deleted menu
+308	Права по умолчанию для нового пользователя	Default permission for new user
+309	Рассылка	Mailing
+310	Текст письма	Mail text
+311	<b>НЕ</b> отправлять следующим пользователям:	Do <b>NOT</b> send to these users:
+312	отправил рассылку	did mass mailing
+313	не показывать форму и страницы	do not show form and pages
+314	файлы	files
+315	поместить в раздел:	Put into:
+316	У вас нет прав на эту операцию	You have no permission to do this
+317	Производится перенаправление. Если вы слишком долго видите эту страницу, нажмите	Redirecting... If you see this page for long time, click
+318	здесь	here
+319	Резервное копирование/восстановление таблиц	Backup/restore tables	yyyyyyyyy
+320	Файл отсутствует	File not found	
+321	Какие из этих таблиц вы хотите резервно сохранить?	Which tables you want to <b>back-up</b>?	
+322	Резервные копии можно также отправить по e-mail:	These back-ups can also be emailed (enter email)	
+323	Какие из этих таблиц вы хотите востановить?	Which tables you want to restore?	
+324	Какие индексы нужно восстановить?	Which indexes you want to (re-)create after restore?	
+325	Добавить картинки, загруженные с полным доступом	Include pictures added with full access	
+326	Добавить файлы	Include files	
+327	и	and	
+328	Перезаписан под именем	Saved with new name	
+329	Просмотр файла	Viewing	
+330	Картинки и другие файлы	Pictures and other files	
+331	загружено файлов	uploaded files	
+332	удалено файлов	deleted files	
+333	Выбрать картинки и файлы с сайта для удаления	Select pics and other files to delete	
+334	загрузить	upload	
+335	редактирование макросов	editing macros
+336	Шаблонный	Template
+337	Исполняемый	Executable
+338	Форматированные ссылки	Formatted links
+339	Создать новый макрос	Create new macro
+340	Имя макроса	Macros name
+341	Тип макроса	Macros type
+342	Макрос удалён	macros deleted
+343	редактируется макрос	editing macros
+344	удалить этот макрос	delete this macro
+345	сохранить	save
+346	Рассылки	Maillists
+347	Отправка рассылки завершена	Sendmail successful
+348	Ждите сообщения о завершении. Рассылка отправляется..	Wait for successful final. Sending…
+349	Отправлено	Sent
+350	писем из	mails of
+351	тестовое письмо отправлено	test mail is sent
+352	Новая рассылка	New mail
+353	Тема рассылки	Subject
+354	Дата создания	Created
+355	Получателей	Recipients
+356	нет	no
+357	частично	partially
+358	редактирование рассылки	editing mail
+359	нужно указать хотя бы одну группу получателей рассылки	you must select at least one group of recipients
+360	поместите в шаблон текст ::body:: в том месте, где должен быть текст письма	place text ::body:: in the template where content must be
+361	удалить рассылку	delete this mail
+362	Шаблон с диска	template from your computer
+363	или с сайта	or from this website
+364	сохранить рассылку	save mail
+365	предпросмотр	preview
+366	отправить письмо себе	Send mail to yourself
+367	отправить сейчас	send now
+368	рассылку необходимо сохранить и просмотреть перед отправкой	you must save and preview the mail before sending
+369	группы пользователей	user groups
+370	новая группа	new group
+371	наименование	name
+372	описание	description
+373	членов	members
+374	неизвестная группа	unknown group
+375	вы не можете удалить пользователя с полным доступом	you cannot delete user with full access
+376	всего	total
+377	сменить группы	change groups
+378	редактировать группы	edit groups
+379	удалить пользователя	delete user
+380	поле не разрешено к показу	field is not permitted to be shown
+381	максимальное количество документов для автозамены:	autoreplacement - no more than pages:
+382	Заменить	Replace that
+383	на	to
+384	Замена произведена для	Replacement made for
+385	Раздел	Section
+386	Показать	Show
+387	Замена текста страниц	Content replacement
+388	Углубляясь	Going deeper to
+389	на 1уровень	1 level
+390	на 2 уровня	2 levels
+391	до конца	all levels
+392	отображены уровни 1-3	Levels shown: 1-3
+393	наследование макрос(ов) отменяется	Macros inheritance cancelled
+394	Настройки	Settings
+395	Макросы	Macros
+396	начиная с 	begin with
+397	Добавление раздела в 	Adding a section to
+398	У вас нет прав на удаление/перемещение	You have no permission for deleting/moving
+399	выбранные страницы:	selected pages:
+400	Вы уверены, что хотите это сделать?	Are you shure you want to do this?
+401	В рабочем сайте изменение адреса страниц приводит к снижению посещаемости	In a working website changing urls result in lower amount of visits.
+402	Переместить под	Move under
+403	Производится переименование/перенос	Making rename/move…
+404	уже существует	already exist
+405	отсутствует. Создайте его, прежде чем переносить	doesn't exist. Create it first.
+406	Отсутствует целевой раздел. Некуда переносить.	Target section not present. Nowhere to move.
+407	Нельзя переносить внутрь себя.	Unable to move into the same section/
+408	Разделы удалены	Sections are deleted
+409	только латинские буквы, цифры и дефис	only latin characters, digits and defis
+410	Пока закрыть этот раздел от посетителей	Close that new section for some time
+411	перезаписано поверх существующего	written over existing
+412	не картинка	not a picture
+413	Не удалось сохранить в файле. Файл должен изначально присутствовать и иметь расширение .shtml	Unable to save as file. The file must exist and have .shtml extension.
+414	 Документ сохранен.	Document saved successfully.
+415	Разделы пересены:( Добавлены записи об ошибочных страницах:-P	Sections are moved:( Added records about 404 pages:-P
+416	Картинка раздела	Section picture
+417	Разрешить макросы в этом документе	Allow macros in this document
+418	Простое автоформатирование	Simple autoformatting
+419	Редактировать макросы	Edit macros
+420	Права на чтение ветви	Permission to read branch
+421	наследовать	inherit
+422	не определен	not defined
+423	наследование в этом месте отменяется	Macros inheritance cancelled
+424	отменить наследование	cancel inheritance of
+425	Обнаружены ошибки в теле страницы! Содержание не было обновлено.	An error(s) found in page body! Document not saved.
+426	сортировать по этому полю	sort by this field
+427	ошибка в вызове подпрограммы	error in Sub macro
+428	Обслуж-е	Service
+429	только обновить структуру	only structural update, no data
+430	название	name
+431	размер	size
+432	создано	created
+433	создана структура	structure created
+434	Ошибка в вызове файл-макроска	Error in file macro
+435	Ошибка в вызове подпрограммы	Error in subprogram
+436	Часовой пояс СЕРВЕРА (Москва +3, Новосибирск +6)	SERVER Timezone (London 0, NY -5)
+437	Курс у.е. (рублей за у.е., копейки отделяем точкой, а не запятой)	Different valute rate (how much cost this valute in your main money)
+438	Время кэширования для незарегистрированных пользователей, сек.	Cache time for those not logged in, seconds
+439	Язык сайта по умолчанию	Default system language
+440	Картировать пустой раздел	Map empty sections
+441	Включать в карту невидимые в меню разделы	Include invisible(in menu) sections in maps
+442	Не проверять пустоту раздела в картах (особенно если контент в файлах)	Don't check empty sections in maps
+443	Максимальное время выполнения запроса (выставляйте от 1 до 3 или 6-10 секунд)	Time limit for one request (1-3 or 6-10 seconds)
+444	Время хранения сессии, дней (0 - вечно)	"Session time (0 - ever; max=90)"
+445	Я на корпоративном доступе	I am on corporate LAN
+446	Повысить безопасность путем обновления SID на каждом сеансе	Renew session ID each load for more security
+447	Разрешить версию для печати	Enable print version
+448	Превышено время ожидания	Timeout exceeded
+449	Этот документ не был найден.	The page was not found
+450	Возможно, на сайте, с которого вы пришли, стоит неправильная или устаревшая ссылка.	Probably the referer site have wrong or not up-to-date link.
+451	Вы неправильно набрали адрес в броузере, либо на нашем сайте стоит неправильная ссылка. В последнем случае мы ее вскоре исправим.	Looks like there's a broken link on our site. It has been recorded, so we'll be able to correct it.
+452	Попробуйте поиск по сайту.	Try site search.
+453	Если поиска нет, зайдите на	If there's no site search, visit the
+454	главную страницу	main page
+455	Ошибка 404 - документ не найден	Error 404 - document not found
+456	Раздел администратора	Admin section
+457	Добавить раздел рядом с этим	Add a section at the same level
+458	Добавить подраздел к	Add subsection to
+459	ошибка в данных	data error
+460	Редактировать этот блок	Edit this block
+461	Подпрограмма не найдена или содержит ошибку.	Applet error or not found.
+462	Пожалуйста, обновите эту страницу. Если ошибка повторится, значит сервер перегружен.	Please refresh this page. If this error continues - the site is overloaded.
+463	Ошибка соединения с базой данных. Возможно, отображена устаревшая или некорректная страница.	Database connection failed. Probably an old page was displayed.
+464	У вас нет прав для редактирования таблиц	You have no permission to edit tables.
+465	Таблица отсортирована по	Table sorted by
+466	и не сохранена	and not saved
+467	Таблица сохранена	Table saved
+468	Поряд.сорт.	sort_order
+469	Не удалось сохранить документ.	Unable to save the document.
+470	Отсутствует поле	Missing field
+471	Не удалось обновить экземпляр	Unable to create exempler of
+472	глобальные настройки для	global settings for
+473	в дизайн-шаблоне	in design template
+474	У меня контент в файле:	I have content in file:
+475	Картинка раздела (загружается отдельно от всего остального):	Node pic (loaded separately)
+476	Сохранить картинку	Save pic
+477	согласно глобальным настройкам	according to global settings
+478	пусто	empty
+479	Название сайта	Site name
+480	Размер превью картинок разделов по ширине	Preview pic width
+481	Региональные	Regional
+482	Отображение разделов	Sections view behavior
+483	Не вести лог 404-х страниц	Do not log 404 pages
+484	Безопасность	Security
+485	8-часовое ограничение на сессию для пользователей с этими правами (через пробел)	Permissions to limit session time to 8 hours (divided by space)
+486	Быстродействие	Performance
+487	Макс. уровень кэшируемых страниц	Max level of cached pages
+488	Сообщения о загрузке процессора (all|core|module|your_applet)	CPU load debug messages (all|core|module|your_applet)
+489	Переменные сохранены	Globals saved
+490	Редактор таблиц сайта	Site tables editor
+491	Новая таблица	New table
+492	Создаваемые пользователем таблицы	User created tables
+493	Таблицы этого сайта	Tables of this site (system)
+494	Служебные таблицы	Service tables
+495	Описания SQL-таблиц	Database structure
+496	таблица удалена	table deleted
+497	Таблица сохранена. Вы можете вывести ее в разделах или новостях,	table saved. You can use it in document content or news
+498	используя эту конструкцию:	using this construction:
+499	Перечислите столбцы новой таблицы, разделяя их звёздочкой *. Допускаются русские буквы и пробелы.	Enumerate columns of the new table, divided by asterisk *
+500	Название таблицы (предпочтительно латинские буквы)	Table name
+501	Создать таблицу	Create table
+502	Удалить таблицу	Delete table
+503	Нет такого файла или неверный каталог	No such file or wrong directory
+504	Редактируется	Editing
+505	Глобальные настройки модулей	Module global settings
+506	Выберите модуль для глобального редактирования его настроек	Select module to edit its global settings
+507	к списку	to the list
+508	Настройка модуля	Module setting
+509	Значение	Value
+510	Использовать настройку	Use setting
+511	Никогда	Never
+512	Если пустая в разделе	If empty in appropriate section
+513	Если	If
+514	Всегда	Always
+515	регулярные выражения, применяемые к адресу запрошенной страницы. Адрес всегда начинается с /	regular expressions, applied to page path. The path always started with /
+516	Если regexp сработал, глобальная настройка будет использована. Примеры	If regexp result is true, a setting will be applied. Examples
+517	сработает на всех страницах вашего сайта, начинающихся с	applied to all pages beginning with
+518	Ограничить поиск разделом (путь)	Limit structure search by (path)
+519	Результатов, примерно	Results, approx.
+520	Вести журнал запросов	Do search log
+521	Слово должно состоять не менее чем из 4 букв.	Alt least 4 chars please
+522	Искать	Search
+523	Статистика поисковых запросов	Search queries stats
+524	Разделы сайта	Site sections
+525	без названия	no title
+526	Необходимые для регистрации поля (через пробел)	Required field (space-separated)
+527	Скрыть текстовые поля (через пробел)	Hidden fields (space-separated)
+528	Права по умолчанию для нового пользователя	Default permissions for new user
+529	Регистрация завершена. Скоро вам придет письмо.	Registration complete. Check your inbox, please.
+530	Сообщение об успешной регистрации	Successful registration message
+531	Дополнительное сообщение в письме о регистрации	Additional message in the mail
+532	Готово!	Finished!
+533	Текст на кнопке формы данных пользователя	Submit button label
+534	Регистрация нового пользователя	User registration
+535	Заголовок формы регистрации	Registration title
+536	Пароль для хеша-подтверждения е-мейла. Если хотите, чтобы пользователи подтверждали свой e-mail после регистрации, впишите сюда любое слово.	If you want users to confirm their emails, type any word here
+537	Подтверждение человечности (CAPTCHA) при регистрации	Confirm you are a human below…
+538	Альтернативные обозначения полей	Alternate field labels
+539	Поля, которые можно сделать необходимыми:	Fields that can be set required:
+540	Альтернативные обозначения полей можно создать в /my/dbs/users1.txt	No alternate field pseudonames
+541	Изменение персональных данных	Personal info modification
+542	Восстановление пароля	Password re-generation
+543	Исправьте, пожалуйста, ошибки заполнения формы	Please correct the following form errors
+544	Вернуться на предыдущую страницу	Back to previous page
+545	Регистрация на	Your registration at
+546	Здравствуйте,	Hello
+547	Подтвердите, пожалуйста, регистрацию, пройдя по этой ссылке:	please confirm your email by clicking this link:
+548	Вы были зарегистрированы на	You've been registered at
+549	Ваш логин:	Your login is:
+550	Используйте эти данные, чтобы зайти на сайт в следующий раз	Use this information to log in to this site next time
+551	Извините, такого e-mail'а не существует в нашей базе.	Sorry, this email doesn't exist in our database
+552	Ой, что-то не так…	Oops…
+553	Ваш e-mail уже подтвержден.	Your email is already confirmed
+554	Всё в порядке. Ваш e-mail подтверждён.	Your email is confirmed. Thanks.
+555	поля, помеченные звездочкой - обязательны к заполнению	fields, marked with asterisk, are required
+556	Ваши права:	Your permissions:
+557	Ваш	Your
+558	Нет такого пользователя или неверный пароль. Возможно, неверный язык ввода или раскладка клавиатуры.	No such user or incorrect password.
+559	Регистрация	Registration
+560	Предложение сменить пароль было выслано по указанному адресу.	A link to change password sent to entered email
+561	Восстановление пароля на	Password recovery at
+562	Кто-то (возможно, Вы) запросил смену пароля. Если это были Вы, то пройдите по этой ссылке:	Looks like you have requested password re-generation. If you, then click this link:
+563	Если нет - проигнорируйте это письмо.	If not you, then ignore this mail
+564	Нет такого пользователя	No such user
+565	Новый пароль на	new password at
+566	Ваш новый пароль:	Your new password is
+567	Войти в систему можно здесь:	You may enter here:
+568	Новый пароль был выслан вам по почте	New password is sent to you by mail
+569	Восстановить	Re-generate
+570	Пароль для CAPTCHA (любое слово, менять если появились спам-регистрации)	CAPTCHA password (change if detect spam-registrations)
+571	Введите цифры, изображенные на картинке:	Enter the digits on the picture:
+572	Вы ввели неверный код с картинки	You've entered wrong digits from the picture
+573	Нижеследующая информация будет актуальна после подтверждения	The following info will be actual after confirmation
+574	ID галереи	Gallery ID
+575	Макс. размер БОЛЬШОЙ картинки по горизонтали	Max width of the LARGE picture
+576	Макс. размер ПРЕВЬЮ по горизонтали	Max width of the PREVIEW
+577	Макс. размер ПРЕВЬЮ по вертикали	Max HEIGHT of the PREVIEW
+578	Картинок на страницу	Pics per page
+579	Сортиовать по названию	Sort by name
+580	Запретить редактирование и доп. управление	Disallow editing and add.controls
+581	Перейти к редактированию галереи	Switch to edit mode
+582	редактировать фотогалерею	edit gallery
+583	Изображение	Picture
+584	загружено	loaded
+585	сегодня	today
+586	вчера	yesterday
+587	позавчера	2 days ago
+588	Редактирование галереи	Editing gallery
+589		
+590		
+591
+592
+593
+594

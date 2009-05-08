@@ -1,0 +1,12 @@
+column	sql_type	comment	key	form_handler	special_handler
+sect_key	INT(8) NOT NULL	Ref to structure	key	hidden
+title	VARCHAR(255) NOT NULL	title tag	fulltext	text
+pagetitle	VARCHAR(255) NOT NULL	h1 tag	fulltext	text
+keywords	VARCHAR(255) NOT NULL	keywords tag	fulltext	text
+description	TEXT NOT NULL	Description tag	fulltext	textarea
+content	TEXT NOT NULL	Contents		textarea
+comment	VARCHAR(255) NOT NULL	Invisible for no-editors comment		textarea
+this_settings	VARCHAR(255) NOT NULL	Presets for only this		special
+module_settings	TEXT NOT NULL	Module settings	fulltext	special
+asfile	VARCHAR(64) NOT NULL	File to keep content	key	special
+picture	VARCHAR(64) NOT NULL	Section picture		special

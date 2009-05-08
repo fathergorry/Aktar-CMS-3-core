@@ -1,0 +1,38 @@
+
+@main[]
+
+^if(def $form:q){^q1[]}{
+^if(def $form:set0){^q2[]}
+}
+@q1[]
+$tmp[^table::create{hm
+^untaint{^form:q.match[\s;ig]{
+}}}]
+$q[^taint[sql][^tmp.menu{^if(^tmp.hm.length[] > 3){$tmp.hm }}]]
+^connect[$scs]{
+$fields[^table::create{tab	index	c
+structure	head1	menutitle
+sections	head2	pagetitle, description
+sections	head3	title, keywords}]$found[]
+ ^fields.menu{
+   ^if(!def $found){^try{$r[^table::sql{SELECT sect_key
+     FROM ^dtp[$fields.tab] WHERE MATCH ($fields.c) AGAINST ('$q')
+     }[$.limit(1)]]}{$exception.handled(1)}
+     »скали в $fields.index ^if(def $r){^do_redirect[$r.sect_key] нашли} не нашли  <br>
+     }
+ }
+
+}
+
+^if(!def $found){^redirect[/search?q=^taint[uri][$form:q]]}
+
+@do_redirect[key]
+$tmp[^table::sql{SELECT path FROM ^dtp[structure] WHERE sect_key = '$key' AND visiblity != 'no'}]
+^if(def $tmp){
+^redirect[$tmp.path] $found[1]
+}
+
+@q2[]
+$tmp[$form:set0]
+$cookie:$tmp[$form:value0]
+^redirect[^default[$form:redirect;/]]

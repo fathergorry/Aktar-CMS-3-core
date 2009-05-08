@@ -1,0 +1,60 @@
+@main[]
+$ignore_404[yes]
+^environment[] $menu.0[]
+$document.content{^body[]}
+$document.title[^lang[335] in $env:SERVER_NAME]
+$document.pagetitle[^lang[335]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+
+@body[][list]
+^if(def ^cando[$.block(1) $.menu(1) $.demo(1)]){
+$btypes[^table::create{block	rig	desc
+cfg	menu block	^lang[336] (cfg)
+p		^lang[337] (p)
+w	menu block	^lang[338] (w)}] $noadm[$.w(1) $.cfg(1) ]
+<br>
+^if(def $form:newblock){^if(def ^cando[$.block(1) $.menu(1)] && def $noadm.[$form:new] || def ^cando[]){
+ $tmp[ ]
+ ^tmp.save[/my/blocks/^saveable[$form:newblock].$form:new]
+  ^redirect[blocks.htm?block=^saveable[$form:newblock].$form:new]
+}{^die[268]}}
+
+
+$list[^file:list[/my/blocks;\.^if(def ^cando[]){(w|cfg|p)}{(w|cfg)}^$]]
+<table border=0 ^if(def $form:block){align=right}><tr><td><form action="blocks.htm">
+^lang[94]:
+<br>^list.sort{^pseudoname:find[$list.name]}
+^list.menu{<a href="blocks.htm?block=$list.name^rn[&]">^pseudoname:find[$list.name] (^if(!def $form:block){$list.name}{^file:justext[$list.name]})</a><br>}
+
+<br>
+^if(!def $form:block){
+^lang[339] <br>
+^lang[340]:<br><input type=text name=newblock><br>
+^lang[341]:<br>
+^btypes.menu{^if(def ^cando[$btypes.rig demo]){<input type=radio name="new" value="$btypes.block">^lang[$btypes.desc]<br>}{}}
+<input type=submit value="OK">
+}
+</form></td></tr></table>
+
+^if(def $form:block){^if(def ^cando[$.block(1) $.menu(1)] && def $noadm.[^file:justext[$form:block]] || def ^cando[]){
+^editblock[$form:block]
+}{^die[268]}}
+
+}
+@editblock[block][e;tmp]
+$e[^file:justext[$block]]
+^if(-f "/my/blocks/$block"){^if(def $form:delblock && $e ne p){^file:delete[/my/blocks/$block]^msg[342]^log[deleted macros	$block	!]}{
+^lang[343] $block $tmp[^btypes.locate[block;$e]]($btypes.desc)
+<form action="blocks.htm" method=post>
+<input type=hidden name=block value="$form:block">
+^switch[$e]{
+ ^case[p]{^editexeblock[/my/blocks/$block]}
+ ^case[w]{^editwikiblock[/my/blocks/$block]}
+ ^case[cfg]{^edittmpblock[/my/blocks/$block]}
+}}
+
+^if(!def $form:delblock){<input type=submit value="^lang[345;save]">}
+^if($e ne p && !def $form:delblock){<div align=right><input type=checkbox name=delblock value="y">^lang[344;delete]</div>}{}
+</form>
+}{^die[232]}

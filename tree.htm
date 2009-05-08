@@ -1,0 +1,62 @@
+
+@main[]
+$ignore_404[yes]
+^environment[] 
+$document.content{^body[]}
+$document.title[^lang[195] $env:SERVER_NAME]
+$document.pagetitle[^lang[195]]
+^document[$.design[/login/templates/_ayoo1.html] ]
+
+@body[]
+<style type="text/css">
+<!--
+.i30 {background-color: #e9e7e7^; height:100%^; background: url(/login/img/x-bg.gif)^; padding-left: 3px}
+.pic {width: 9px^; height: 9px}
+-->
+</style>
+<table align=right border=0 cellPadding=3 cellSpacing=0>
+<td bgcolor="#FFFFFF" colspan=2><b>^lang[99]</b><p>
+<img src="/login/img/access.gif" alt="^lang[100]"> ^lang[100]<p>
+<img src="/login/img/template.gif" alt="^lang[101]"> ^lang[101]<p>
+<img src="/login/img/macro.gif" alt="^lang[102]"> ^lang[102]<p>
+<img src="/login/img/menu.gif" alt="^lang[103]"> ^lang[103]<p>
+<img src="/login/img/xmenu.gif" alt="^lang[Наследование блока(-ов) отменяется]"> ^lang[393;Наследование блока(-ов) отменяется]<p>
+<img src="/login/img/closed.gif" alt="^lang[104]"> ^lang[104]<p>
+</td></tr></table>
+^connect[$scs]{
+$acount(^int:sql{SELECT COUNT(sect_key) FROM ^dtp[structure]})
+$tree[^table::sql{SELECT sect_key, path, modified, level, sect_order, parent, menutitle, rpermission, epermission, design, module, add_block, visiblity FROM ^dtp[structure]
+^if($acount > 500){WHERE level < '^if($acount > 1000){4;5}' ^msg[392;отображены уровни 1-3]} ORDER BY path }]
+}
+$g[^s2h[1 2 3 4 5 6 7]] $h[^hash::create[]]
+^tree.menu{
+$g.[$tree.level]($tree.sect_order) ^for[i]($tree.level + 1;7){$g.$i(0)}
+ $h.[$tree.sect_key][^for[i](1;7){^g.$i.format[%03.0f]}]
+}
+
+^tree.sort{$h.[$tree.sect_key]}[asc]
+
+^verbose[about_tree]
+<form action="/login/groupedit.htm" method=post>
+<table border=0 cellpadding=0 cellspacing=0 bgcolor="#F8F8F8">
+^tree.menu{
+<tr><td>
+<div style="margin-left: ^eval($tree.level * 50)px" class=i30>
+#$tree.sect_order ^eval(($tree.sect_order / 1000 + 1) * ^math:pow(10;5 - $tree.level))
+<a href="update.htm?p=$tree.path" title="^lang[94] mod. $tree.modified">$tree.menutitle</a>
+^if(def $tree.rpermission || def $tree.epermission){<img class="pic" src="/login/img/access.gif" alt="r: $tree.rpermission w: $tree.epermission">}
+^if(def $tree.design){<img class=pic src="/login/img/template.gif" alt="$tree.design">}
+^if(def $tree.module){<img class=pic src="/login/img/macro.gif" alt="$tree.module">}
+^if(def $tree.add_block){<img class=pic src="/login/img/^if(^tree.add_block.pos[clear] >= 0){x}menu.gif" alt="$tree.add_block">}
+^if($tree.visiblity ne yes){<img class=pic src="/login/img/closed.gif" alt="$tree.visiblity visiblity">}
+ <a href="update.htm?add=$tree.path" title="^lang[134] $tree.path">+</a></div>
+</td><td class=i30><input type=checkbox name=eftree value="$tree.sect_key"></td>  </tr>
+}</table>
+<br>
+^lang[175]
+<select name="grpfield">
+$grp[^table::load[/login/config/grpfields.txt]]
+^grp.menu{<option value="$grp.field">^lang[$grp.descr]</option>}
+
+</select>
+<input type=submit></form>
