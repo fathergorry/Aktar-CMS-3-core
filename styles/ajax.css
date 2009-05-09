@@ -1,0 +1,12 @@
+#modalOut{
+	position:absolute;left:299px;top:205px; 
+	width:300px; overflow:visible; 
+	padding:10px; background:#f7f1e8; border:1px solid #006ac3
+}
+#modalContent {
+	background-color:#FFFFFF; clear:both; padding:3px; margin-top:4px
+}
+#modalHeader {margin-top:0px; float:left;}
+
+.dialogbox{border: 1px solid #d08d3c; background:#f7f1e8; 
+padding:3px; position:absolute; display:none;}

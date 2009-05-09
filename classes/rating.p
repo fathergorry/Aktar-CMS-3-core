@@ -98,4 +98,4 @@ rc$k = {^v.menu{$v.id : ["$v.good", "$v.bad"]}[, ]}^;
 
 @rboxhtml[obj;objId;cnt]
 ^if(!$rboxjsflag){^call_js[/plugins/jquery.js]^rboxjs[]$rboxjsflag(1)}
-<span id="$objId" class="ratingl"><a href="#" onClick="rate('$objId',rc$obj,0,this)" class="ratel">&nbsp^;+&nbsp^;</a>&nbsp^;<span class="rval">$cnt</span>&nbsp^;<a href="#" class="ratel" onclick="rate('$objId',rc$obj,1,this)">&nbsp^;–&nbsp^;</a></span>
+<span id="$objId" class="ratingl"><a href="javascript:void(0)" onClick="rate('$objId',rc$obj,0,this)" class="ratel">&nbsp^;+&nbsp^;</a>&nbsp^;<span class="rval">$cnt</span>&nbsp^;<a href="javascript:void(0)" class="ratel" onclick="rate('$objId',rc$obj,1,this)">&nbsp^;–&nbsp^;</a></span>

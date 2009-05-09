@@ -181,7 +181,7 @@ $mysect[^table::sql{SELECT path, menutitle, level FROM ^dtp[structure] WHERE ^de
 }
 <form action="$uri/?action=login^rn[&]" method="post">
 ^keepvalue[action refto refmsg refmode upaction]
-^lang[557] e-mail:<br><input type=text name=id><br>^lang[61]<br><input type=password name=password><br>
+^lang[557] e-mail:<br><input type=text name=id value="$form:id"><br>^lang[61]<br><input type=password name=password><br>
 <input type=submit value="^lang[209]"></form>
 <a href="$uri?upaction=register">^lang[559]</a> |
 <a href="$uri?upaction=recover">^lang[280]</a>

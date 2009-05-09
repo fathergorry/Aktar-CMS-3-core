@@ -5,9 +5,7 @@ error: function (XMLHttpRequest, textStatus, errorThrown) {
 }
 });
 
-$("a.ajaxhandled").click(function(){
-	return ajaxlink($(this));
-});
+XurlInit();
 
 
 

@@ -1,7 +1,7 @@
 
 
 function XurlInit(){
-$("a.ajaxhandledx").click(function(){
+$("a.ajaxhandled").unbind().click(function(){
 	return ajaxlink($(this));
 });
 };
@@ -58,7 +58,7 @@ function movepm(fld){
 function rate(objId, obj, color, caller){
 	var marks = eval(obj);
 	var c="";
-	for (var i in marks){c+='<a href="#" onClick="rateme(\''+objId+'\','+i+','+color+')">'+marks[i][color]+'</a><br/>'};
+	for (var i in marks){c+='<a href="javascript:void(0)" onClick="rateme(\''+objId+'\','+i+','+color+')">'+marks[i][color]+'</a><br/>'};
 	$("#rateBox").html(c);
 	PDdialog(caller, 1, '#rateBox');
 	return false;

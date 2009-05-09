@@ -77,12 +77,7 @@ $file[^file::load[text;http://$env:SERVER_NAME/$fileName;
 ^untaint{$file.text}
 
 
-#########transforms string to hash, a|b|c -> $div[|] -> $.a(1) $.b(1) $.c(1)
-#result must be assigned to new variable.
-@s2h[str;div;def0][tmp;tmpt;tmph;str1]
-^if(!def $div){$div[ ]}^if(!def $def0){$def0(1)}^if($str is hash){$result[$str]}{$tmp[^str.split[$div;v]]$tmph[^tmp.menu{^if(def $tmp.piece){$.[$tmp.piece]($def0)}}]}$result[^if($tmph is hash){$tmph}{^hash::create[]}]
-
-@htmltable[tab][locals]
+@htmltable[tab][locals] #any table into html view
 $tc[^tab.columns[c]]
 <table border="1" class="htmltable">
 <tr>^tc.menu{<td><b>$tc.c</b></td>}</tr>
@@ -461,7 +456,7 @@ $allowed_modules[^s2h[$allowed_modules]]
 ^if(def $globals.jqueryOn){
 	^call_js[/plugins/jquery.js]
 	^call_js[/login/scripts/user.js]
-	<link rel="stylesheet" href="/login/styles/ajax.css" />
+	<link rel="stylesheet" href="/login/styles/ajax.css" type="text/css" />
 }
 @get_content[][f;rep0]
 ^if(def $form:editcontent){^use[visualeditor.p] ^visualeditor[]}{
@@ -806,6 +801,11 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 <!-- errmsg-->	$errrep}]^jqueryon[]
 }{$result[${body}^jqueryon[]]}
 #^if(def $tlog){^tlog.sort{$tlog.0}^tlog.save[nameless;/lang.log]}
+
+#########transforms string to hash, a|b|c -> $div[|] -> $.a(1) $.b(1) $.c(1)
+#result must be assigned to new variable.
+@s2h[str;div;def0][tmp;tmpt;tmph;str1]
+^if(!def $div){$div[ ]}^if(!def $def0){$def0(1)}^if($str is hash){$result[$str]}{$tmp[^str.split[$div;v]]$tmph[^tmp.menu{^if(def $tmp.piece){$.[$tmp.piece]($def0)}}]}$result[^if($tmph is hash){$tmph}{^hash::create[]}]
 @end[]
 
 ############################################
@@ -824,7 +824,29 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 
 
 
+@CLASS
+h2s
 
+@createh[str]
+^process{^taint[as-is; ^$hash_^[$str^] ]}
+$result[^if($hash_ is hash){$hash_}{^hash::create[]}]
+
+@h2o[hash_;div]
+$result[^hash_.foreach[k;v]{$k}[^if(def $div){$div}{ }]]
+
+@h2s[hash1;level][tmp;hh]
+$hh(^level.int(0))^hh.inc(1)^hash1.foreach[k;v]{^if($v is hash){$tmp[^hash::create[$hash1.$k]]^$.$k^[^h2s[$tmp;$hh]]}{^$.$k^if($v is int || $v is double){($v)}{[^unparse[$v]]}}}
+
+@unparse[t]
+^if($unparser is table){;
+$unparser[^table::create{from	to
+^^	^^^^
+^$	^^^$
+^;	^^^;
+^[	^^^[
+^]	^^^]}]
+}
+$result[^t.replace[$unparser]]
 
 @CLASS
 pagination
@@ -870,29 +892,6 @@ $offset(^eval($items * ($curr - 1)))
 
 
 
-@CLASS
-h2s
-
-@createh[str]
-^process{^taint[as-is; ^$hash_^[$str^] ]}
-$result[^if($hash_ is hash){$hash_}{^hash::create[]}]
-
-@h2o[hash_;div]
-$result[^hash_.foreach[k;v]{$k}[^if(def $div){$div}{ }]]
-
-@h2s[hash1;level][tmp;hh]
-$hh(^level.int(0))^hh.inc(1)^hash1.foreach[k;v]{^if($v is hash){$tmp[^hash::create[$hash1.$k]]^$.$k^[^h2s[$tmp;$hh]]}{^$.$k^if($v is int || $v is double){($v)}{[^unparse[$v]]}}}
-
-@unparse[t]
-^if($unparser is table){;
-$unparser[^table::create{from	to
-^^	^^^^
-^$	^^^$
-^;	^^^;
-^[	^^^[
-^]	^^^]}]
-}
-$result[^t.replace[$unparser]]
 @CLASS
 gridcontrol
 
