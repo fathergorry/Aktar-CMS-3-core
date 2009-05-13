@@ -1,9 +1,10 @@
 
-@recover_files[files][locals]
-$files[^s2h[$files]]
-^files.foreach[k;v]{
-	^if(-f "/login/recover/$k" && !-f "/my/$k"){
-		^file:move[/login$k;/my$k]
+@recover_files[files;obligate][locals]
+$files[^table::create{file
+^untaint{$files}}]
+^files.menu{
+	^if(-f "/login/recover/$files.file" && (!-f "/my/$files.file" || def $obligate)){
+		^file:copy[/login/recover/$files.file;/my/$files.file]
 	}
 }
 

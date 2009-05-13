@@ -669,7 +669,7 @@ $result[^sts.menu{^$.$sts.param^[$sts.value^]}[ ]]}{
 ^ihavenotime[]
 $xec[$$module] $result[^try{^xec[$set]}{
 ^if(!def ^cando[]){$exception.handled(1)}
-^if(def ^cando[]){^die[^lang[435] $module]}}]
+^if(def ^cando[]){$exception.handled(1) $exception.comment $exception.file $exception.lineno}}]
 
 @correctme[edit_path;b]
 ^if(def ^cando[editor menu $b]){
@@ -719,7 +719,8 @@ $b[$$sub] $result[^b[$set]]
 $result[$set]
 #Применяет глобальные настройки к подпрограмме
 @modpath[mod]
-^if($system_modules is hash){;$system_modules[^s2h[news.p forum.p swapcontent.p inbox.p userprofile.p search.p]]}
+^if($system_modules is hash){;
+$system_modules[^s2h[sectionmap.p news.p forum.p swapcontent.p inbox.p userprofile.p search.p]]}
 $result[^if(def $system_modules.$mod){/login/modules/$mod}{/modules/$mod}]
 @apply_globalsub[set;sub]
 $modval[^bmodval[$sub;$set]]
