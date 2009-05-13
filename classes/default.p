@@ -440,9 +440,9 @@ $prepared_content[^get_content[]]
 ^design[^get_header[];$document.pagetitle;$prepared_content]
 
 @load_custom_modules[]
-$mmodules[^file:list[/my/p]]
+$mmodules[^file:list[/my/autorun]]
 ^mmodules.menu{
- ^use[/my/p/$mmodules.name]
+ ^use[/my/autorun/$mmodules.name]
  ^try{$allowed_modules[$allowed_modules ^allowed[]]}{$exception.handled(1)}
 }
 $allowed_modules[$allowed_modules var correctme email special program sitemap notlogin islogin translit nest redirect]
@@ -953,7 +953,7 @@ $uri[^tmp.0.trim[end;/]]
 $MAIN:path[$uri]
 
 #adding class pathes - only this way
-$akpathlist[^s2h[/my/p /login/classes /login/modules]] $tmp[$MAIN:CLASS_PATH]
+$akpathlist[^s2h[/my/autorun /login/classes /login/modules]] $tmp[$MAIN:CLASS_PATH]
 $MAIN:CLASS_PATH[^table::create{path
 ^if($tmp is table){^tmp.menu{^if(!def $akpathlist.[$tmp.path]){$tmp.path
 }}}/login/classes}]
