@@ -45,19 +45,19 @@ $l[^default[$language;$globals.language]]
 $verbose.$yes
 }
 
-@qbuild[params][qfile;ff]
+@qbuild[params][qfile;ff;tmp]
 $tmp[^request:uri.split[?;lh]]
 $qfile[$tmp.0]
 $ff[$form:fields]
 $tmp[^expand[$params;=;&]]
 ^tmp.menu{
 	^if(def $tmp.value){
-		$ff.[$tmp.param][$tmp.value]
-	}{
+		$ff.[$tmp.param][$tmp.value] 
+	}{$ff.fff[$tmp.param]
 		^ff.delete[$tmp.param]
 	}
 }
-$result[$qfile?^ff.foreach[k;v]{$k=$v}[&]]
+$result[$qfile?^ff.foreach[k;v]{$k=$v}[&] ]
 
 @fdhash[vn;has][tmp]
 ^if(!def $caller.$vn){$caller.$vn[^if(def $has){$has;^hash::create[]}]}
@@ -304,18 +304,18 @@ $document.title[$document.title $text]
 $document.pagetitle[$text]
 $document.title[$text]
 
-@compact[tbl;tab;new]
+@compact[tbl;tab;new][locals]
 ^if(!def $tab){$tab[==]}
 ^if(!def $new){$new[,,]}
 $result[^tbl.menu{${tbl.param}${tab}${tbl.value}}[$new]]
-@expand[str;tab;new][rep]
-^if(!def $str){$str[ ]}
-^if($expand_replace is table){;$expand_replace[^table::create{from	to
+@expand[str;tab;new][locals]
+^if(!def $str){$str[ ]}^if(!def $tab){$tab[==]}^if(!def $new){$new[,,]}
+$expand_replace[^table::create{from	to
 &tab	^taint[^#09]
-^default[$tab;==]	^taint[^#09]
-^default[$new;,,]	^taint[^#0A]
+$tab	^taint[^#09]
+$new	^taint[^#0A]
 ^taint[^#0A]	
-^taint[^#0D]	}]}
+^taint[^#0D]	}]
 $result[^table::create{param	value	value2
 ^untaint{^str.replace[$expand_replace]}}]
 
@@ -480,8 +480,10 @@ $dtp[$startup.db_tbl_prefix.value]
 $scs[$startup.sql_conn_string.value] $SQL.connect-string[$scs]
 ^try{
 	$tmp[^file::load[text;/my/deriv/globals.p]]
-	$globals[^h2s:createh[$tmp.text]] ^if(^globals.timeout.int(0) < 1){$globals.timeout(2)}
-}{^blad[]$globals[$.timeout(2)]}
+	$globals[^h2s:createh[$tmp.text]] 
+}{^blad[]$globals[^hash::create[]]}
+^if(^globals.timeout.int(0) < 1){$globals.timeout(2)}
+^if(!def $globals.language){$globals.language[en]}
 @environment[path][str;tbl]
 ^manage_session[]
 $menu[^hash::create[]]

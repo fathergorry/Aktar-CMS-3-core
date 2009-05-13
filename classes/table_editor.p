@@ -51,7 +51,7 @@ $tab3[^tab.select(^tab.line[] < 1)]
 $tab2[^table::create{^u.menu{$u.column	}sortorder}]
 ^for[i](1;^tab.count[]){
 	^if(!def $form:delete$i){
-		^tab2.append{^u.menu{$j[${u.column}$i]^form:$j.replace[$dequote]	}$form:sortorder$i}
+		^tab2.append{^u.menu{$j[${u.column}$i]^try{^form:$j.replace[$dequote]}{^blad[]}	}$form:sortorder$i}
 	}
 }
 #order by numbers in from's right column

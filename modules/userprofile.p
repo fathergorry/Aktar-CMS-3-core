@@ -144,14 +144,15 @@ $datacloser
 <input type=submit id="upsubmit" value="^default[$useropt.submit;Готово]">
 </form>
 @capchk[]
+^if(!def $user.id){
 ^use[/login/captchadefault.htm]
 ^if(!^capchk0[]){$userdesc.data_error(1)}
-
+}
 @capshow[]
-
+^if(!def $user.id){
 ^use[/login/captchadefault.htm]
 <br>^capshow0[<br>]<br>
-
+}
 @logout[]
 ^if($sessions is hashfile){;$sessions[^hashfile::open[/cache/set/sessions]]}
 ^sessions.delete[$sid] $cookie:s[]

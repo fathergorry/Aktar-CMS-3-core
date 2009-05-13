@@ -51,7 +51,10 @@ $datatable[^table::create{^dh.foreach[k;v]{$k}[	]
 	^if(!def $dh.$k){$data_error(1)$keylist.$k.error(1)^die[^lang[470] ^if(^instance.locate[column;$k]){$instance.comment}]}
 }
 
-
+@handle[column;data;handler]
+^if(^instance.locate[column;$column] && def $instance.$handler){
+$result[^proc[$data;$instance.$handler;$column]]
+}{$result[$data]}
 @proc[d;h;k][tmp] h - handler, d - data, k - key/column
 $dp[^^$h^[^$d^]] 
 ###!!!!!ну хуйня, знаю, но без этого никак
