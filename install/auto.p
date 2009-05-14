@@ -33,7 +33,7 @@ $tStruc[^table::create{name
 ^tStruc.sort{$tStruc.name}
 
 @finish_install[]
-$htaccess[<Files ~ "\.(p|cfg|txt|htm)^$">
+$htaccess[<Files ~ ".">
 Order allow,deny
 Deny from all
 </Files>]

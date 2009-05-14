@@ -1,0 +1,22 @@
+
+
+@main[]
+
+$tab[$form:tab]
+
+$instance[^table::load[/my/dbs/${tab}.txt]]
+
+$fld[^form:fld.mid(^form:tab.length[] + 1; 99)]
+^if(^instance.locate[column;$fld] && (^instance.special_handler.pos[suggestable] >= 0 || ^instance.onedit.pos[suggestable])){
+^connect[$scs]{
+	$sresult[^table::sql{
+		SELECT DISTINCT $fld FROM ^dtp[$tab] 
+		^if(def $form:q){WHERE $fld LIKE '^utf2win[$form:q]%'}
+		ORDER BY $fld DESC
+		LIMIT 6
+	}]
+}
+}
+^if(^sresult.count[] > 0){
+<div id="suggest" class="as_block">^sresult.menu{<span class="ajaxresult">$sresult.$fld</span>}[<br>]</span>
+}

@@ -1,0 +1,2 @@
+RewriteEngine off
+RemoveHandler parsed-html gif jpg jpeg htm html shtml

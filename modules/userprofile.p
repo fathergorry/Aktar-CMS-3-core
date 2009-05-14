@@ -7,6 +7,8 @@
 $result[^table::create{param	type	default	descr
 reqfields	option	email name	^lang[526]
 hiddenfields	option	flag_a	^lang[527]
+reghidden	string		ѕол€, скрываемые при регистрации, но видимые при изменении
+modhidden	string		ѕол€, видимые при регистрации, но скрываемые при изменении
 defrig	translit	z	^lang[528]
 #editrig	translit	users	ѕрава, разрешающие редактировать данные пользовател€ с правами по умолчанию
 reg_ok	string	^lang[529]	^lang[530]
@@ -43,7 +45,8 @@ $upaction[^default[$form:upaction;$form:action]]
 	^switch[$upaction]{
 		^case[recover;cc]{^recover[] ^unameme[^lang[542]]}
 		^case[register]{^userform[$upaction] ^unameme[^default[$useropt.regmsg;^lang[534]]]}
- 		^case[DEFAULT]{^login[]}
+ 		^case[userid]{^myinfo[]}
+		^case[DEFAULT]{^login[]}
 	}
 }
 }
@@ -64,7 +67,7 @@ $document.pagetitle[^default[$useropt.$with;$def]]
 ^if($act eq modify && $env:REQUEST_METHOD ne POST){$dw_cond[$.id($user.id)]}
 
 $userdesc[^datawork::create[users;$dw_cond;;
-	$.exclude[$useropt.hiddenfields rig extid groupid regdate]
+	$.exclude[$useropt.hiddenfields rig extid groupid regdate ^if($upaction eq register){$useropt.reghidden } ^if($upaction eq modify){$useropt.modhidden} ]
 	^if(def $useropt.alt_1){$.alternate[1]}
 	^if(def $useropt.reqfields){$.required[$useropt.reqfields]}
 	^if($env:REQUEST_METHOD eq POST){$.from_form[instance_name]})
@@ -135,10 +138,10 @@ $md5em[^md5[$mymail.email $useropt.conf_email]]
 }
 
 @upform[]
-<form action="$uri/" method="POST">
+<form action="$uri/" method="POST" enctype="multipart/form-data">
 * - ^lang[555]<br>
 ^keepvalue[action refto refmsg refmode allowcode upaction]
-^userdesc.form[;$.tstyle[width:400px]]
+^userdesc.form[;$.tstyle[width:400px]$.nofilemsg[вы сможете загрузить файл после регистрации]]
 ^capshow[]
 $datacloser
 <input type=submit id="upsubmit" value="^default[$useropt.submit;√отово]">
@@ -161,15 +164,21 @@ $sid[]
 ###################################
 
 @myinfo[]
+^if($userprofile_design is junction){^userprofile_design[]}{
 ^lang[58] $user.name!
-<p><!-- ^cando[] -->
+<p>
+^mypermlist[]
+^mysectlist[]
+}
+@mypermlist[]
 ^lang[556]<br> $permissions[^table::load[/my/config/_permissions.txt]] $permissions[^permissions.hash[permission]]
 ^usercando.foreach[k;v]{^if(def $k){$k - ^lang[$permissions.$k.description] <br>}}
+
+@mysectlist[]
 ^if(!def ^cando[$.editor(1)]){
 $mysect[^table::sql{SELECT path, menutitle, level FROM ^dtp[structure] WHERE ^default[^usercando.foreach[k;v]{epermission LIKE '%$k'}[ OR ];0] ORDER BY path}]
 ^if(def $mysect){<p>^lang[266]:<br>^mysect.menu{^for[i](1;$mysect.level){&nbsp^;&nbsp^;}<a href="$mysect.path">$mysect.menutitle</a><br>}}
 }
-
 @login[][user0]
 ^if($env:REQUEST_METHOD eq POST){
   $user0[^table::sql{SELECT * FROM ^dtp[users] WHERE (id = '^form:id.int(-1)' OR email = '$form:id') AND password = '$tmp[$form:password]^md5[^tmp.trim[]]'}]

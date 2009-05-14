@@ -1,4 +1,5 @@
 @version[]
+2009-05-13	extrahtml, .handle
 2009-01-07	Опция вывода скрытых полей
 2008-07-21	Поддержка сообщений об ошибках, сгенерированных обработчиком
 2008-06-25	Спаны полей
@@ -150,7 +151,7 @@ $d[$div.div]
   ^if($keylist.$ic.errtype eq check || $keylist.$ic.error){$lg[<span class="error">$lg  <b>^untaint{$keylist.$ic.comment}</b></span>]}
 <span id="$ii" class="formpiece">
 ^switch[$instance.form_handler]{
-  ^case[text]{${lg}$d<input type="text" class="dw_text" name="$ii" style="$div.tstyle" value="$val" /> $d}
+  ^case[text]{${lg}$d<input type="text" class="dw_text $instance.special_handler" name="$ii" style="$div.tstyle" value="$val" /> $d}
   ^case[num]{${lg}$d<input type="text" class="dw_text" name="$ii" size="5" value="$val" /> $d}
   ^case[visualtextarea]{${lg}$d^use[visualeditor.p] ^MAIN:htmlarea[$val;$ii]}
   ^case[textarea]{${lg}$d<textarea name="$ii" style="$div.tstyle" rows="4">$val</textarea>$d}
@@ -159,7 +160,7 @@ $d[$div.div]
   ^case[enum]{$lg $d $tmp1[^enum::parse[$instance.sql_type;;$ii]] ^tmp1.form[$val] $d}
   ^case[special]{$lg $d $val $d}
   ^case[special2]{$val}
-  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){загрузка будет доступна после сохранения формы} $d $val  $d}
+  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){^default[$div.nofilemsg;загрузка файла будет доступна после отправки формы]} $d $val  $d}
   ^case[set]{${lg}${d}^val.replace[^table::create{from	to
 _fieldname_	$ii}] $d}
   ^case[DEFAULT]{^if($div.reveal){${lg}$d <em>$val</em> $d}
@@ -167,6 +168,7 @@ _fieldname_	$ii}] $d}
 }</span>
 }}
 }{$hideForm}
+$extrahtml
 @show[exclude][locals]
 <table border="0" cellspacing="0" cellpadding="2">
 ^if(def $datatable){^instance.menu{
