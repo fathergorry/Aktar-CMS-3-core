@@ -12,7 +12,7 @@ $document.pagetitle[^lang[319]]
 @body[]
 
 ^if(def ^cando[]){
-^if(def $form:b){^backup[]}{^if(def $form:r){^restore[]}{}}
+^if(def $form:b){^backup[]}{^if(def $form:r || def $form:i){^restore[]}{}}
 ^if(def $form:download){^download[]}
 ^show_menu[]
 }{^die[269;нет прав]}
@@ -54,13 +54,13 @@ $list[^file:list[/my/tabak]] $list0[^table::create{tname	fsize	created	imgcreate
 	$a[^file::stat[/my/tabak/${f}.tabak]]
 	$b[^file::stat[/my/dbs/${f}.txt]]
 	^list0.append{$f	$a.size	^a.mdate.unix-timestamp[]	^b.mdate.unix-timestamp[]}
-}^list0.sort($list0.[^default[$form:rest_ob;created]])[desc]
+}^list0.sort{$list0.[^default[$form:rest_ob;created]]}[desc]
 <div align=right>
 <form action="backup.htm">
 ^lang[323;restore]
 <table border=0 cellpadding=3>
 <tr>
-^gridcontrol:list[rest_ob;tname, fsize, created, imgcreated;</a><input type="checkbox" onClick="checkAll(this.form,'r',this.checked)">Все, ^lang[fsize], created, image created;backup.htm?]
+^gridcontrol:list[rest_ob;tname, fsize, created, imgcreated;*</a><input type="checkbox" onClick="checkAll(this.form,'r',this.checked)">Все, ^lang[fsize], created, image created;backup.htm?]
 </tr>
  ^list0.menu{<tr><td>
   <input type=checkbox name="r" value="$list0.tname"><a href="backup.htm?download=${list0.tname}.tabak">$list0.tname</a> </td>
@@ -71,9 +71,12 @@ $list[^file:list[/my/tabak]] $list0[^table::create{tname	fsize	created	imgcreate
 <input type=submit><p>
 ^lang[324;restore indexes] <br>
 $iii[^table::load[/my/config/indexes.txt]]
+$iii[^iii.select(^list0.locate[tname;$iii.tab])]
+<table>
+<tr><td><input type="checkbox" onClick="checkAll(this.form,'i',this.checked)"></td><td>Все</td></tr>
 ^iii.menu{
-<input type=checkbox name="i" value="$iii.index">$iii.index ($iii.tab)<br>
-}
+<tr><td><input type=checkbox name="i" value="$iii.index"></td><td>$iii.index ($iii.tab)</td></tr>
+}</table>
 
 <input type=submit>
 </form>
@@ -117,7 +120,8 @@ $bkpsize[^file::stat[/my/tabak/${bkp}.tabak]]
 @restore[]
 #get all sql tables to restore
 ^resmeter[backup;before restore]
-$alltables[$form:tables.r]
+$alltables[^default[$form:tables.r;^table::create{field}]]
+
 ^alltables.menu{
  $rst[$alltables.field]
  $rsttbl[^dbobj::create[$rst]]

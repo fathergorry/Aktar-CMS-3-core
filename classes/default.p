@@ -9,7 +9,6 @@ Branch
 
 @auto[]
 ^load_config_tables[]
-^resmeter[core;default.p + config -- auto.p]
 ^load_custom_modules[]
 $menu[^hash::create[]]$now[^date::now[]]
 
@@ -235,19 +234,6 @@ $mid(0)^tab.menu{^mid.inc($tab.score*27/$mv)}$mid($mid/^tab.count[]/3)
 ^tab.menu{$tv(^math:round($tab.score*(27-$mid)/$mv))^if($tv < 10){$tv(10)}
 <nobr><a class="tag" href="$url=$tab.name"><span class="tagspan" style="font-size:${tv}px">$tab.name^if(def $opt.score1){ ($tab.score)}</span></a></nobr>}[$div]
 
-@attach_file[data][file;text;f]
-^if($data is hash){$file[^saveable[$data.file]]$text[$data.text]}{$file[^saveable[$data]]}
-^if((def ^cando[$.editor(1)] || def ^cando[$epermission]) && def $file){
-^if(def $form:attach_file$file){
-  $f[$form:attach_file$file]
-  ^f.save[binary;/img/files/$file]
-}
-<form action="$uri" method=post enctype="multipart/form-data" style="display:inline">
-<input type=file name=attach_file$file><br><input type=submit value="^lang[334]">
-</form>
-
-}
-^if(-f "/img/files/$file"){^untaint{$text} ^if(-f "/img/icons/^file:justext[$file].gif"){<img src="/img/icons/^file:justext[$file].gif" border=0 align=baseline>}<a href="/img/files/$file">$file</a>}
 
 @preformat[data;p]
 <pre><font size=2>^taint[as-is][^if($data is hash){}{$data}]</font></pre>
@@ -260,18 +246,6 @@ $pre
 ^get_admin_menu[]
 <b>^lang[456]</b>$div
 <a href="/login/update.htm?p=$uri^rn[&]">^lang[210]</a>$div
-^rem{
-<script language="Javascript1.2"><!--
-var win_ie_ver = parseFloat(navigator.appVersion.split("MSIE")[1])^;
-if (win_ie_ver = "") { win_ie_ver = -1 }^;
-if (navigator.userAgent.indexOf('Mac')        >= 0) { win_ie_ver = 0^; }
-if (navigator.userAgent.indexOf('Windows CE') >= 0) { win_ie_ver = 0^; }
-if (navigator.userAgent.indexOf('Opera')      >= 0) { win_ie_ver = 0^; }
-if (win_ie_ver >= 5.5) {
-  document.write('<a href=$uri?editcontent=on^rn[&]>^lang[294]</a>')^;
-}
-// --></script>$div
-}
 <a href=$uri?editcontent=on^rn[&]>^lang[294]</a>$div
 ^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]">^lang[457]</a> $div}
 <a href="/login/update.htm?add=$uri^rn[&]">^lang[458] &quot^;$document.menutitle&quot^;</a> $div
@@ -319,7 +293,7 @@ $new	^taint[^#0A]
 $result[^table::create{param	value	value2
 ^untaint{^str.replace[$expand_replace]}}]
 
-@db_fld2showinlist[tab][t]
+@db_fld2showinlist[tab][t] #убрать в adbase
 ^if($dw_$tab is table){;$dw_$tab[^table::load[/my/dbs/${tab}.txt]]}
 $t[$dw_$tab]
 $result[
@@ -347,7 +321,7 @@ $id0[^s2h[$id; ]]
 @is_from_site[]
 $result(^if(^env:HTTP_REFERER.pos[$env:SERVER_NAME] >= 0 || !def $env:HTTP_REFERER){1;0})
 
-@icontent[text;auto][pc]
+@icontent[text;auto][pc] #to news, maybe?
 $pc[^try{^process{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){^lang[459]}}]
 $result[^if($auto eq no){$pc}{^pc.replace[^unbrul[]]}]
 
@@ -417,9 +391,15 @@ $tmp.text]}{^blad[]}
 #############old /auto.p##################
 ##########################################
 
-@blad[oi]
+@blad[oi;msg][locals]
 $caller.exception.handled(1)
-^if(def $oi){^die[$oi]}
+$extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
+^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^)}]
+^if(def $oi){^switch[$oi]{
+	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
+	^case[huinia]{$extxt}
+	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
+}}
 
 @dtp[table]
 $result[${startup.db_tbl_prefix.value}$table]
@@ -457,6 +437,7 @@ $allowed_modules[^s2h[$allowed_modules]]
 	^call_js[/plugins/jquery.js]
 	^call_js[/login/scripts/user.js]
 	<link rel="stylesheet" href="/login/styles/ajax.css" type="text/css" />
+	$jqinheader(1)
 }
 @get_content[][f;rep0]
 ^if(def $form:editcontent){^use[visualeditor.p] ^visualeditor[]}{
@@ -785,7 +766,7 @@ $expdate[^date::now(-$minutes/1440)]
 $result[^if(-f "$file1"){$file1;$file2}]
 @jqueryon[scr][locals]
 $rct[$response:content-type] 
-^if(def $globals.jqueryOn && $rct.value eq "text/html"){
+^if(def $globals.jqueryOn && $jqinheader && $rct.value eq "text/html"){
 	$ex[^file::load[text;^choose_file[/my/templates/ajax.htm;/login/templates/ajax.htm]]]
 	^untaint{$ex.text}
 	^if(!def $scr){<script language="javascript" src="/login/scripts/inits.js"></script>}{
@@ -793,7 +774,7 @@ $rct[$response:content-type]
 	}
 }{$result[]}
 @postprocess[body]
-^resmeter[core;after all -- ./auto.p]
+^resmeter[core;всё сделано]
 ^if((def $errmsg || def $errmsg1) && $body is string){
 $errmsg[^table::create{err
 $errmsg}]

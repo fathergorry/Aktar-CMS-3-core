@@ -126,7 +126,7 @@ $tabindex(0)
 <select name="module" ^tabindex[] onChange="this.form.submit()">
 <option value="">^lang[151;не использовать]</option>
 $macros[^file:list[/modules;\.p^$]]
-^macros.join[^file:list[/login/modules]]
+^macros.join[^file:list[/login/modules;\.p^$]]
  ^macros.sort{^pseudoname:find[$macros.name]}
 ^macros.menu{<option value="$macros.name"^if($document.module eq $macros.name){ selected}>^pseudoname:find[$macros.name]</options>}
 </select>

@@ -17,9 +17,11 @@ ansbgr	string		Цвет фона для ответов
 norate	bool	yes	Отключить голосования}]
 @forum_info[set]
 Права на модерирование: moder
-$inf[^table::sql{SELECT DISTINCT fid FROM ^dtp[forum]}]
-<br> Имеющиеся идентификаторы (непустые): ^inf.menu{$inf.fid}[, ].
-
+^try{
+$inf[^table::sql{SELECT DISTINCT fid , COUNT(fid) AS coun 
+FROM ^dtp[forum] GROUP BY fid ORDER BY coun DESC LIMIT 10}]
+<br> Имеющиеся идентификаторы (непустые): ^inf.menu{$inf.fid ($inf.coun)}[, ].
+}{^blad[huinia]}
 @forum[set]
 
 ^forum:operate[$set]
@@ -71,6 +73,7 @@ $answers[^table::sql{SELECT * FROM ^dtp[ans] WHERE id = '$id'}]
 ^if($MAIN:message_design is junction){^message_design[]}{
  $MAIN:document.title[$message.title - $message.author - $MAIN:document.title]
 ^if(!$seti.embedded){
+^MAIN:crumbs.append{$MAIN:uri?fdisplay=$form:fdisplay	^wisetrim[$message.title;16]}
  $MAIN:document.pagetitle[^default[$message.title;Сообщение] - $MAIN:document.pagetitle] $MAIN:document.keywords[$message.title] $MAIN:document.content[]
 }{<h2>^default[$message.title;Сообщение]</h2>}
   Пишет <b>$message.author</b> (^dmy[$message.mydate]) <br>

@@ -1,4 +1,16 @@
 
+@pizdec[]
+^recover_obligate_files[]
+
+@recover_obligate_files[]
+^recover_files[
+files/.htaccess
+img/.htaccess
+dbs/structure.txt
+dbs/sections.txt
+.htaccess
+;obligate]
+
 @recover_files[files;obligate][locals]
 $files[^table::create{file
 ^untaint{$files}}]
