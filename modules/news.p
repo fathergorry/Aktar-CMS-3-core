@@ -36,10 +36,11 @@ $new.content[^icontent[^new.content.replace[$rep];$new.autoformat]]
 $new.postdate[^dmy[$new.postdate]]
   ^titlerep[$new.title]
 ^if($new_design is junction){^new_design[]}{
+$document.content[]  
 <b class="newsb">$new.postdate</b><br>
 <span class=new>$new.content</span>
 <p>
-^comments[$new.id]
+^try{^comments[$new.id]}{^blad[]}
 }
 @icontent[text;auto][pc]
 $pc[^try{^process{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){ошибка в данных}}]

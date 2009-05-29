@@ -35,10 +35,11 @@ $vtype.article[$vtype.n]
 $r1[$rrange.$id] $rv(0)
 ^r1.foreach[k;v]{^rv.inc($v)}
 $lastrate($rv)
+^if(^user.int(0) < 0){$result($rv)}{
 ^rboxhtml[^id.trim[end;0123456789];$id;$rv]
-
+}
 @val[id]
-^if(!def $id){$result($lastrate)}
+^if(!def $id){$result($lastrate);$result($rrange.$id)}
 
 @ratewrite[id;user;count;type]
 ^connect[$MAIN:scs]{

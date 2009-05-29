@@ -774,7 +774,7 @@ $rct[$response:content-type]
 	}
 }{$result[]}
 @postprocess[body]
-^resmeter[core;всё сделано]
+^resmeter[core;страница сформирована]
 ^if((def $errmsg || def $errmsg1) && $body is string){
 $errmsg[^table::create{err
 $errmsg}]

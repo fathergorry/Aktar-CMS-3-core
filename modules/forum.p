@@ -1,4 +1,5 @@
 @version[]
+2009-05-29	Рейтинги и внутриклассность
 2008-02-27	Добавлена поддержка премодерации и убрана каптча для зарегистрированных
 
 @forum_settings[options]
@@ -14,7 +15,8 @@ reged	bool	yes	Только зарегистрированные могут постить
 premod	bool	yes	Премодерация постингов
 specans	string		Права, разрешающие ответ (пустое поле - отвечают все)
 ansbgr	string		Цвет фона для ответов
-norate	bool	yes	Отключить голосования}]
+norate	bool	yes	Отключить голосования
+ratesort	bool	yes	Сортировать сообщения на странице по рейтингу}]
 @forum_info[set]
 Права на модерирование: moder
 ^try{
@@ -163,6 +165,9 @@ $fans[^table::sql{SELECT * FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', 
 ]
 ^fans.menu{a$fans.ansid}[
 ]]
+^if(def $seti.ratesort){
+^forum.sort(^rating:box[f$forum.id;-1])[desc]
+}
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
 <span class="isUser" onClick="userbox(this, 22, 'pmsend')"></span><a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
 ^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}
@@ -213,9 +218,9 @@ $newpost.content[^utf2win[$form:content]]
 ^if(!$ajaxcalled){
   ^redirect[^urido[]fdisplay=$msgId^rn[&]&msg=Ваша запись добавлена.^if(def $seti.premod){Она появится после проверки модератором.}&noform=true]]
 }{^die[Сообщение добавлено]}
-^if(def $seti.notify){
+^if(def $seti.notify){$notify[^s2h[$seti.notify]]^notify.foreach[k;v]{
   ^mail:send[
-  $.from["$env:SERVER_NAME Forum" <$globals.site_admin>]      $.to["$env:SERVER_NAME Forum supervisor" <$seti.notify>]
+  $.from["$env:SERVER_NAME Forum" <$globals.site_admin>]      $.to["$env:SERVER_NAME Forum supervisor" <$k>]
     $.subject[Новое сообщение в форуме]    $.charset[$globals.mailcharset]
     $.text[В форум поступило сообщение от $newpost.author
 http://${env:SERVER_NAME}^urido[]fdisplay=$msgId
@@ -224,7 +229,7 @@ $newpost.title
 $newpost.content
 ]
    ]
-}
+}}
 }
 
 

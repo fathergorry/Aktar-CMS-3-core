@@ -1,0 +1,5 @@
+column	sql_type	comment	key	form_handler	onedit	onshow	onsave
+votefor	CHAR(8)	За что голосовали	primary	hidden			
+voter	INT(10)	Кто голосовал	primary	hidden			
+votecount	INT(2)	Сколько голосов отдали		hidden			
+votetype	INT(2)	Тип голоса		hidden			
