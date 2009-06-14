@@ -201,7 +201,7 @@ $result[^if(def $var){$local.$var}{$local.string}]
 @saveable[string;p][rep;str]
 $rep[^table::load[/login/config/saveable.txt]]
 $str[^string.replace[$rep]]
-$result[^taint[file-spec][$str]]
+$result[^taint[file-spec][^str.left(32)]]
 @translit[string;p]
 ^if(!def $translit_table){$translit_table[^table::load[/login/config/translit.txt]]}
 $result[^string.replace[$translit_table]]
@@ -246,7 +246,7 @@ $pre
 ^get_admin_menu[]
 <b>^lang[456]</b>$div
 <a href="/login/update.htm?p=$uri^rn[&]">^lang[210]</a>$div
-<a href=$uri?editcontent=on^rn[&]>^lang[294]</a>$div
+^if($uri ne "/"){<a href=$uri?editcontent=on^rn[&]>^lang[294]</a>$div}
 ^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]">^lang[457]</a> $div}
 <a href="/login/update.htm?add=$uri^rn[&]">^lang[458] &quot^;$document.menutitle&quot^;</a> $div
 ^menu.a.menu{<a href="$menu.a.uri">$menu.a.menutitle</a>}[$div]
@@ -377,6 +377,19 @@ $files}]
 	^try{$tmp[^file::load[text;$files.file]]$fh[$fh
 $tmp.text]}{^blad[]}
 } $result[$fh]
+@choose_file[file1;file2]
+$result[^if(-f "$file1"){$file1;$file2}]
+@jqueryon[scr][locals]
+$rct[$response:content-type] 
+^if(def $globals.jqueryOn && $jqinheader && $rct.value eq "text/html"){
+	$ex[^file::load[text;^choose_file[/my/templates/ajax.htm;/login/templates/ajax.htm]]]
+	^untaint{$ex.text}
+	^if(!def $scr){<script language="javascript" src="/login/scripts/inits.js"></script>}{
+	^call_js[$scr]
+	}
+}{$result[]}
+
+
 #########################################
 
 
@@ -477,6 +490,7 @@ $environment_created[y]
 @create_document[uri][tmp] #each document contains page hash, all menu tables and breadcrumb table. May not be available if user has no permission to view hidden table
 $path_t[^path_splitter[$uri]]  $path_hash[^path_t.hash[uri][$.distinct(1)]] $placeblock[^hash::create[]]
 ^for[i](0;$max_level){$menu.$i[^table::create{sect_order	uri	menutitle	current	visiblity	module}]}
+$menu.a[^table::create[$menu.0]]
 $crumbs[^table::create{uri	menutitle}]
 ^connect[$scs]{
 #Get crumbs, additional menus and build all inherits
@@ -761,18 +775,6 @@ $expdate[^date::now(-$minutes/1440)]
 		^result.save[/cache/sql/$mdq;$.encloser[^#02]$.separator[^#03]]
 	}
 }
-
-@choose_file[file1;file2]
-$result[^if(-f "$file1"){$file1;$file2}]
-@jqueryon[scr][locals]
-$rct[$response:content-type] 
-^if(def $globals.jqueryOn && $jqinheader && $rct.value eq "text/html"){
-	$ex[^file::load[text;^choose_file[/my/templates/ajax.htm;/login/templates/ajax.htm]]]
-	^untaint{$ex.text}
-	^if(!def $scr){<script language="javascript" src="/login/scripts/inits.js"></script>}{
-	^call_js[$scr]
-	}
-}{$result[]}
 @postprocess[body]
 ^resmeter[core;страница сформирована]
 ^if((def $errmsg || def $errmsg1) && $body is string){
@@ -786,10 +788,6 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 }{$result[${body}^jqueryon[]]}
 #^if(def $tlog){^tlog.sort{$tlog.0}^tlog.save[nameless;/lang.log]}
 
-#########transforms string to hash, a|b|c -> $div[|] -> $.a(1) $.b(1) $.c(1)
-#result must be assigned to new variable.
-@s2h[str;div;def0][tmp;tmpt;tmph;str1]
-^if(!def $div){$div[ ]}^if(!def $def0){$def0(1)}^if($str is hash){$result[$str]}{$tmp[^str.split[$div;v]]$tmph[^tmp.menu{^if(def $tmp.piece){$.[$tmp.piece]($def0)}}]}$result[^if($tmph is hash){$tmph}{^hash::create[]}]
 @end[]
 
 ############################################
@@ -806,7 +804,10 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 
 
 
-
+#########transforms string to hash, a|b|c -> $div[|] -> $.a(1) $.b(1) $.c(1)
+#result must be assigned to new variable.
+@s2h[str;div;def0][tmp;tmpt;tmph;str1]
+^if(!def $div){$div[ ]}^if(!def $def0){$def0(1)}^if($str is hash){$result[$str]}{$tmp[^str.split[$div;v]]$tmph[^tmp.menu{^if(def $tmp.piece){$.[$tmp.piece]($def0)}}]}$result[^if($tmph is hash){$tmph}{^hash::create[]}]
 
 @CLASS
 h2s

@@ -72,14 +72,21 @@ $pp[^pagination::create[$r;40]]
 $users[^table::sql{SELECT id, name, lastname, groupid, ^if(def ^cando[users]){email}{(0) AS email}, rig FROM ^dtp[users] ^if(def $form:usermatch){WHERE email LIKE '%$form:usermatch%' OR name LIKE '%$form:usermatch%'}
 ORDER BY ^if(def $form:order){$form:order ASC}{id DESC}}[^pp.q[limits]]]
 $groups[^table::sql{SELECT groupid, name, rig FROM ^dtp[usergroups]}]
+^groups.append{-136	ÓÄÀËÈÒÜ ÏÎËÜÇÎÂÀÒÅËß	}
 <form action="/login/users.htm?order=$form:order&page=$form:page&usermatch=$form:usermatch" method=post>
-
+<script>
+function grpsel(obv){
+^$("option[value="+obv+"]").attr("selected", "selected")^;
+}
+</script>
 <table ^admin_tbl_design[]><caption>^lang[199] (^lang[376] $r)</caption>
 <tr><td><a href="users.htm?order=id">ID</a></td>
 <td><a href="users.htm?order=lastname">^lang[166]</a></td>
 <td><a href="users.htm?order=email">^lang[222]</a></td>
 <td><a href="users.htm?order=rig">^lang[223]</a></td>
-<td><a href="users.htm?order=groupid">^lang[369]</a></td>
+<td><a href="users.htm?order=groupid">^lang[369]</a><br>
+<select><option>Äëÿ âñåõ:</option>^groups.menu{<option value="$groups.groupid" onClick="grpsel('$groups.groupid')">$groups.name</option>}</select>
+</td>
 </tr>
 ^users.menu{
 <tr><td>$users.id</td><td><a href="?uid=$users.id&^rn[]">$users.lastname $users.name </td><td>$users.email</td><td>$users.rig</td>
@@ -99,7 +106,7 @@ $udrig[^s2h[$users.rig]]
 <select name="$a">
 ^groups.menu{<option value="^if($groups.groupid != $users.groupid){$groups.groupid}"^if(^default[$form:$a;$users.groupid] == $groups.groupid){ selected}>$groups.name ^if(def $groups.rig){($groups.rig)}</option>}
 ^if(!def $udrig.deity && !def $udrig.editor && !def $udrig.users){
-<option value="-136">ÓÄÀËÈÒÜ ÏÎËÜÇÎÂÀÒÅËß</option>}
+}
 </select></td></tr>
 }
 <tr><td colspan=5 align=right><input type=submit value="^lang[377]"></td></tr>

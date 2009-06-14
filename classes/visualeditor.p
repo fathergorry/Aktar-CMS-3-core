@@ -15,7 +15,7 @@
 ^die[268]
 }
 
-@VECP[text;doptions][result]
+@VECP[source;doptions][result]
 ^taint[as-is][
 	^if(!def $doptions.exec){
 		^if(def $doptions.unbrul){
@@ -30,7 +30,7 @@
 
 
 @save_visual[][content;saveto;sect_key;c]
-$content[^if(!def $doptions.exec){$form:vcontent}{^content_prepare[$form:vcontent]}]
+$content[^if(!def $MAIN:doptions.exec){$form:vcontent}{^content_prepare[$form:vcontent]}]
 $c[^content.split[<STYLE;lh]]$content[^taint[sql][$c.0]]
 ^if($form:editcontent eq $uri){$saveto[$uri]}{
   ^if(def ^cando[editor] && $form:editcontent eq "/"){$saveto[/]}
@@ -50,7 +50,7 @@ $f3[@content[]]
 $rfiledata[$f2
 $f3
 ^taint[as-is][^if(def $content){$content}{ }]]
-^rfiledata.save[$document.asfile]
+^rfiledata.save[/my/file_content$document.asfile]
 }
 ^redirect[$saveto^rn[?]&msg=^taint[uri;$smsg]]
 
