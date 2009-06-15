@@ -499,7 +499,7 @@ $inher[^sqlcache[
 	SELECT * FROM ^dtp[structure] 
 	WHERE path IN (^path_t.menu{'$path_t.uri'}[, ]) 
 	ORDER BY level ASC 
-;^if(def ^cando[editor]){-1;120}]]
+;^if(def $form:export){50000}{^if(def ^cando[editor]){-1;120}}]]
   ^inher.menu{
     ^if(def $inher.design){$design[$inher.design]}
     ^if(def $inher.language){$language[$inher.language]}

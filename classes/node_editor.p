@@ -247,6 +247,7 @@ $brkopen(^document.content.pos[^[] >= 0)
 $brkclose(^document.content.pos[^]] >= 0)
 ^if($brkopen && $brkclose){$result(1)}
 ^if(!$brkopen || !$brkclose){$result(0)}
+^if($document.nomacro){$result(0)}
 @placehld_check[][f]
 ^if(-f "/my/templates/$design"){
 ^use[/my/templates/$design]

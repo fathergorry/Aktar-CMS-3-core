@@ -1,4 +1,5 @@
 @version[]
+2009-06-15	RSS
 2008-03-19	 артировка - в модуле + %this% + minor bugs
 
 @sectionmap_settings[][set]
@@ -82,7 +83,7 @@ $response:content-type[
         $.value[application/rss+xml]
         $.charset[$response:charset]
 ]
-^sitemap.sort(^date::create[$sitemap.modified])[desc]
+^try{^sitemap.sort(^date::create[$sitemap.modified])[desc]}{^blad[]}
 <channel>
     <title>^taint[xml][^default[$document.pagetitle;$document.menutitle] - список обновлений раздела]</title>
     <link>http://${env:SERVER_NAME}$uri</link>
