@@ -36,10 +36,11 @@ $adt[^table::create{uri	name	p
 /login/pages404.htm	404	errpg demo
 /login/logs.htm	Log	errpg demo log
 /login/tableed.htm	Sys.tab	deity editor}]
-$menu.ta[^table::create{uri	menutitle}]
+^if($menu.a is table){;$menu.a[^table::create{sect_key	uri	menutitle	}]}
+^if(!$admin_menu_called){
 ^adt.menu{
- ^if(def ^cando[$adt.p]){^menu.ta.append{$adt.uri	$adt.name}}
-}^menu.a.join[$menu.ta]
+ ^if(def ^cando[$adt.p]){^menu.a.append{	$adt.uri	$adt.name}}
+}$admin_menu_called(1)}
 
 @permission_list[]
 ^if(def $permission_list){}{^try{

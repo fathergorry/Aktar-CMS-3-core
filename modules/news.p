@@ -6,7 +6,8 @@ visual	bool	yes	Использовать визуальный редактор
 more	string	$form:p	Путь к архиву новостей (если нужен)
 readmore	string	Читать дальше&gt^;&gt^;	Текст "читать дальше"
 nopages	bool	yes	Не выводить страницы
-allowexport	bool	yes	Разрешить экспорт (RSS)}]
+denyexport	bool	yes	Запретить экспорт в RSS
+}]
 
 @news_info[set][inf]
 Права на редактирование новостей: news
@@ -25,7 +26,7 @@ $cnews[^table::load[/my/dbs/news.txt]]
 }
 
 }
-^if(def $seti.allowexport){
+^if(!def $seti.denyexport){
 <a href="$uri?export=rss"><span style="background-color:#ff6600^;font-size:9px^;text-decoration:none^;color:#FFFFFF^;padding:2px^;letter-spacing:1px">rss</span></a>
 }
 
@@ -56,7 +57,7 @@ WHERE n.newsid IN (^allid.foreach[k;v]{'$k'}[, ])
  
 GROUP BY n.id ORDER BY n.postdate DESC}[^if(!def $seti.nopages){^pp.q[limits]}]]
 <form action="$uri?a=del_multiple" style="display:inline">
-^if(def $form:export && def $seti.allowexport){
+^if(def $form:export && !def $seti.denyexport){
 	$response:body[^xmlexportnews[$news;$form:export]]
 }{
 ^if($news_design is junction){^news_design[$news]}{

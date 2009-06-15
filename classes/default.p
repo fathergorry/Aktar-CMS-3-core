@@ -250,6 +250,7 @@ $pre
 ^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]">^lang[457]</a> $div}
 <a href="/login/update.htm?add=$uri^rn[&]">^lang[458] &quot^;$document.menutitle&quot^;</a> $div
 ^menu.a.menu{<a href="$menu.a.uri">$menu.a.menutitle</a>}[$div]
+^if($menu.b is table){<br><b>^menu.b.menu{$div<a href="$menu.b.uri">$menu.b.menutitle</a>}</b>}
 $post
 }
 
@@ -389,6 +390,15 @@ $rct[$response:content-type]
 	}
 }{$result[]}
 
+@blad[oi;msg][locals]
+$caller.exception.handled(1)
+$extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
+^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^)}]
+^if(def $oi){^switch[$oi]{
+	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
+	^case[huinia]{$extxt}
+	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
+}}
 
 #########################################
 
@@ -401,18 +411,9 @@ $rct[$response:content-type]
 
 
 ##########################################
-#############old /auto.p##################
+#############document inits###############
 ##########################################
 
-@blad[oi;msg][locals]
-$caller.exception.handled(1)
-$extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
-^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^)}]
-^if(def $oi){^switch[$oi]{
-	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
-	^case[huinia]{$extxt}
-	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
-}}
 
 @dtp[table]
 $result[${startup.db_tbl_prefix.value}$table]
@@ -458,7 +459,7 @@ $allowed_modules[^s2h[$allowed_modules]]
 $precontent[^if(def $doptions.unbrul){^document.content.replace[^unbrul[]]}{$document.content}]
 ^if($process_body){^process{^untaint{$precontent}}}{^untaint{$precontent}}
 ^if(def $document.module && !def $module_already_executed){
-  ^exec_sub[$document.module;^expand[$document.module_settings]] ^rem{bottom}
+  ^exec_sub[$document.module;^expand[$document.module_settings]] 
 }
 }
 
@@ -490,7 +491,7 @@ $environment_created[y]
 @create_document[uri][tmp] #each document contains page hash, all menu tables and breadcrumb table. May not be available if user has no permission to view hidden table
 $path_t[^path_splitter[$uri]]  $path_hash[^path_t.hash[uri][$.distinct(1)]] $placeblock[^hash::create[]]
 ^for[i](0;$max_level){$menu.$i[^table::create{sect_order	uri	menutitle	current	visiblity	module}]}
-$menu.a[^table::create[$menu.0]]
+$menu.b[^table::create[$menu.0]] $ept[ept0]
 $crumbs[^table::create{uri	menutitle}]
 ^connect[$scs]{
 #Get crumbs, additional menus and build all inherits
@@ -755,7 +756,7 @@ $d3[^date::now[]]
 @program[unuseful_data;d]
 $module_already_executed[y]
 ^if(def $document.module){
-^exec_sub[$document.module;^expand[$document.module_settings]]
+^exec_sub[$document.module;^expand[$document.module_settings]] 
 }
 
 @sqlcache[query;minutes;junk;alt_cache][locals;result]
