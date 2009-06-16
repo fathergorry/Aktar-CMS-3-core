@@ -1,0 +1,15 @@
+param	value
+sectionmap.p	карта раздела
+userdata.p	большой раздел пользовател€
+search.p	поиск по сайту
+schluss.p	карта невидимых разделов
+news.p	лента новостей
+vote.p	голосовани€
+links.p	каталог ссылок
+feedback.p	обратна€ св€зь
+forum.p	форум
+shop.p	магазин
+pseudonames.p	ѕсевдонимы
+userarea.p	малый раздел пользовател€
+counters.cfg	¬еб-счетчики
+ad-base.p	–екламна€ база

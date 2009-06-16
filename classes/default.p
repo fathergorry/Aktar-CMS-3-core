@@ -604,11 +604,10 @@ $cookie:s[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
 ^if(^hasrig[$globals.sessionlimit8]){$result(1/3)}{$result($globals.sessiontime)}
 
 @include[file][f;ftx]
-$fe[^math:md5[$file]]
+$fe[^math:md5[$file]]^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
 #$f[^file:find[$file]]^if(def $f){$ftx[^file::load[text;$f]]^process[$caller.self]{^taint[as-is][$ftx.text]}[$.file[$file]]}
 #$f[^file:find[$file]]^if(def $f){^if(!def $$fe){$$fe[^file::load[text;$f]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]}
 #^if(!def $$fe){$$fe[^file::load[text;$file]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
-^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
 @include_exist[file][ftx]
 $ftx[^file::load[text;$file]]
 ^process{^taint[as-is][$ftx.text]}
@@ -654,12 +653,19 @@ $result[^sts.menu{^$.$sts.param^[$sts.value^]}[ ]]}{
  $result[$set]
 }}
 
-@exec_file[file;set;p1;p2;p3;p4;p5]
+@exec_file[file;set;p1;p2;p3;p4;p5][pr;prt]
 ^ihavenotime[]
-^untaint{^try{^exec_file1[$file;$set]}{^if(def ^cando[]){^die[^lang[434] $file] }}}
+$pr[^untaint{^try{^exec_file1[$file;$set]
+}{^if(def ^cando[]){^blad[huinia]}{$exception.handled(1)}$file}}]
+^if(def $set.transform){^try{
+	$pr[^xdoc::create{$pr}]
+	$prt[^pr.transform[/my/blocks/$set.transform]]
+	$prt[^prt.string[$.method[html]]]
+	$pr[$prt]
+}{^blad[huinia]}}
+$result[^taint[as-is][$pr]]
 @exec_file1[file;set][local;ftx]
-^if($set is hash){$caller.local[$set]}{$caller.local[^hash::create[]] $caller.local.string[$set]}
-^include[/my/blocks/$file]
+^if($set is hash){$caller.local[$set]}{$caller.local[^hash::create[]] $caller.local.string[$set]}^include[/my/blocks/$file]
 
 @exec_module[module;set;p1;p2;p3;p4;p5][xec]
 ^ihavenotime[]

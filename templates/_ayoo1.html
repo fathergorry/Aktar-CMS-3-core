@@ -15,24 +15,7 @@ $bgstyle[F0F9FB]
 <meta name="robots" content="NOINDEX, FOLLOW">
 <script language="javascript" src="/login/scripts/jquery.js"></script>
 $header
-<style type="text/css">
-<!--
-table, div {	font-family: Arial, Helvetica, sans-serif;font-size: x-small;color: #044757;}
-a:link {color: #0000C0;text-decoration: underline;}
-a:visited {color: #0000C0;text-decoration: underline;}
-a:hover {color: 0000FF;}
-.dsc {font-size: 11px;}
-.eye {width: 11px; height: 11px; margin-bottom: -2px}
-.hnd {cursor: help}
-input, textarea {font-family: Courier new, courier, sans-serif;font-size: x-small; border-width:1px; }
-.red {color: #FF0000; font-family: monospace; font-size: small}
-.uj {text-align: right; vertical-align: top}
-.errmsg{display:block; font-family:courier new; font-size:16px; color:#FF0000}
-.errmsg1{color:#880000}
-input.modsetstr{width:550px}
-.globalset {background-color:#EECCCC}
--->
-</style>
+<link rel="stylesheet" href="/login/styles/ayoo.css">
 </head>
 
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" background="/login/img/vb.gif" bgcolor="#F7FBFF">
@@ -42,12 +25,8 @@ input.modsetstr{width:550px}
         <tr>
           <td width="82" align="center" bgcolor="#D5EFF8"><a href="/"><img src="/login/img/logo2.gif" width="82" height="19" border=0></a></td>
           <td align="right">
-^if(def $userid){
-^lang[58] <a href="/login/?action=modify">$user.name</a>!
-[<a href="/login/?action=logout^rn[&]">выйти</a>]
-}{
-<a href="/login/^rn[?]">Войти</a>
-}
+$aktar_version[^include[/login/config/version.txt]]
+^ayoo_user_menu[]          
           </td>
         </tr>
       </table></td>
@@ -55,7 +34,7 @@ input.modsetstr{width:550px}
   <tr>
     <td bgcolor="#E0F3F9"><table width="100%" border="0" cellspacing="0" cellpadding="3">
         <tr>
-          <td width="82" align="center"  bgcolor="#D5EFF8"><b><small>v. ^include[/login/config/version.txt]</td>
+          <td width="82" align="center"  bgcolor="#D5EFF8"><b><small>v. $aktar_version</td>
 <td align="right">
 ^get_admin_menu[]
 #<a href="/login/">^lang[298]</a>

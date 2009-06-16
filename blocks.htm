@@ -12,16 +12,17 @@ $document.pagetitle[^lang[335]]
 $btypes[^table::create{block	rig	desc
 cfg	menu block	^lang[336] (cfg)
 p		^lang[337] (p)
-w	menu block	^lang[338] (w)}] $noadm[$.w(1) $.cfg(1) ]
+xsl	menu block	XSL template (xsl)
+}] $noadm[$.w(1) $.cfg(1) $.xsl(1)]
 <br>
-^if(def $form:newblock){^if(def ^cando[$.block(1) $.menu(1)] && def $noadm.[$form:new] || def ^cando[]){
+^if(def $form:newblock && ^btypes.locate[block;$form:new]){^if(def ^cando[$.block(1) $.menu(1)] && def $noadm.[$form:new] || def ^cando[]){
  $tmp[ ]
  ^tmp.save[/my/blocks/^saveable[$form:newblock].$form:new]
   ^redirect[blocks.htm?block=^saveable[$form:newblock].$form:new]
 }{^die[268]}}
 
 
-$list[^file:list[/my/blocks;\.^if(def ^cando[]){(w|cfg|p)}{(w|cfg)}^$]]
+$list[^file:list[/my/blocks;\.^if(def ^cando[]){(w|cfg|p|xsl)}{(w|cfg|xsl)}^$]]
 <table border=0 ^if(def $form:block){align=right}><tr><td><form action="blocks.htm">
 ^lang[94]:
 <br>^list.sort{^pseudoname:find[$list.name]}
@@ -51,7 +52,7 @@ $e[^file:justext[$block]]
 ^switch[$e]{
  ^case[p]{^editexeblock[/my/blocks/$block]}
  ^case[w]{^editwikiblock[/my/blocks/$block]}
- ^case[cfg]{^edittmpblock[/my/blocks/$block]}
+ ^case[cfg;xsl]{^edittmpblock[/my/blocks/$block]}
 }}
 
 ^if(!def $form:delblock){<input type=submit value="^lang[345;save]">}

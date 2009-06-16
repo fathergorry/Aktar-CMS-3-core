@@ -102,8 +102,6 @@ $userdesc[^datawork::create[users;$dw_cond;;
 $user[^datawork::create[users;$.id($userdesc.last_insert)]]
 $user[^user.returnHash[]]$user_[$user]
 $sid[^math:uid64[]] $userid($user.id)
-	<a href="$form:refto^rn[?]"><b><big>^default[$form:refmsg;^lang[544]]</big></b></a>
-    ^if($form:refmode eq absolute){^redirect[${form:refto}^rn[?]]}
     ^manage_session[$sid]
 ^if(def $user_.email){
 ^mailsend[
@@ -138,7 +136,12 @@ $md5em[^md5[$mymail.email $useropt.conf_email]]
 }
 
 @upform[]
+^if($env:REQUEST_METHOD eq POST && !$userdesc.data_error){
+	<a href="$form:refto^rn[?]"><b><big>^default[$form:refmsg;^lang[544]]</big></b></a>
+    ^if($form:refmode eq absolute){^redirect[${form:refto}^rn[?]]}
+}
 <form action="$uri/" method="POST" enctype="multipart/form-data">
+
 * - ^lang[555]<br>
 ^keepvalue[action refto refmsg refmode allowcode upaction]
 ^userdesc.form[;$.tstyle[width:400px]$.nofilemsg[вы сможете загрузить файл после регистрации]]
