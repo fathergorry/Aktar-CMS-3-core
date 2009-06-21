@@ -249,7 +249,7 @@ $pre
 ^if($uri ne "/"){<a href=$uri?editcontent=on^rn[&]>^lang[294]</a>$div}
 ^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]">^lang[457]</a> $div}
 <a href="/login/update.htm?add=$uri^rn[&]">^lang[458] &quot^;$document.menutitle&quot^;</a> $div
-^menu.a.menu{<a href="$menu.a.uri">$menu.a.menutitle</a>}[$div]
+^menu.a.menu{^if(^menu.a.line[]<9){<a href="$menu.a.uri">$menu.a.menutitle</a>}}[$div]
 ^if($menu.b is table){<br><b>^menu.b.menu{$div<a href="$menu.b.uri">$menu.b.menutitle</a>}</b>}
 $post
 }
@@ -391,9 +391,10 @@ $rct[$response:content-type]
 }{$result[]}
 
 @blad[oi;msg][locals]
+#^sgsdfg.menu{}
 $caller.exception.handled(1)
 $extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
-^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^)}]
+^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^) <- $stack.name $stack.file^(${stack.lineno}:$stack.colno^)}]
 ^if(def $oi){^switch[$oi]{
 	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
 	^case[huinia]{$extxt}
@@ -416,7 +417,7 @@ $extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$calle
 
 
 @dtp[table]
-$result[${startup.db_tbl_prefix.value}$table]
+$result[${MAIN:dtp}$table]
 
 @document[params][fd]
 ^if(!def $environment_created){^environment[]}
@@ -439,8 +440,23 @@ $mmodules[^file:list[/my/autorun]]
  ^use[/my/autorun/$mmodules.name]
  ^try{$allowed_modules[$allowed_modules ^allowed[]]}{$exception.handled(1)}
 }
-$allowed_modules[$allowed_modules var correctme email special program sitemap notlogin islogin translit nest redirect]
+$allowed_modules[$allowed_modules comments var correctme email special program sitemap notlogin islogin translit nest redirect]
 $allowed_modules[^s2h[$allowed_modules]]
+
+
+@comments[dt;sm]
+^use[/login/modules/forum.p]$sm[$uri]
+$fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
+^if($dt eq hide && !def $form:showallcomments){
+^connect[$scs]{$fcn[^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$fid'}]}
+<a href="$uri?showallcomments=1">Комментариев: $fcn</a>
+;
+^forum[
+	$.fid[$fid]
+	$.notify[$MAIN:globals.site_admin]
+	$.rpp[^if(def $form:showallcomments){100;5}]
+]
+}
 
 @get_header[]
 <title>$document.title</title>
@@ -469,10 +485,12 @@ $precontent[^if(def $doptions.unbrul){^document.content.replace[^unbrul[]]}{$doc
 $result[]
 
 @load_config_tables[][tmp]
-$tmp[^table::load[/^if(-f "/local"){aktar_mysql_local;aktar_mysql}.cfg]]
+$tmp[^file::load[text;/^if(-f "/local"){aktar_mysql_local;aktar_mysql}.cfg]]
+$tm2[^process{^untaint{$tmp.text}}]
+$tmp[^table::create{^untaint{$tmp.text}}]
 $startup[^tmp.hash[var]]
-$dtp[$startup.db_tbl_prefix.value]
-$scs[$startup.sql_conn_string.value] $SQL.connect-string[$scs]
+$dtp[^default[$db_tbl_prefix;$startup.db_tbl_prefix.value]]
+$scs[^default[$sql_conn_string;$startup.sql_conn_string.value]] $SQL.connect-string[$scs]
 ^try{
 	$tmp[^file::load[text;/my/deriv/globals.p]]
 	$globals[^h2s:createh[$tmp.text]] 

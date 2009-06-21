@@ -147,19 +147,7 @@ GROUP BY fid ORDER BY score DESC LIMIT 6
 ^pages.menu{<a href="$pages.path" class="sided">$pages.name 
 ($pages.score)<img src="/my/templates/mak/more.gif" class="morei"/></a>}[<br>]
 }
-@comments[dt;sm]
-^use[/login/modules/forum.p]$sm[$uri]
-$fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
-^if($dt eq hide && !def $form:showallcomments){
-^connect[$scs]{$fcn[^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$fid'}]}
-<a href="$uri?showallcomments=1">Комментариев: $fcn</a>
-;
-^forum[
-	$.fid[$fid]
-	$.notify[$MAIN:globals.site_admin]
-	$.rpp[^if(def $form:showallcomments){100;5}]
-]
-}
+
 @tags[data;sm]
 $a[^table::sql{SELECT DISTINCT $data.column AS name, COUNT($data.column) AS score
 FROM ^dtp[$data.table] WHERE moderated = 'yes' GROUP BY $data.column ORDER BY score DESC LIMIT 45}]

@@ -32,10 +32,10 @@ $adt[^table::create{uri	name	p
 /login/blocks.htm	^lang[395]	demo editor
 /login/files.htm	^lang[238], ^lang[314]	pic demo delpic
 /login/backup.htm	^lang[428]	deity
+/login/tableed.htm	Sys.tab	deity editor
 /login/groupedit.htm	SEO	editor demo
 /login/pages404.htm	404	errpg demo
-/login/logs.htm	Log	errpg demo log
-/login/tableed.htm	Sys.tab	deity editor}]
+/login/logs.htm	Log	errpg demo log}]
 ^if($menu.a is table){;$menu.a[^table::create{sect_key	uri	menutitle	}]}
 ^if(!$admin_menu_called){
 ^adt.menu{

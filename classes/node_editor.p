@@ -171,14 +171,16 @@ $macros[^file:list[/modules;\.p^$]]
 <div align="right"><nobr><small> <a href="update.htm?p=$form:p&cp=word^rn[&]">Clean MSWord text</a> <a href="update.htm?p=$form:p&cp=tables^rn[&]">Clean tables</a>
  <a href="update.htm?p=$form:p&cp=breaks^rn[&]">Set breaks</a> </small></nobr></div>
 <table border=0><tr><td valign=top>
-^if($document.module ne "ad-base.p"){
+^if(!def $femodules){$femodules[^hash::create[]]}
+^placeblock.foreach[k;v]{$femodules.$v(1)}
+
+^if($document.module ne "ad-base.p" && !def $femodules.[nomacro.p]){
 <input type=checkbox name=doptions value=exec id=allowmacro ^if(^must_have_macro[]){checked}> ^lang[417;allow macros]
 }<br>
 ^fbool[doptions;unbrul;^if(def $doptions.unbrul){unbrul}] ^lang[418;autoformat]
 </td>$f_ext[^s2h[p cfg w; ]]
 
-^if(!def $femodules){$femodules[^hash::create[]]}
-^placeblock.foreach[k;v]{$femodules.$v(1)}
+
 
 <td valign=top>^if($femodules is hash){^lang[419;Редактировать макросы]: ^femodules.foreach[k;v]{^if(def $f_ext.[^file:justext[$k]]){<a href="blocks.htm?block=$k">$k</a> }}}</td></tr></table>
 
