@@ -40,11 +40,15 @@ $hUserKeysDef[^db_fld2showinlist[$whatload]]
 	^if(^instance.locate[key;foreign]){$primary_key[$instance.column]}
 }
 
-@createFormExempler[prefix][j;dh]
+@createFormExempler[prefix][j;dh;result]
 ^if($prefix eq same){$prefix[]}{^if($prefix eq instance_name){$prefix[${instance_name}_]}}
 $dh[^hash::create[]] $onsaves[^instance.menu{$.[$instance.column][$instance.onsave]}]
 $formexset{^if(^k.left(4) eq "set_"){$form:tables.$j;$form:$j}}
-^keylist.foreach[k;v]{$j[${prefix}$k]$dh.$k[^proc[^if(^k.left(4) eq "set_"){$form:tables.$j;$form:$j};$onsaves.$k;$k]] }
+^keylist.foreach[k;v]{
+	$j[${prefix}$k]
+	^if($form:$j is file && !def $onsaves.$k){^throw[parser.runtime;Open /my/dbs/${instance_name}.txt and add %your_onsave% handlers to file fields, then define @%your_onsave%[file] in ${instance_name}.p]}
+	$dh.$k[^proc[^if(^k.left(4) eq "set_"){$form:tables.$j;$form:$j};$onsaves.$k;$k]] 
+}
 $datahash[$dh]
 $datatable[^table::create{^dh.foreach[k;v]{$k}[	]
 ^dh.foreach[k;v]{$v	}}]

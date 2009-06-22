@@ -6,12 +6,10 @@ $rrange[^hash::create[]]
 
 
 
-$vtype[
-$.clinic[^table::create{id	good	bad
-1	Дешево	Дорого
-2	Эффективное лечение	Неэффективное лечение
-3	Радушный персонал	Грубый персонал
-4	Комфортные условия	Некомфортные условия}]
+^try{$vtype[^h2s:fromfile[/my/config/rating.cfg]]}{
+	^if($exception.type eq "file.missing"){
+	$exception.handled(1)
+	$vtype[
 $.f[^table::create{id	good	bad
 1	По делу	Бесполезно
 2	Дружелюбно	Оскорбтельно
@@ -23,9 +21,11 @@ $.user[^table::create{id	good	bad
 1	Информативен	Неинформативен
 2	Нравится	Раздражает}]
 ]
+	}
+}
 $vtype.a[$vtype.f]
 $vtype.article[$vtype.n]
-
+#^throw[1;^vtype._count[]]
 #$MAIN:extrahtml[^extrahtml[]]
 
 

@@ -2,7 +2,18 @@
 @pizdec[]
 ^recover_obligate_files[]
 
+
+@recover_fac_files[dir][all]
+$all[^file:list[$dir]]
+^all.menu{
+	^if(-d "$dir/$all.name"){
+	^recover_fac_files[$dir/$all.name]}{
+		^recover_files[^dir.mid(15;99)/$all.name]
+	}
+}
+
 @recover_obligate_files[]
+^recover_fac_files[/login/recover]
 ^recover_files[
 files/.htaccess
 img/.htaccess

@@ -475,7 +475,7 @@ $fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
 $precontent[^if(def $doptions.unbrul){^document.content.replace[^unbrul[]]}{$document.content}]
 ^if($process_body){^process{^untaint{$precontent}}}{^untaint{$precontent}}
 ^if(def $document.module && !def $module_already_executed){
-  ^exec_sub[$document.module;^expand[$document.module_settings]] 
+  ^exec_sub[$document.module;^expand[asmain==yes,,$document.module_settings]]  
 }
 }
 
@@ -780,7 +780,7 @@ $d3[^date::now[]]
 @program[unuseful_data;d]
 $module_already_executed[y]
 ^if(def $document.module){
-^exec_sub[$document.module;^expand[$document.module_settings]] 
+^exec_sub[$document.module;^expand[asmain==yes,,$document.module_settings]] 
 }
 
 @sqlcache[query;minutes;junk;alt_cache][locals;result]
@@ -838,8 +838,16 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 h2s
 
 @createh[str]
-^process{^taint[as-is; ^$hash_^[$str^] ]}
+^process[$h2s:CLASS]{^taint[as-is; ^$hash_^[$str^] ]}
 $result[^if($hash_ is hash){$hash_}{^hash::create[]}]
+
+@fromfile[path][f]
+$f[^file::load[text;$path]]
+$result[^createh[$f.text]]
+
+@tofile[hash_;path][sh]
+$sh[^h2s[$hash_]]
+^sh.save[$path]
 
 @h2o[hash_;div]
 $result[^hash_.foreach[k;v]{$k}[^if(def $div){$div}{ }]]

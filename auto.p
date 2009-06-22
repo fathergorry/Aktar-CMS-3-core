@@ -6,7 +6,7 @@
 @auto[]
 
 @imgresize[path;x;y;q;ifsize][locals]
-^if(!def $q){$q(47)} $must_resize(1)
+^if(!def $q){$q(57)} $must_resize(1)
 ^if($ifsize eq bigonly){
 	$tmp[^image::measure[$path]]
 	^if($x && $tmp.width <= $x ){$must_resize(0)}

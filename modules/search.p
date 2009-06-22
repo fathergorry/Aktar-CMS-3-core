@@ -19,6 +19,7 @@ salert = "^lang[521]";
 </form>
 ^if(def $form:q){
 ^connect[$scs]{
+^use[adbase2.p]
 ^memories[$form:q]<p>
 ^do_search[]<p>
 }

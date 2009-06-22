@@ -1,51 +1,5 @@
 
 @notes----[]
-Запрещено переносить разделы с новостями и специальными разделами Адбазы (далее Спецразделы), 
-в которых установлена соотв. подпрограмма (Рекламная база и Новости)
-Прикрепляемые в форму спецразделов файлы могут быть добавлены только После 
-создания описания (т.е. когда в урле есть id=xxx)
-Запись может не отображаться если не промодерирована
-Не забудьте добавить в избранное ссылки на все разделы с новыми немодерированными записями
-Распространенные фамилии нужно дублировать метками, чтобы они более уверенно находились.
-Метка выглядит так: <источникданных№записи/> Метки можно посмотреть а каждой записи.
-Пример: в новостях пишем "Иванов Иван <person35/> сделал заявление..." 
-Метки также нужно ставить, когда упоминаемый находится не в именительном падеже
-или если упоминаемый объект не указан в тексте явно. Метки не видны при чтении страницы.
-Чтобы разрешить добавление комментариев к какой-либо статье (не новости и не адбазы),
-нужно разрешить в ней макросы и прописать внизу [comments]
-
-Структура модификаций (для программиста): 
-- основная часть: модуль ad-base.p, он управляет всеми доп.базами, связан с datawork.p
-- /custom/adbase.p - общие макросы
-- /classes/adb_search.p - поиск по доп.таблицам
-- classes/adbase2.p - обработчики для табличных данных (см. доку по datawork)
-Особенность адбазных разделов в том, что в них прописывается дизайн для экземпляра, а не страницы.
-В общем, это все особенности, остальное в мануале по Актару. 
-
-К уточнению
-- Заголовки в 2 и более строк смотрятся некрасиво
-- статьи в списке (карта раздела) - нужен красивый вывод. Возможно, давать описание раздела или спец.теги
-- параграф предлагаю выравнивать полностью
-- выпадающая строка верхнего меню не удобна: сложно довести мышью до края, задевается другой пункт меню и строка заменяется, при другой реализации выпавший список остается висеть и непонятно, к чему он + все равно юзеру непросто его зафиксировать. Варианты: убрать вообще или сделать выпадание вертикальным списком
-- функция "ответить на комментарий" скорее всего нереализуема в рамках бюджета, т.к. требует древовидного вывода комментариев, пользовательского скриптования для скрытия/раскрытия текста, а это не оговорено. Кроме того, виртуальный хостинг мастерхоста это не потянет (итак каждый объект требует 2 системных запроса + 1 на себя + 4-7 для поиска упоминаний + 1 для комментариев!!) Большинство сайтов в таких случаях используют обычный, неиерархический список. Если дерево дискуссий все же нужно, предлагаю подождать выхода древовидного форума на общих основаниях. Он будет обратно совместим с вашим приложением.
-- Устаревшие тендеры, хоты и т.д. надо как-то удалять. Делать это автоматически или будете вручную?
-Ставить значок "завершено"
-- Определитесь, в каком формате давать статичные материалы - новости или разделы сайта. Разница в том, что новости идут лентой, а собственно разделы имеют человеко-понятные адреса
-
-фамилии сотрудников не ведут в раздел "Персоны", названия клиентов не ведут в раздел "Рекламодатели", сайты с эксклюзивным размещением не ведут в раздел "интернет проекты"
-интернет-проекты согласно ТЗ нет формы для подбора нужного сайта, см. ТЗ
-!! скрыть часть полей!
-
-В разделе "предложение" нет ссылки разместить "Горячее предложение" согласно ТЗ, ну и форму оттуда возьмешь
-В Глоссарии нет алфавитного указателя
-http://aktar-master/useful/links битая ссылка
-Поиск и популярные материалы??
-
-#ночные снайперы - не горюй когда узнаешь обо мне ты
-#миллион долларов шурша холодно поверь в себя в свою мечту всё будет хорошо
-
-Туду: 
-5. Восстановить USERDATA и CFORUM с удаленки!!!!!! А надо?
 
 @allowed[]
 tags comments populars memories announcer myrecords tabled_header1
@@ -58,7 +12,7 @@ $watchin[^watchin.select(^watchin.cls.pos[u]>=0)]
 $newad[^modinfo::create[ad-base.p]]
 ^connect[$scs]{
 ^watchin.menu{
-$myt[^table::sql{SELECT ^sr_out[$watchin.adt] AS name, path, id, moderated FROM ^dtp[$watchin.adt] WHERE ^if(def ^cando[editor base-editor]){moderated != 'yes'}{editby = '$MAIN:userid'}   }]
+$myt[^table::sql{SELECT ^sr_out_name[$watchin.adt], path, id, moderated FROM ^dtp[$watchin.adt] WHERE ^if(def ^cando[editor base-editor]){moderated != 'yes'}{editby = '$MAIN:userid'}   }]
 	<h3>$watchin.name</h3>
 	^myt.menu{
 	<a href="^myt.path.match[action=show][ig]{action=edit}"><img src="/login/img/edit.gif" border=0></a>
@@ -71,7 +25,7 @@ $myt[^table::sql{SELECT ^sr_out[$watchin.adt] AS name, path, id, moderated FROM 
 @announcer[tab][an]
 ^try{
 ^use[datawork.p]
-^connect[$scs]{$an[^table::sql{SELECT CONCAT(^sr_out[$tab]) AS name, path 
+^connect[$scs]{$an[^table::sql{SELECT ^sr_out_name[$tab], path 
 FROM ^dtp[$tab] WHERE moderated != 'no' ORDER BY lastmodified DESC LIMIT 3}]}
 ^an.menu{<a href="$an.path" class="sided">$an.name<img src="/my/templates/mak/more.gif" class="morei"></a><p>}
 }{$exception.handled(0)неверный источник данных}
@@ -123,12 +77,12 @@ GROUP BY fid ORDER BY score DESC LIMIT 6
 ^if(def $is){^connect[$scs]{$page[^table::sql{
 	SELECT path, 
 	^switch[$is]{
-		^case[structure]{menutitle}
-		^case[news]{title}
+		^case[structure]{menutitle AS name}
+		^case[news]{title AS name}
 		^case[adtab]{
-			^sr_out[$sTable]
+			^sr_out_name[$sTable]
 		}
-	} AS name, '$frm.score' AS score
+	}, '$frm.score' AS score
 	FROM ^dtp[^switch[$is]{^case[adtab]{$sTable}^case[DEFAULT]{$is}}] WHERE 
 	^switch[$is]{
 		^case[news]{id = '$frm.fid'}
@@ -148,12 +102,27 @@ GROUP BY fid ORDER BY score DESC LIMIT 6
 ($pages.score)<img src="/my/templates/mak/more.gif" class="morei"/></a>}[<br>]
 }
 
-@tags[data;sm]
+@tags[data;sm][kuc]
 $a[^table::sql{SELECT DISTINCT $data.column AS name, COUNT($data.column) AS score
-FROM ^dtp[$data.table] WHERE moderated = 'yes' GROUP BY $data.column ORDER BY score DESC LIMIT 45}]
+FROM ^dtp[$data.table] WHERE moderated = 'yes' GROUP BY $data.column ORDER BY score DESC LIMIT 125}]
+^if(def $data.div){
+	$kuc[^hash::create[]]
+	^a.menu{
+		$tmp[^a.name.split[$data.div;v]]
+		^tmp.menu{
+			$tmp2[^tmp.piece.trim[]]
+			^try{^kuc.$tmp2.inc($a.score)}{$exception.handled(1)$kuc.$tmp2(1)}
+		}
+	}
+$a[^table::create{name	score
+^kuc.foreach[k;v]{$k	$v
+}}]
+}
+
 ^tagcloud[$a;$data.url?filter=field&field=$data.column&value;, 
 ]
 
+#delete after ADBase switched to akbd
 @sr_out[tab;anc]
 $anc[^db_fld2showinlist[$tab]] CONCAT(
 ^switch[$tab]{
@@ -167,6 +136,17 @@ $anc[^db_fld2showinlist[$tab]] CONCAT(
 	^case[DEFAULT]{$anc.1, ', ', $anc.2, ', ', $anc.3}
 } )
 
+@sr_out_name[tab][anc]
+$anc[^db_fld2showinlist[$tab]]
+^try{^use[/my/config/akbd_selector.cfg]^akbd_selector[$tab;$anc]}{
+^if($exception.type eq "file.missing"){^blad[]
+	CONCAT(^switch[$tab]{
+	^case[news]{DATE_FORMAT(postdate, '%d.%m.%Y' ), ', ', title}
+	^case[DEFAULT]{$anc.1, ', ', $anc.2, ', ', $anc.3}
+	}) AS name
+
+}
+}
 @adb_tabselorder[tab]
 ^switch[$tab]{
 	^case[DEFAULT]{lastmodified DESC}
@@ -181,3 +161,40 @@ WHEN 08 THEN 'Августа' WHEN 07 THEN 'Июля'
 WHEN 06 THEN 'Июня' WHEN 05 THEN 'Мая' WHEN 04 THEN 'Апреля' 
 WHEN 03 THEN 'Марта' WHEN 02 THEN 'Февраля' WHEN 01 THEN 'Января'
 ELSE 'месяца' END
+
+#######################################
+#COMMON HANDLERS#######################
+#######################################
+@adb_edited_by[by][h]
+^if(^by.int(0)){$h($by)}{$h(0)}
+^if($form:id eq new && !def ^cando[editor users base-editor]){$h($MAIN:user.id)}
+^if(!def ^cando[editor users base-editor] && $h != ^MAIN:userid.int(-1)){
+	^die[Вам нельзя редактировать эту запись]
+	$datawork:CLASS.data_error(1) 
+	$MAIN:hideForm[<!-- -->]
+}{^if(^form:reassign_editor.int(0)){$h($form:reassign_editor)}}
+$result($h)
+
+@adb_compurl[url][res]
+$res[$MAIN:uri?action=show&id=]
+^if(!^form:id.int(0)){$MAIN:update_adb_url[$res]}
+$result[${res}^form:id.int(0)]
+
+@adb_ismoderated[yes]
+$result[^if($yes ne yes){no;yes}]
+^if($form:action eq edit && !def ^cando[editor users base-editor unmoderated]){$result[no]}{}
+
+@currentdate_sql[d][dd]
+$dd[^date::now[]]
+$result[^dd.sql-string[]]
+
+@savefile[file0;exts;prname;path]
+$result[]
+^if($file0 is file && ^form:id.int(0)){
+	$exts[^s2h[$exts]]$r[^file:justext[$file0.name]]
+	^if(def $exts.$r){
+		$fprname[${prname}_^form:id.int(0).$r]
+		^file0.save[binary;$path/$fprname]
+		$result[$path/$fprname]
+	}{^die[Неверный формат файла "$prname". Допускаются ^exts.foreach[k;v]{$k}[, ]]}
+}{^if(!^form:id.int(0)){^die[Необходимо еще раз загрузить файл]}}

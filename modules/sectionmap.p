@@ -8,7 +8,8 @@ path	string	this	Картировать, начиная с раздела
 limit	num	5	Уровень заглубления
 bydate	bool	yes	Сортировать по дате
 showpic	bool	yes	Показывать картинки
-markempty	bool	yes	Отмечать непустые разделы}]
+markempty	bool	yes	Отмечать непустые разделы
+norss	bool	yes	Запретить экспорт}]
 
 
 @sectionmap_info[set][ut;ks;р]
@@ -22,7 +23,8 @@ $tmp[^sitemap[$set]] <b>^sitemap.count[]</b> разделов будут отображаться
 }
 
 
-@sitemap[set;d][eye;pic]
+@sitemap[s;d][eye;pic]
+$set[$s]
 #Установки настроек
 ^if($set is hash){}{$set[^hash::create[]]}
 ^if($set.path eq this){$set.path[$MAIN:uri]}
@@ -64,8 +66,9 @@ ORDER BY ^if(def $set.bydate){s.created DESC}{s.path}}]
 }{
 	^def_sitemap_design[$sitemap]
 }}
+^if(!def $set.norss && def $set.asmain){
 <a href="$uri?export=rss"><span style="background-color:#ff6600^;font-size:9px^;text-decoration:none^;color:#FFFFFF^;padding:2px^;letter-spacing:1px">rss</span></a>
-
+}
 @def_sitemap_design[sitemap]
  $eye{^if($sitemap.visiblity ne yes){<img src="/login/img/eye.gif" align=baseline title="Закрыто">}}
  $pic{^if(def $set.showpic && def $sitemap.picture){^if(-f "/my/img/node_pics/$sitemap.picture"){<a href="$sitemap.path"><img src="/my/img/node_pics/$sitemap.picture" border="0" /></a><br>}}}
