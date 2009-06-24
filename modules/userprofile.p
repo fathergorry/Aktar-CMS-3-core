@@ -240,3 +240,34 @@ $g[aoeui] $s[qrtpsdfghjklzxcvbnm]
   $r(^math:random(^if($v eq $s){19}{5})) $p[${p}^v.mid($r;1)]
 }
 $result[${p}^math:random(99)]
+
+@users_password[p]
+
+^if($upaction eq modify){Старый пароль;Введите пароль (только латинские буквы и цифры)} <br>
+<input type="password" name="users_password"><br>
+^if($upaction eq modify){Новый пароль}{Повторите пароль}<br>
+<input type="password" name="users_password_confirm"><p>
+
+@check_password[p][pc] notice that in 'register' there is entered string, in 'modify' - MD5
+$pc[$form:users_password_confirm] $result[$p]
+^if($upaction eq register){
+	^if(def $p && $pc ne $p){
+		^throw[check;;Вы ошиблись в подтверждении ввода пароля]
+	}{
+		^if(def $p){
+			$result[$p]
+		}{
+			$result[^password_generate[]]
+		}
+	}
+}
+^if($upaction eq modify){$result[]}
+^if($upaction eq modify && def $pc){
+	$tmp[^table::sql{SELECT password FROM ^dtp[users] WHERE id = '$user.id' AND password = '^md5[$p]'}]
+	^if(def $tmp.password){
+		$result[$pc]
+		^msg[Пароль изменен]
+	}{
+		^msg[Пароль не был изменен]
+	}
+}

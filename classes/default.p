@@ -625,7 +625,7 @@ $cookie:s[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
 ^if(^hasrig[$globals.sessionlimit8]){$result(1/3)}{$result($globals.sessiontime)}
 
 @include[file][f;ftx]
-$fe[^math:md5[$file]]^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
+$result[$fe[^math:md5[$file]]^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]]
 #$f[^file:find[$file]]^if(def $f){$ftx[^file::load[text;$f]]^process[$caller.self]{^taint[as-is][$ftx.text]}[$.file[$file]]}
 #$f[^file:find[$file]]^if(def $f){^if(!def $$fe){$$fe[^file::load[text;$f]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]}
 #^if(!def $$fe){$$fe[^file::load[text;$file]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
@@ -717,9 +717,9 @@ $tb[^table::load[nameless;/my/blocks/$block]]
 #Выполняет подпрограмму
 @exec_sub[sub;set;p1;p2;p3;p4;p5]
 ^ihavenotime[]
-^try{^exec_sub1[$sub;$set]}{^lang[427] $exception.comment $exception.file^(${exception.lineno}:$exception.colno^) $sub
+^try{^exec_sub1[$sub;$set]}{^lang[427] $exception.type $exception.comment $exception.file^(${exception.lineno}:$exception.colno^) $sub
 ^if(!def ^cando[]){
-$exception.handled(1)
+^blad[]
 }{
 ^lang[427] $sub default.p/exec_sub
 $exception.handled(0)

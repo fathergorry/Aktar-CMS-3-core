@@ -72,7 +72,7 @@ $ks[^keylistgen[]]
 }
 @update_keys[][column]
 $ks[^keylistgen[]]
-, DROP PRIMARY KEY
+, DROP PRIMARY KEY 
 ^ks.foreach[k;v]{
 	^switch[$k]{
 		^case[key]{

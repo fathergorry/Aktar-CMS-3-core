@@ -8,7 +8,7 @@
 $watchin[^table::load[/my/config/adbase_tables.txt]]
 $watchin[^watchin.select(^watchin.cls.pos[u]>=0)]
 ^use[modinfo.p]
-$newad[^modinfo::create[ad-base.p]]
+$newad[^modinfo::create[akbd.p]]
 ^connect[$scs]{
 ^watchin.menu{
 $myt[^table::sql{SELECT ^sr_out_name[$watchin.adt], path, id, moderated FROM ^dtp[$watchin.adt] WHERE ^if(def ^cando[editor base-editor]){moderated != 'yes'}{editby = '$MAIN:userid'}   }]
@@ -201,4 +201,18 @@ $result[]
 		^file0.save[binary;$path/$fprname]
 		$result[$path/$fprname]
 	}{^die[Неверный формат файла "$prname". Допускаются ^exts.foreach[k;v]{$k}[, ]]}
-}{^if(!^form:id.int(0)){^die[Необходимо еще раз загрузить файл]}}
+}
+
+#vt - predefined values as 1-column 'ad' table
+@edit_set[val;vt] #Edit set
+^if(def $val){
+$val[^expand[$val]]
+$val[^val.menu{$.[$val.param][1]}]
+}{$val[^hash::create[]]}
+^vt.menu{<input type=checkbox name="_fieldname_" value="$vt.ad" ^if(def $val.[$vt.ad]){checked}>
+$vt.ad<br>}
+
+@commasep2list[cs]
+$result[^cs.replace[^table::create{a	b
+,,	,}]]
+

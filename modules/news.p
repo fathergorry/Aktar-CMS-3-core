@@ -2,7 +2,7 @@
 $result[^table::create{param	type	default	descr
 id	string	$i[^uri.split[/;rh]]^i.0.left(32)	Идентификатор новостной ленты
 rpp	num	15	Новостей на странице
-visual	bool	yes	Использовать визуальный редактор
+#visual	bool	yes	Использовать визуальный редактор
 more	string	$form:p	Путь к архиву новостей (если нужен)
 readmore	string	Читать дальше&gt^;&gt^;	Текст "читать дальше"
 nopages	bool	yes	Не выводить страницы
@@ -47,7 +47,7 @@ $document.content[]
 $pc[^try{^process{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){ошибка в данных}}]
 $result[^if($auto eq no){$pc}{^pc.replace[^unbrul[]]}]
 @shownews[]
-$r(^int:sql{SELECT COUNT(id) FROM ^dtp[news] WHERE ^allid.foreach[k;v]{newsid = '$k'}[ OR ] })
+$r(^int:sql{SELECT COUNT(id) FROM ^dtp[news] WHERE newsid IN (^allid.foreach[k;v]{'$k'}[, ]) })
 
 ^if(!def $seti.nopages){$pp[^pagination::create[$r;^seti.rpp.int(15)]]}
 $news[^table::sql{SELECT n.*, count(f.fid) AS comments 
@@ -77,7 +77,9 @@ GROUP BY n.id ORDER BY n.postdate DESC}[^if(!def $seti.nopages){^pp.q[limits]}]]
 #ifdesign end
 ^if(^is_j[]){ <input type=submit value="Удалить выбранные">}
 </form>
-^if(!def $seti.nopages){^pp.listpages[ | ;$.url[$uri?]$.prescript[Страницы:]]}
+^if(!def $seti.nopages){^pp.listpages[ | ;$.url[$uri?]$.prescript[Страницы:]]}{
+	^if(def $seti.more){<a href="$seti.more">Архив новостей</a>}
+}
 
 @xmlexportnews[news;mode]
 $response:charset[UTF-8]
@@ -140,7 +142,6 @@ $tmp[^text.split[:more:;lh]]
 }
 $exmp[^if(def $form:displaynew){^getnew[^form:displaynew.int(0)]}{
  $.postdate[^now.sql-string[]] $ustar[^date::now[]] ^ustar.roll[month](9)
- $.expires[^ustar.sql-string[]]
  $.newsid[$seti.id]
 }]
 ^if(!def $exmp.newsid){$exmp.newsid[default]}
@@ -153,14 +154,13 @@ $exmp[^if(def $form:displaynew){^getnew[^form:displaynew.int(0)]}{
 
 ^if(^hasrig[simple]){
 <input type=hidden name="postdate" value="$exmp.postdate">
-<input type=hidden name="expires" value="$exmp.expires">
 <input type=hidden name="newsid" value="$exmp.newsid">
 }{
 
 Дата новости: <br>
 <input type=text name=postdate size=30 value="$exmp.postdate"><br>
-Дата устаревания: <br>
-<input type=text name=expires size=30 value="$exmp.expires">
+Ключевые слова (тэги), через запятую: <br>
+<input type=text name=keywords size=30 value="$exmp.keywords">
 Раздел:
   $inf[^table::sql{SELECT DISTINCT newsid FROM ^dtp[news]}] ^if(!^inf.locate[newsid;$seti.id]){^inf.append{$seti.id}}
   <select name="newsid">

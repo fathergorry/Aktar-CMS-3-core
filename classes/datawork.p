@@ -20,6 +20,7 @@ $saved_ok_msg[^lang[304]]
 ^instance_keys.sub[^s2h[$set.exclude]]
 $conditions[$condition]
 $keylist[^if(def $fields){^instance_keys.intersection[^s2h[$fields]]}{$instance_keys}]
+$req2[^hash::create[$required]] ^req2.sub[$keylist] ^required.sub[$req2]
 ^if(def $condition){
 	^createDBExempler[$condition;$set.order;$set.limits;$set.alt_select]
 }{
@@ -52,7 +53,7 @@ $formexset{^if(^k.left(4) eq "set_"){$form:tables.$j;$form:$j}}
 }
 $datahash[$dh]
 $datatable[^table::create{^dh.foreach[k;v]{$k}[	]
-^dh.foreach[k;v]{$v	}}]
+^dh.foreach[k;v]{^if($v is file || $v is table){^throw[dw.unhandled;Unhandled '$v.CLASS_NAME' in DW form;Check out onsave handler in /my/dbs/${instance_name}.txt];$v}	}}]
 ^required.foreach[k;v]{
 	^if(!def $dh.$k){
 		$tmp(^instance.locate[column;$k])
