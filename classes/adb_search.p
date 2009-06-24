@@ -16,9 +16,11 @@ $qry[
 	^if($tab eq $mainTable){AND id != '^form:id.int(0)'}
 	ORDER BY score DESC LIMIT 6
 ]
+
 ^if(def $indexes.tab){
 	$result[^table::sql{
 		$qry
 	}]
 	}{$result[^table::create{}]}
 
+#^die[MATCH ($index.com) AGAINST ('$query') ^result.count[]]

@@ -4,7 +4,7 @@ site_name		479	text
 site_admin		216	text
 defaultrig	z	308	text
 enablePrint	yes	447	bool
-jqueryOn	yes	Включить jquery и связанные функции	bool
+jqueryOff	yes	Временно отключить jquery и связанные функции	bool
 nodepicsizex		480	num
 _	481		
 timezone	3	436	text

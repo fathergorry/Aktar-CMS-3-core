@@ -382,7 +382,7 @@ $tmp.text]}{^blad[]}
 $result[^if(-f "$file1"){$file1;$file2}]
 @jqueryon[scr][locals]
 $rct[$response:content-type] 
-^if(def $globals.jqueryOn && $jqinheader && $rct.value eq "text/html"){
+^if(!def $globals.jqueryOff && $jqinheader && $rct.value eq "text/html"){
 	$ex[^file::load[text;^choose_file[/my/templates/ajax.htm;/login/templates/ajax.htm]]]
 	^untaint{$ex.text}
 	^if(!def $scr){<script language="javascript" src="/login/scripts/inits.js"></script>}{
@@ -393,11 +393,12 @@ $rct[$response:content-type]
 @blad[oi;msg][locals]
 #^sgsdfg.menu{}
 $caller.exception.handled(1)
-$extxt[$caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
+$extxt[@blad-> $caller.exception.type $caller.exception.source <br>^untaint[html]{$caller.exception.comment}<br> 
 ^untaint[html]{$caller.exception.file^(${caller.exception.lineno}:$caller.exception.colno^) <- $stack.name $stack.file^(${stack.lineno}:$stack.colno^)}]
 ^if(def $oi){^switch[$oi]{
 	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
 	^case[huinia]{$extxt}
+	^case[gdeeto]{^if($caller.exception.type ne "file.missing"){$caller.exception.handled(0)}}
 	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
 }}
 
@@ -440,7 +441,7 @@ $mmodules[^file:list[/my/autorun]]
  ^use[/my/autorun/$mmodules.name]
  ^try{$allowed_modules[$allowed_modules ^allowed[]]}{$exception.handled(1)}
 }
-$allowed_modules[$allowed_modules comments var correctme email special program sitemap notlogin islogin translit nest redirect]
+$allowed_modules[$allowed_modules myrecords comments var correctme email special program sitemap notlogin islogin translit nest redirect]
 $allowed_modules[^s2h[$allowed_modules]]
 
 
@@ -463,7 +464,7 @@ $fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
 <meta name="keywords" content="$document.keywords">
 ^if(def $document.description){<meta name="description" content="$document.description">}
 <!-- ^#41k^#74a^#72 ^#43M^#53 -->
-^if(def $globals.jqueryOn){
+^if(!def $globals.jqueryOff){
 	^call_js[/plugins/jquery.js]
 	^call_js[/login/scripts/user.js]
 	<link rel="stylesheet" href="/login/styles/ajax.css" type="text/css" />
@@ -490,7 +491,9 @@ $tm2[^process{^untaint{$tmp.text}}]
 $tmp[^table::create{^untaint{$tmp.text}}]
 $startup[^tmp.hash[var]]
 $dtp[^default[$db_tbl_prefix;$startup.db_tbl_prefix.value]]
-$scs[^default[$sql_conn_string;$startup.sql_conn_string.value]] $SQL.connect-string[$scs]
+$scs[^default[$sql_conn_string;$startup.sql_conn_string.value]] 
+$scs[$scs^if(^scs.pos[?]>4){&;?}multi_statements=1]
+$SQL.connect-string[$scs]
 ^try{
 	$tmp[^file::load[text;/my/deriv/globals.p]]
 	$globals[^h2s:createh[$tmp.text]] 

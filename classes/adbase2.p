@@ -1,9 +1,8 @@
 
-@notes----[]
-
-@allowed[]
-tags comments populars memories announcer myrecords tabled_header1
-
+@auto[]
+#^MAIN:allowed_modules.add[^s2h[myrecords memories announcer tags comments populars]]
+#$allowed_modules[^s2h[myrecords memories announcer tags comments populars]]
+#^die[^h2s:h2s[$allowed_modules]]
 @myrecords[arg;a2][watchin;myt;hd]
 ^if(def $user.id){
 $watchin[^table::load[/my/config/adbase_tables.txt]]
@@ -30,7 +29,6 @@ FROM ^dtp[$tab] WHERE moderated != 'no' ORDER BY lastmodified DESC LIMIT 3}]}
 ^an.menu{<a href="$an.path" class="sided">$an.name<img src="/my/templates/mak/more.gif" class="morei"></a><p>}
 }{$exception.handled(0)неверный источник данных}
 @memories[q]
-
 ^if($adtabs is table){;$adtabs[^table::load[/my/config/adbase_tables.txt]]}
 ^use[adb_search.p] 
 ^adtabs.menu{ 
@@ -38,7 +36,6 @@ FROM ^dtp[$tab] WHERE moderated != 'no' ORDER BY lastmodified DESC LIMIT 3}]}
 }
 ^if(def $membase){$document.pagetitle[Результаты поиска '$q'] $membase}
 @mem2[qqq;tab][rest]
-
 $rest[^adbsearch:defquery[$qqq;$tab]]
 ^if(def $rest){$membase[$membase 
 <h3>$adtabs.name: ^rest.count[]</h3>
@@ -111,7 +108,9 @@ FROM ^dtp[$data.table] WHERE moderated = 'yes' GROUP BY $data.column ORDER BY sc
 		$tmp[^a.name.split[$data.div;v]]
 		^tmp.menu{
 			$tmp2[^tmp.piece.trim[]]
-			^try{^kuc.$tmp2.inc($a.score)}{$exception.handled(1)$kuc.$tmp2(1)}
+			^if(^tmp2.length[]>3){
+				^try{^kuc.$tmp2.inc($a.score)}{$exception.handled(1)$kuc.$tmp2(1)}
+			}
 		}
 	}
 $a[^table::create{name	score
@@ -119,8 +118,13 @@ $a[^table::create{name	score
 }}]
 }
 
+^if(!def $data.div){
 ^tagcloud[$a;$data.url?filter=field&field=$data.column&value;, 
 ]
+}{
+^tagcloud[$a;/search?q;, 
+]
+}
 
 #delete after ADBase switched to akbd
 @sr_out[tab;anc]

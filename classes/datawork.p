@@ -1,4 +1,5 @@
 @version[]
+2009-06-23	file deletion support
 2009-05-13	extrahtml, .handle
 2009-01-07	Опция вывода скрытых полей
 2008-07-21	Поддержка сообщений об ошибках, сгенерированных обработчиком
@@ -53,7 +54,12 @@ $datahash[$dh]
 $datatable[^table::create{^dh.foreach[k;v]{$k}[	]
 ^dh.foreach[k;v]{$v	}}]
 ^required.foreach[k;v]{
-	^if(!def $dh.$k){$data_error(1)$keylist.$k.error(1)^die[^lang[470] ^if(^instance.locate[column;$k]){$instance.comment}]}
+	^if(!def $dh.$k){
+		$tmp(^instance.locate[column;$k])
+		^if($instance.form_handler ne file){
+			$data_error(1)$keylist.$k.error(1)^die[^lang[470] $instance.comment]
+		}
+	}
 }
 
 @handle[column;data;handler]
@@ -78,7 +84,7 @@ $result[$d] ^process[$datawork:CLASS]{^$column_name[$k]^$instance_name[$instance
 				$keylist.$k.error(1) $data_error(1)
 				$keylist.$k.errtype[check]
 				$keylist.$k.comment[$exception.comment]
-				$result[$d]
+				$result[^if($d is file){;$d}]
 				$exception.handled(1)
 			}
 		}
@@ -164,7 +170,7 @@ $d[$div.div]
   ^case[enum]{$lg $d $tmp1[^enum::parse[$instance.sql_type;;$ii]] ^tmp1.form[$val] $d}
   ^case[special]{$lg $d $val $d}
   ^case[special2]{$val}
-  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){^default[$div.nofilemsg;загрузка файла будет доступна после отправки формы]} $d $val  $d}
+  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){^default[$div.nofilemsg;загрузка файла будет доступна после отправки формы]}{^if(def $val){<input type="checkbox" name="del_$ii" value="yes">Удалить}} $d $val $d}
   ^case[set]{${lg}${d}^val.replace[^table::create{from	to
 _fieldname_	$ii}] $d}
   ^case[DEFAULT]{^if($div.reveal){${lg}$d <em>$val</em> $d}
@@ -201,13 +207,21 @@ WHERE ^parse_cond[$key]}
  (^datav.foreach[k;v]{$k}[, ])
  VALUES
  (^datav.foreach[k;v]{'^taint[sql][$v]'}[, ])
+^; LOCK TABLES $tbl_name READ
 }
 $last_insert(^int:sql{SELECT LAST_INSERT_ID()})
+^void:sql{UNLOCK TABLES}
+$conditions[$$primary_key($last_insert)]
 
 @update1record[datav;conditions]
 ^instance.menu{
 	^if($instance.form_handler eq file){
-		^if(!def $datav.[$instance.column]){^datav.delete[$instance.column]}
+		$fdf[del_${instance_name}_$instance.column]
+		^if(!def $datav.[$instance.column]){
+			^if(def $form:$fdf){
+				^try{^file:delete[^string:sql{SELECT $instance.column FROM ^dtp[$instance_name] WHERE ^parse_cond[$conditions]}]}{}
+			}{^datav.delete[$instance.column]}
+		}
 	}
 }
 ^void:sql{UPDATE $tbl_name SET ^datav.foreach[k;v]{$k = '^taint[sql][$v]'}[, ] 
