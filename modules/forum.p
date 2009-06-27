@@ -74,7 +74,7 @@ $message[^getmessage[$id]]
 $answers[^table::sql{SELECT * FROM ^dtp[ans] WHERE id = '$id'}]
 ^if($MAIN:message_design is junction){^message_design[]}{
  $MAIN:document.title[$message.title - $message.author - $MAIN:document.title]
-^if(!$seti.embedded){
+^if(def $seti.asmain){
 ^MAIN:crumbs.append{$MAIN:uri?fdisplay=$form:fdisplay	^wisetrim[$message.title;16]}
  $MAIN:document.pagetitle[^default[$message.title;Сообщение] - $MAIN:document.pagetitle] $MAIN:document.keywords[$message.title] $MAIN:document.content[]
 }{<h2>^default[$message.title;Сообщение]</h2>}
@@ -169,7 +169,8 @@ $fans[^table::sql{SELECT * FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', 
 ^forum.sort(^rating:box[f$forum.id;-1])[desc]
 }
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
-<span class="isUser" onClick="userbox(this, 22, 'pmsend')"></span><a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
+^if(^forum.userid.int(0)){<span class="isUser" onClick="userbox(this, $forum.userid, 'pmsend')"></span>}
+<a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
 ^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}
 $forum.author</a>^if(def $forum.email){ (^email[$forum.email])},
 ^ufdate[$forum.mydate] ^ratingbox[f$forum.id]

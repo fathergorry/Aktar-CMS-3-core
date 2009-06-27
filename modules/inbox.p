@@ -58,8 +58,9 @@ $f[^folders.select($folders.fld ne "$form:folder")]
 }
 
 $msgs[^table::sql{
-	SELECT m.*, u.name, u.lastname, u.rig  FROM ^dtp[privmsg] m 
+	SELECT m.*, u.name, u.lastname, u.rig, CONCAT(u2.name, ' ', u2.lastname) AS rname FROM ^dtp[privmsg] m 
 	LEFT JOIN ^dtp[users] u ON m.author = u.id 
+	LEFT JOIN ^dtp[users] u2 ON m.recipe = u2.id
 	^if($form:folder eq sent){
 		WHERE m.author = '$id'
 	}{
@@ -75,7 +76,7 @@ $msgs[^table::sql{
 ^msgs.menu{
 	$sndrig[^s2h[$smsgs.rig]]
 	<div class="message $msgs.folder">
-	<div class="sender">^userbox[$msgs.author;$msgs.rig;$msgs.name $msgs.lastname;$.window[pmsend]] | ^ufdate[$msgs.msgdate] 
+	<div class="sender">^userbox[$msgs.author;$msgs.rig;$msgs.name $msgs.lastname ^if($form:folder eq sent){-> $msgs.rname};$.window[pmsend]] | ^ufdate[$msgs.msgdate] 
 	^if($form:folder ne sent){
 		| <a class="pmop" href="#" id="msg$msgs.id" onClick="PDdialog(this, $msgs.id, '#toFolder')">переместить в...</a>
 	}</div>	
@@ -86,3 +87,11 @@ $msgs[^table::sql{
 @write[to]
 ^use[/classes/datawork.p]
 $msg[^datawork::create[privmsg]]
+
+@userbox[id;rig;name;opt][locals]
+^if($opt is hash){;$opt[$.window[default]]}
+^if($rig is hash){;$rig[^s2h[$rig]]}
+^if(def $rig.conf){$uc[isSpec]}{
+	^if(def $rig.spec){$uc[isSpecUnconf]}{$uc[isUser]}
+}
+<span class="$uc" onClick="userbox(this, $id, '$opt.window')">$name</span>

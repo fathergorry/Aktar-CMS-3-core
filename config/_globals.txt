@@ -24,6 +24,7 @@ sessionlimit8		485	text
 capass		570	text
 _	486		
 cache_time	9999	438	num
+sqlcache	120	Время кэширования SQL-запросов, мин.	num
 cache_level	3	487	num
 timeout	3	443	num
 nocache	yes	445	bool

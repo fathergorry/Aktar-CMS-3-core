@@ -208,7 +208,7 @@ WHERE ^parse_cond[$key]}
  (^datav.foreach[k;v]{$k}[, ])
  VALUES
  (^datav.foreach[k;v]{'^taint[sql][$v]'}[, ])
-^; LOCK TABLES $tbl_name READ
+#^; LOCK TABLES $tbl_name READ
 }
 $last_insert(^int:sql{SELECT LAST_INSERT_ID()})
 ^void:sql{UNLOCK TABLES}

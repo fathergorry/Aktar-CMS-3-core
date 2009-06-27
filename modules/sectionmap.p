@@ -48,17 +48,21 @@ s.rpermission, s.epermission, s.visiblity, s.module, s.modified,
 #Нельзя выдавать корень, есл смотрим с корня
 ^if($set.path eq "/"){AND s.path != '/'}
 #Скрытые разделы, если есть права
+^die[^h2s:h2s[$erpermission]]
 ^if(!def ^cando[$erpermission] && !def ^cando[$.editor(1)]){
 	^if(!def $globals.includeNoMenu){
-		AND s.visiblity LIKE 'yes'
+		AND s.visiblity LIKE 'yes' 
 	}{
 		AND s.visiblity NOT LIKE 'no'
 	}
 	}
 #Если выводим по дате, то структура теряется
 ORDER BY ^if(def $set.bydate){s.created DESC}{s.path}}]
-^if($form:export eq rss){
-	$response:body[^sitemap_rss[$sitemap]]
+^if(def $form:export){
+	^switch[$form:export]{
+		^case[sitemap]{$response:body[^sitemap_seo[$sitemap]]}
+		^case[DEFAULT]{$response:body[^sitemap_rss[$sitemap]]}
+	}	
 }{
 ^if(!def $set.bydate){$sitemap[^tree_sort[$sitemap]]}
 ^if($sitemap_design is junction){
@@ -78,6 +82,27 @@ ORDER BY ^if(def $set.bydate){s.created DESC}{s.path}}]
  ^default[$sitemap.pagetitle;$sitemap.menutitle] ^if(def ^cando[]){$sitemap.modified} </a></b><br>$pic ^if(def $sitemap.description){$sitemap.description <a href="$sitemap.path">&gt^;&gt^;</a>}
  </b></div>
  }
+@sitemap_seo[sitemap]
+<?xml version="1.0" encoding="UTF-8"?>
+$response:charset[UTF-8]
+$response:content-type[
+        $.value[application/xml]
+        $.charset[$response:charset]
+]
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	^sitemap.menu{
+	<url>
+      <loc>http://${env:SERVER_NAME}${sitemap.path}/</loc>
+      <lastmod>$sitemap.modified</lastmod>
+      $cf[monthly]
+      ^if(def $sitemap.module){$cf[weekly]}
+      ^try{$tmp[^date::create[$sitemap.modified]] ^if($tmp.year == $MAIN:now.year && $tmp.month == $now.month){$cf[daily]}}{^blad[]}
+	<changefreq>$cf</changefreq>
+      <priority>^if(def $sitemap.description){0.6}{0.4}</priority>
+	</url>
+	}
+</urlset> 
+
 @sitemap_rss[sitemap]
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">

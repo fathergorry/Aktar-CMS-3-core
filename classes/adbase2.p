@@ -7,18 +7,27 @@
 ^if(def $user.id){
 $watchin[^table::load[/my/config/adbase_tables.txt]]
 $watchin[^watchin.select(^watchin.cls.pos[u]>=0)]
+$serep[^table::create{a	b
+action=show	action=edit
+id=0	id=$myt.id}]
 ^use[modinfo.p]
 $newad[^modinfo::create[akbd.p]]
-^connect[$scs]{
 ^watchin.menu{
-$myt[^table::sql{SELECT ^sr_out_name[$watchin.adt], path, id, moderated FROM ^dtp[$watchin.adt] WHERE ^if(def ^cando[editor base-editor]){moderated != 'yes'}{editby = '$MAIN:userid'}   }]
-	<h3>$watchin.name</h3>
+^connect[$scs]{$myt[^table::sql{
+	SELECT ^sr_out_name[$watchin.adt], path, id, moderated 
+	FROM ^dtp[$watchin.adt]  
+	WHERE ^if(def ^cando[editor base-editor]){moderated != 'yes'}{editby = '$MAIN:userid'}   
+}]}
+<h3>$watchin.name</h3>
 	^myt.menu{
-	<a href="^myt.path.match[action=show][ig]{action=edit}"><img src="/login/img/edit.gif" border=0></a>
-	<a href="$myt.path">^untaint{$myt.name} $myt.id ^if($myt.moderated ne yes){<img src="/login/img/eye.gif" title="Не модерировано" border=0>}</a>}[<br>]
-	^newad.focus[table;$watchin.adt]
-	<p><a href="^newad.returnpath[]?action=edit&id=new">^newad.returnval[newtitle]</a>
-}}$document.pagetitle[Панель управления]
+	<a href="^myt.path.replace[$serep]"><img src="/login/img/edit.gif" border=0></a>
+	<a href="^myt.path.match[id=0][ig]{id=$myt.id}">^untaint{$myt.name} $myt.id 
+	^if($myt.moderated ne yes){<img src="/login/img/eye.gif" title="Не модерировано" border=0>}
+	</a>
+	}[<br>]
+^newad.focus[table;$watchin.adt]
+<p><a href="^newad.returnpath[]?action=edit&id=new">^newad.returnval[newtitle]</a>
+}$document.pagetitle[Панель управления]
 
 }{<p>Панель уравления доступна только для зарегистрированных пользователей<p>}
 @announcer[tab][an]

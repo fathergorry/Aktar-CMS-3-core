@@ -381,7 +381,8 @@ $tmp.text]}{^blad[]}
 @choose_file[file1;file2]
 $result[^if(-f "$file1"){$file1;$file2}]
 @jqueryon[scr][locals]
-$rct[$response:content-type] 
+$rct[$response:content-type]
+^if($rct is hash){;$rct[^hash::create[]]}
 ^if(!def $globals.jqueryOff && $jqinheader && $rct.value eq "text/html"){
 	$ex[^file::load[text;^choose_file[/my/templates/ajax.htm;/login/templates/ajax.htm]]]
 	^untaint{$ex.text}
@@ -543,7 +544,7 @@ $menus[^sqlcache[
 		(^if($path_t.uri ne "/"){path LIKE '$path_t.uri/%' AND} 
 		level = '^eval($path_t.level + 1)' ) 
 	}[ OR ] 
-;^if(def ^cando[editor]){-1;120}]]
+;^if(def ^cando[editor]){-1;^globals.sqlcache.int(120)}]]
 ^if(def $usercando){^ifUser[]}{^ifNoUser[]}
 ^for[i](0;$max_level){^menu.$i.sort($menu.$i.sect_order)}
 #Get current document
