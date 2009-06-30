@@ -1,6 +1,8 @@
 @CLASS
 rating
 
+#переделать rating на view и тогда получится выводить окраску голоса
+
 @auto[]
 $rrange[^hash::create[]]
 

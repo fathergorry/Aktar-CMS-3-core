@@ -9,9 +9,9 @@ $document.pagetitle[^lang[246]]
 
 @body[][]
 
-^if(def ^cando[$.demo(1) $.errpg(1)]){
+^if(def ^cando[$.demo(1) $.errpg(1) $.editor(1)]){
 ^connect[$scs]{
-^if(def $form:clear404){^clear404[]}
+^if(def $form:clear404 && def ^cando[editor errpg]){^clear404[]}{^die[No permission]}
 ^err404[]
 
 }

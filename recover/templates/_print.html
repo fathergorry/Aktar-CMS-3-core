@@ -1,0 +1,27 @@
+
+
+@design[header;h1;body]
+^if(def $form:download){
+$response:download[^file::create[text;^pagefilename[];^design2[$header;$h1;$body]]]
+}{
+
+^design2[$header;$h1;$body;window.print()^;]
+
+}
+@design2[header;h1;body;onload]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+$header
+</head>
+<body onLoad="$onload">
+
+<h1>$h1</h1>
+
+$body
+<p>
+&copy^; $env:SERVER_NAME, $now.year <p>
+<a href="$uri">&lt^;&lt^; $h1 </a>
+</body>
+</html>

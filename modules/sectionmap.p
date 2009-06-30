@@ -24,6 +24,7 @@ $tmp[^sitemap[$set]] <b>^sitemap.count[]</b> разделов будут отображаться
 
 
 @sitemap[s;d][eye;pic]
+
 $set[$s]
 #Установки настроек
 ^if($set is hash){}{$set[^hash::create[]]}
@@ -48,7 +49,6 @@ s.rpermission, s.epermission, s.visiblity, s.module, s.modified,
 #Нельзя выдавать корень, есл смотрим с корня
 ^if($set.path eq "/"){AND s.path != '/'}
 #Скрытые разделы, если есть права
-^die[^h2s:h2s[$erpermission]]
 ^if(!def ^cando[$erpermission] && !def ^cando[$.editor(1)]){
 	^if(!def $globals.includeNoMenu){
 		AND s.visiblity LIKE 'yes' 

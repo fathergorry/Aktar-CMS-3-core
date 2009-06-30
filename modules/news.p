@@ -134,6 +134,7 @@ $tmp[^text.split[:more:;lh]]
  $upd_id[$exmp.id] ^exmp.delete[id]
  $exmp.lastmodified[^now.sql-string[]] $exmp.moderated[yes]
  $exmp.path[^default[$seti.more;$MAIN:uri]?displaynew=$form:displaynew]
+ ^if(!def $form:displaynew){$exmp.authorid($MAIN:user.id)}
  $exmp.content[^taint[sql][^content_prepare[$exmp.content]]]
  ^void:sql{^if(def $upd_id){UPDATE ^dtp[news] SET ^exmp.foreach[k;v]{$k = '^taint[sql][$v]'}[, ] WHERE id = '$upd_id'}{
  INSERT INTO ^dtp[news] (^exmp.foreach[k;v]{$k}[, ]) VALUES (^exmp.foreach[k;v]{'^taint[sql][$v]'}[, ])}}
