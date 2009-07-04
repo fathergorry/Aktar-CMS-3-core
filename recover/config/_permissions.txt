@@ -2,8 +2,6 @@ permission	description
 deity	258
 users	Менеджер пользователей
 editor	Шеф-редактор
-manager	Клиент-менеджер магазина
-seller	Завсклад
 pic	261
 delpic	290
 menu	Редактирование cfg-макросов

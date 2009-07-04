@@ -19,6 +19,12 @@ files/.htaccess
 img/.htaccess
 dbs/structure.txt
 dbs/sections.txt
+dbs/news.txt
+dbs/pages404.txt
+dbs/forum.txt
+dbs/ans.txt
+dbs/rating.txt
+dbs/usergroups.txt
 .htaccess
 ;obligate]
 

@@ -49,4 +49,4 @@ $add[^table::create{in	out	value
 ^myfiles.menu{
 <option value="$myfiles.value">$myfiles.comment</option>
 }
-</select> <a href="/login/files.htm" target="_blank" class="loadfiles">load files</a>
+</select> <a href="/login/files.htm" target="_blank" class="loadfiles">load files</a><br>

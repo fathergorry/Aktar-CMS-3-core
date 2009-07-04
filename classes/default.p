@@ -185,7 +185,7 @@ FROM ^dtp[structure] s LEFT JOIN ^dtp[sections] se ON s.sect_key = se.sect_key
 
 #Выводит знаки, которые отрубаются внутри макросов: $, [, ], неразрывный пробел, <, >
 @special[char;d][chr]
-$chr[$.USD[^$]$.lc[^[]$.rc[^]] $.nbsp[&nbsp^;] $.gt[&gt^;] $.lt[&lt^;] $.opentag[<] $.closetag[>]]
+$chr[$.USD[^$]$.dollar[^$]$.grid[#]$.lc[^[]$.rc[^]] $.nbsp[&nbsp^;] $.gt[&gt^;] $.lt[&lt^;] $.opentag[<] $.closetag[>]]
 $result[$chr.$char]
 @email[email;d]
 <script language=javascript>var dog="@"^;document.write ("<a href=mailto:^email.match[@][i]{"+dog+"}>^email.match[@][i]{"+dog+"}</a>")</script>
@@ -756,7 +756,7 @@ $result[$set]
 @mvcheck[modval;param;value]
 $result(0)
 ^if( $modval.use == 1 && !def $value ||
-	$modval.use == 2 && def $modval.r && ^uri.match[$modval.r] ||
+	$modval.use == 2 && def $modval.r && ^uri.match[^untaint[as-is]{$modval.r}] ||
 	$modval.use == 3
 ){$result(1)}
 #Загружает описание глобальных настроек для модуля

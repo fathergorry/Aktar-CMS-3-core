@@ -1,5 +1,0 @@
-column	sql_type	comment	key	form_handler	special_handler
-item_id	INT(8) NOT NULL	ID товара	key	hidden	
-cart_id	INT(8) NOT NULL	ID корзины	key	hidden	
-qty	INT(8) NOT NULL	Кол-во товара		text	
-ccomment	VARCHAR(64)	Комментарий/опции товара		hidden	

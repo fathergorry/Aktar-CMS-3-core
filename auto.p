@@ -169,6 +169,7 @@ $con[^con.match[\^^+][ig]{^^^^^^^^}]
 $rep1[^table::create{from	to
 [	^^mod_prepare^[
 ^$	^^mod_prepare^[special^;dollar]
+^taint[^#0A]#	^taint[^#0A]^^mod_prepare^[special^;grid]
 ^taint[^#0A]@	^taint[^#0A] @}] $con[^con.replace[$rep1]]
 $con0[^try{^process{^taint[as-is][$con]}}{ $result[] $errors[y] ^die[425;Обнаружены ошибки в теле страницы!] $exception.handled(1)}]
 ^if(!def $errors){$result[$con0]}

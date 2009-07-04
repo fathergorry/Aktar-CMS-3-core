@@ -4,15 +4,4 @@ structure	permissions	rpermission, epermission
 sections	head2	pagetitle, description
 sections	head3	title, keywords
 sections	content	content
-shop	items_in_articles	description
-adsite	adsite	name, website, person1, exagent, addesc, rivals, detailstat, auditory, description
-adagent	adagent	name, clcreative, clmedia, exclusive, person1, person2, person3, description
-ademit	ademit	name, servedby, collabwith, preferwww, person1, description
-person	person	specialization, currentwork, bio, lastnames, education, prevwork
 news	news	title, content
-hot	hot	name, resource, about, contacts, addition
-tender	tender	name, about, contacts, addition
-vacancy	vacancy	org_name, bio
-resume	resume	bio, experience, name
-freelancer	freelancer	name, bio, experience
-abc	abc	name, about
