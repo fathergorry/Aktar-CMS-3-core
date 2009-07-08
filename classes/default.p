@@ -798,12 +798,14 @@ $expdate[^date::now(-$minutes/1440)]
 }{
 	^if($exception.type eq "1" || 1){$exception.handled(1)}
 	^connect[$scs]{
-		$result[^table::sql{$query}]
+		^try{$result[^table::sql{$query}]}{^use[errors.p]^noDB[]}
 	}
 	^if($minutes > 0){
 		^result.save[/cache/sql/$mdq;$.encloser[^#02]$.separator[^#03]]
 	}
 }
+
+
 @postprocess[body]
 ^resmeter[core;страница сформирована]
 ^if((def $errmsg || def $errmsg1) && $body is string){

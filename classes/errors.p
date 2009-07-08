@@ -35,6 +35,15 @@ $document.1[1]
 }
 
 
+@noDB[path]
+^if($caller.exception.type eq "sql.execute" && ^caller.exception.comment.pos[doesn't exist] > 0){
+	$caller.exception.handled(1)$caller.minutes(0)
+^process{@unhandled_exception[a^;b^;c^;d]
+###
+# ^^redirect[$path]
+No tables in DB. Do <a href="/login/install">install</a>.
+}
+}
 @rec404[link][rec]
 ^connect[$scs]{
   $rec[^table::sql{SELECT * FROM ^dtp[pages404] WHERE link = '$link'}]

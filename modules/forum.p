@@ -122,8 +122,8 @@ $author_want[^table::sql{SELECT email, author, iwantcomment FROM ^dtp[forum] WHE
 
 
 ^if($author_want.iwantcomment eq yes && ^is_email[$author_want.email]){^try{
-^mail:send[
-  $.from["$env:SERVER_NAME Forum" <$globals.site_admin>]      $.to["$author_want.author" <$author_want.email>]
+^mailsend[
+  $.from["$env:SERVER_NAME Forum" <^default[$seti.notify;$MAIN:globals.site_admin]>]      $.to["$author_want.author" <$author_want.email>]
     $.subject[Ответ от $ans_message.author]    $.charset[$globals.mailcharset]
     $.text[Здравствуйте, $author_want.author
 На ваше сообщение в форуме поступил ответ от $ans_message.author
@@ -132,9 +132,10 @@ http://${env:SERVER_NAME}^urido[]fdisplay=$form:fdisplay
 $ans_message.title
 $ans_message.content
 ]
+$.charset[$response:charset]
 ]
 ^msg[Автору темы отправлено уведомление об ответе.]
-}{$exception.handled(1)^die[не удалось отправить почту]}}
+}{$exception.handled(1)^blad[huinia]}}
 
 #end if !$forum_err
 }
@@ -224,7 +225,7 @@ $newpost.content[^utf2win[$form:content]]
   $.from["$env:SERVER_NAME Forum" <$globals.site_admin>]      $.to["$env:SERVER_NAME Forum supervisor" <$k>]
     $.subject[Новое сообщение в форуме]    $.charset[$globals.mailcharset]
     $.text[В форум поступило сообщение от $newpost.author
-http://${env:SERVER_NAME}^urido[]fdisplay=$msgId
+http://${env:SERVER_NAME}/$form:subst_url
 
 $newpost.title
 $newpost.content
@@ -253,6 +254,7 @@ $newpost.content
 <input type=hidden name="id" value="$message.id">
 <input type=hidden name="postid" value="$message.postid">
 <input type=hidden name="fid" value="$message.fid">
+<input type=hidden name="subst_url" value="$request:uri"
 ^if(!def $form:fdisplay){* Заголовок сообщения<br>
 <input type=text size=60 name="title" value="$message.title"><br>}
 * Ваше имя<br>
