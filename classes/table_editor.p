@@ -79,7 +79,7 @@ $tab2[^table::create{^u.menu{$u.column	}sortorder}]
 
 ^u.menu{<td>
 $b[^^edit_${u.column}[$tab.[$u.column]^;${u.column}^tab.line[]]]
-^try{^process[$MAIN:CLASS]{$b}}{$exception.handled(1)
+^try{^process1[$MAIN:CLASS]{$b}}{$exception.handled(1)
 <input type="text" ^if(^u.column.length[] < 3){size="6"} name="${u.column}^tab.line[]" value="$tab.[$u.column]"^if(^tab.line[] == ^tab.count[]){ onFocus="unlockstr()"}>
 }
 </td>}

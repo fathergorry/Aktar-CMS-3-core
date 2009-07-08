@@ -31,7 +31,7 @@ $mail0[^mails.createInstance[;$id]]
 $users[^table::sql{SELECT id, name, lastname, parname, email FROM ^dtp[users] WHERE
 ^if(def $form:forme){id = '$user.id'}{(^sql_request_hash[$mail0.groups;groupid])} ORDER BY id}[$.offset(^if(def $form:forme){0}{$mail0.sent})$.limit($lettersOnce)]]
 <p>
-$message[^ext_hrefs[^process{^untaint{$mail0.mail}};mail$id]]
+$message[^ext_hrefs[^process0{^untaint{$mail0.mail}};mail$id]]
 ^users.menu{^mail:send[
  $.from[$user.name $user.lastname <$user.email>]
  $.to[$users.name $users.lastname <$users.email>]
@@ -75,7 +75,7 @@ $mail0[^mails.createInstance[;$id]]
 $document.pagetitle[$mail0.subj ^if(!def $form:noed){<a href="mailer.htm?mode=edit&edit=$form:edit^rn[&]">^lang[94]</a>}] <p>
 
 $usercando0090672[^hash::create[$usercando]] $usercando[]
-^ext_hrefs[^process{^untaint{$mail0.mail}};mail$id]
+^ext_hrefs[^process0{^untaint{$mail0.mail}};mail$id]
 $usercando[$usercando0090672]
 
 
@@ -93,7 +93,7 @@ $mail0.gcount[^int:sql{SELECT COUNT(groupid) FROM ^dtp[users] WHERE ^sgrp.foreac
 $mail0.cdate[^sqldate[$mail0.cdate]]
 ^if(def $form:template || def $form:select_template){
 ^if(def $form:template){$template[$form:template.text]}
-^if(def $form:select_template){$tmp[^file::load[text;/templates/mail/$form:select_template]]$template[^process{$tmp.text}]}
+^if(def $form:select_template){$tmp[^file::load[text;/templates/mail/$form:select_template]]$template[^process0{$tmp.text}]}
 $mail0.mail[^content_foredit[$mail0.mail]]
 $template_tab[^template.split[::body::;lh]]
 $mail0.mail[$template_tab.0 $mail0.mail ^if(def $template_tab.1){$template_tab.1;^msg[360;Поместите в шаблон текст ::body:: в том месте, куда вставляется текст письма]}]

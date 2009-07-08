@@ -171,7 +171,7 @@ $rep1[^table::create{from	to
 ^$	^^mod_prepare^[special^;dollar]
 ^taint[^#0A]#	^taint[^#0A]^^mod_prepare^[special^;grid]
 ^taint[^#0A]@	^taint[^#0A] @}] $con[^con.replace[$rep1]]
-$con0[^try{^process{^taint[as-is][$con]}}{ $result[] $errors[y] ^die[425;Обнаружены ошибки в теле страницы!] $exception.handled(1)}]
+$con0[^try{^process0{^taint[as-is][$con]}}{ $result[] $errors[y] ^die[425;Обнаружены ошибки в теле страницы!] $exception.handled(1)}]
 ^if(!def $errors){$result[$con0]}
 ^memory:compact[]
 
@@ -185,7 +185,7 @@ $rep[^table::create{from	to
 ^^exec_sub[	^^mod_foredit^[
 ^^wiki[	^^mod_foredit^[
 ^^wikib[	^^mod_foredit^[}] $femodules[^hash::create[]]
-$result[^try{^process{^data.replace[$rep]}}{^if(def $form:p){$exception.handled(1)^die[Correct the following: ^untaint[html]{$exception.comment}]^die[$form:content]}}]
+$result[^try{^process0{^data.replace[$rep]}}{^if(def $form:p){$exception.handled(1)^die[Correct the following: ^untaint[html]{$exception.comment}]^die[$form:content]}}]
 
 
 @mod_foredit[mod;set;q1;q2;q3;q4;q5;q6;q7;q8;q9]
@@ -199,7 +199,7 @@ $pic[^file:basename[$pica]]
 $result[$pc]
 
 @ext_hrefs[txt;linkid][text;txt1]
-$txt1[^process{$txt}]
+$txt1[^process0{$txt}]
 $result[^txt1.match[<a[^^>]+href=([^^ >]+)[^^>]*>(.*?)</a>][ig]{<a href="^ext_hrefs001[$match.1;$linkid]">${match.2}</a>}]
 
 @ext_hrefs001[arg;linkid][a;result1]

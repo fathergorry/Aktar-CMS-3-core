@@ -8,6 +8,9 @@ Git staging test
 Branch
 
 @auto[]
+$CLASS_PATH[^table::create{path
+/login/classes
+}]
 ^load_config_tables[]
 ^load_custom_modules[]
 $menu[^hash::create[]]$now[^date::now[]]
@@ -323,7 +326,7 @@ $id0[^s2h[$id; ]]
 $result(^if(^env:HTTP_REFERER.pos[$env:SERVER_NAME] >= 0 || !def $env:HTTP_REFERER){1;0})
 
 @icontent[text;auto][pc] #to news, maybe?
-$pc[^try{^process{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){^lang[459]}}]
+$pc[^try{^process0{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){^lang[459]}}]
 $result[^if($auto eq no){$pc}{^pc.replace[^unbrul[]]}]
 
 @mailsend[mail]
@@ -475,7 +478,7 @@ $fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
 ^if(def $form:editcontent){^use[visualeditor.p] ^visualeditor[]}{
 ^if(!def $doptions.exec){$process_body(0)}
 $precontent[^if(def $doptions.unbrul){^document.content.replace[^unbrul[]]}{$document.content}]
-^if($process_body){^process{^untaint{$precontent}}}{^untaint{$precontent}}
+^if($process_body){^process0{^untaint{$precontent}}}{^untaint{$precontent}}
 ^if(def $document.module && !def $module_already_executed){
   ^exec_sub[$document.module;^expand[asmain==yes,,$document.module_settings]]  
 }
@@ -488,7 +491,7 @@ $result[]
 
 @load_config_tables[][tmp]
 $tmp[^file::load[text;/^if(-f "/local"){aktar_mysql_local;aktar_mysql}.cfg]]
-$tm2[^process{^untaint{$tmp.text}}]
+$tm2[^process0{^untaint{$tmp.text}}]
 $tmp[^table::create{^untaint{$tmp.text}}]
 $startup[^tmp.hash[var]]
 $dtp[^default[$db_tbl_prefix;$startup.db_tbl_prefix.value]]
@@ -626,13 +629,10 @@ $cookie:s[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
 ^if(^hasrig[$globals.sessionlimit8]){$result(1/3)}{$result($globals.sessiontime)}
 
 @include[file][f;ftx]
-$result[$fe[^math:md5[$file]]^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]]
-#$f[^file:find[$file]]^if(def $f){$ftx[^file::load[text;$f]]^process[$caller.self]{^taint[as-is][$ftx.text]}[$.file[$file]]}
-#$f[^file:find[$file]]^if(def $f){^if(!def $$fe){$$fe[^file::load[text;$f]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]}
-#^if(!def $$fe){$$fe[^file::load[text;$file]]}^process[$caller.self]{^taint[as-is][$$fe.text]}[$.file[$file]]
+$result[$fe[^math:md5[$file]]^if(!def $$fe){^try{$$fe[^file::load[text;$file]]}{$exception.handled(1)}}^process[$caller.self]{^untaint[as-is]{$$fe.text}}[$.file[$file]]]
 @include_exist[file][ftx]
 $ftx[^file::load[text;$file]]
-^process{^taint[as-is][$ftx.text]}
+^process0{^taint[as-is][$ftx.text]}
 
 @unbrul[]
 $result[^table::create{from	to
@@ -805,6 +805,11 @@ $expdate[^date::now(-$minutes/1440)]
 	}
 }
 
+@process1[context;code]
+$result[^process[$context]{^untaint[as-is]{$code}}]
+
+@process0[code]
+$result[^process{^untaint[as-is]{$code}}]
 
 @postprocess[body]
 ^resmeter[core;страница сформирована]
@@ -844,7 +849,7 @@ $errrep[<span class="errmsg">^errmsg.menu{$errmsg.err<br>}<span class="errmsg1">
 h2s
 
 @createh[str]
-^process[$h2s:CLASS]{^taint[as-is; ^$hash_^[$str^] ]}
+^process1[$h2s:CLASS]{^taint[as-is; ^$hash_^[$str^] ]}
 $result[^if($hash_ is hash){$hash_}{^hash::create[]}]
 
 @fromfile[path][f]

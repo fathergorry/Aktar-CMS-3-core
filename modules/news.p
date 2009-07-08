@@ -44,7 +44,7 @@ $document.content[]
 ^try{^comments[$new.id]}{^blad[]}
 }
 @icontent[text;auto][pc]
-$pc[^try{^process{^untaint{$text}}}{$exception.handled(1)^if(^is_j[]){ошибка в данных}}]
+$pc[^try{^process{^untaint[as-is]{$text}}}{$exception.handled(1)^if(^is_j[]){ошибка в данных}}]
 $result[^if($auto eq no){$pc}{^pc.replace[^unbrul[]]}]
 @shownews[]
 $r(^int:sql{SELECT COUNT(id) FROM ^dtp[news] WHERE newsid IN (^allid.foreach[k;v]{'$k'}[, ]) })

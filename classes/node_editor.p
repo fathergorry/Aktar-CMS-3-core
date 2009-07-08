@@ -137,7 +137,7 @@ $macros[^file:list[/modules;\.p^$]]
 <tr><td colspan=2 bgcolor="#FFF2E9">
 ^mod_set_display[^file:justname[$document.module];$document.module_settings]
 ^try{$topstr[^^^file:justname[$document.module]_info[^^expand[$document.module_settings]]]<br>
-<span style="background-color: #FFFFFF">^process{$topstr}</span>}{$exception.handled(1)^die[$exception.comment in @info]}
+<span style="background-color: #FFFFFF">^process0{$topstr}</span>}{$exception.handled(1)^die[$exception.comment in @info]}
 </td></tr>
 }
 
@@ -268,7 +268,7 @@ $result[]
 ^if($modset is table){}{$modset[^expand[$modset]]}
 ^use[^modpath[${mod}.p]]
 $topstr[^^${mod}_settings^[^]]
-$tab[^process{$topstr}]
+$tab[^process0{$topstr}]
 $modval[^bmodval[$document.module;^hash::create[]]]
 
 <table cellspacing=0 cellpadding=0>
@@ -305,7 +305,7 @@ title="Будет ^taint[html]["^default[$modval.value;^lang[478]]"] ^lang[477]"}
 @mod_set_compact[mod][tab;topstr;t;tm;rv;tp;mtp]
 ^use[^modpath[${mod}.p]]
 $topstr[^^${mod}_settings^[^]]
-$tab[^process{$topstr}] $tabset[^table::create{param	value}]
+$tab[^process0{$topstr}] $tabset[^table::create{param	value}]
 ^tab.menu{$tp[$tab.param] $mtp[${mod}_$tp]^switch[$tab.type]{
   ^case[translit]{^tabset.append{$tp	^saveable[$form:$mtp]}}
   ^case[string;option]{^tabset.append{$tp	$form:$mtp}}
@@ -327,4 +327,4 @@ $rep[^table::create{from	to
 ^^exec_module[	^^mod_foredit^[
 ^^wiki[	^^mod_foredit^[
 }] $femodules[^hash::create[]]
-$result[^process{^data.replace[$rep]}]
+$result[^process0{^data.replace[$rep]}]
