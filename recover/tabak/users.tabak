@@ -1,2 +1,2 @@
-id	city	district	address	phone	name	lastname	parname	email	workphone	birthdate	vkontakte	osebe	country	org	postcode	flag_a	language	rig	extid	groupid	regdate	password
-1	Красноярск	Основной район доставки	Ленина 10-10	8905-9352433	Sibarit.ru - создание сайта			george@sibarit.ru		1978-06-20		Администратор	Новосибирск		000000		rus	 demo overrideUsers deity	0	1	0000-00-00 00:00:00	b59c67bf196a4758191e42f76670ceba
+id	lastname	name	parname	email	org	fax	postcode	address	city	country	phone	osebe	rig	groupid	regdate	language	password	confirmed
+1		Admin		aktar_install@sibarit.ru							8905-9352433	Администратор	 demo deity	1	0000-00-00 00:00:00	rus	19ad89bc3e3c9d7ef68b89523eff1987	

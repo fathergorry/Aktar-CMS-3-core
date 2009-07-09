@@ -1,5 +1,5 @@
 sect_key	parent	path	level	menutitle	epermission	rpermission	module	design	visiblity	add_block	sect_order	created	modified	language
-1	1	/	0	Главная страница	 editor 	  		f08.htm	yes	4==news_announce.p,,5==birthday.cfg,,6==adserver.cfg,,8==shop_announce.p,,9==dostavka.cfg,,12==counters.cfg,,13==copyright.cfg	0	2004-02-20 23:15:33	2009-01-19 13:35:49	rus
+1	1	/	0	Главная страница	 editor 	  		happy.htm	yes		0	2004-02-20 23:15:33	2009-01-19 13:35:49	rus
 2	1	/login	1	Раздел пользователя			userprofile.p		nomenu	6==clear	10	2004-02-20 23:15:33	2008-09-27 14:23:13	rus
 3	1	/search	1	Поиск по сайту			search.p		nomenu		20	2004-02-20 23:15:33	2006-01-29 20:16:49	rus
 4	1	/sitemap	1	Карта сайта			sectionmap.p		nomenu		30	2004-02-20 23:15:33	2006-08-28 01:37:10	rus

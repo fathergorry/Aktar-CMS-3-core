@@ -2,9 +2,18 @@
  like you didn't configure Parser correctly. "AllowOverride all"? Please visit <a href="http://parser.ru/faq/install">http://parser.ru</a> for instructions.
 <!-- 
 @main[]
+^inst_container[^main2[]]
+@main2[]
+
 <p>^install_language[]<br>
 ^recover_obligate_files[]
-DB prefix is '^dtp[]'<p>
+Префикс таблиц: '^dtp[]'<p>
+Если устанавливаете впервые, выберите Быструю установку. Затем зайдите на 
+<a href="http://$env:SERVER_NAME/login/">http://$env:SERVER_NAME/login/</a> и введите: <br>
+$ut[^table::load[/my/tabak/users.tabak][$.encloser[^#02]]]
+
+Логин: $ut.email<br>
+Пароль: ^if($ut.password eq ^md5[install]){install}{уточните в сопроводительном тексте зародыша} <br>
 $instmenu[^table::create{uri	name
 quick.htm	Быстрая и нежная установка
 configure.htm	Сконфигурировать сайт
@@ -13,7 +22,7 @@ backup.htm	Создать/обновить базу данных сайта
 finish.htm	Закончить установку и убрать уязвимость сайта}]
 
 ^instmenu.menu{
-^if(-f "$instmenu.uri"){<a href="$instmenu.uri" target="$instmenu.uri">}$instmenu.name</a><br>
+^if(-f "$instmenu.uri"){<a href="$instmenu.uri">}$instmenu.name</a><br>
 }
 
 
