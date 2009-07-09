@@ -68,10 +68,10 @@ $tabindex(0)
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr><td valign="top">
-<TABLE border=0 width=700 cellPadding=1 cellSpacing=0>
+<TABLE border=0 width="100%" cellPadding=1 cellSpacing=0>
 
 <TR>
-<TD class=dsc width="300"><span title="^lang[138]" class=hnd>^lang[105]</span> </TD>
+<TD class=dsc width="200"><span title="^lang[138]" class=hnd>^lang[105]</span> </TD>
 <TD class=dsc>
 <table border=0 cellspacing=0 cellpadding=0 class=lfield width=100%><tr><td>
 <input name="menutitle" value="$document.menutitle" type="text" size="35" ^tabindex[]>
@@ -98,27 +98,47 @@ $tabindex(0)
 <TR>
 <TD class=dsc>^lang[140] </TD>
 <TD>
-<input name="pagetitle" type="text" size="84" class="lfield" value="$document.pagetitle" ^tabindex[]>
+<input id="pagetitle" name="pagetitle" type="text" style="width:100%" class="lfield" value="$document.pagetitle" ^tabindex[]>
 </TD>
 </TR>
 <TR>
-<TD class=dsc><span title="^lang[141]" class=hnd>^lang[108]:</span></TD>
+<TD class=dsc><span title="^lang[141]" class=hnd>^lang[108]:<span id="optd_plus"></span></span></TD>
 <TD>
-<input name="title" type="text" size="84" class="lfield" value="$document.title" ^tabindex[]>
+<input name="title" type="text" style="width:100%" onFocus="filltitle(this)^;" class="lfield" value="$document.title" ^tabindex[]>
 </TD>
+</TR>
+
+<TR>
+<TD class=dsc><span class="optd">
+<span title="^lang[142]" class=hnd>^lang[109]:</span>
+</span></TD>
+<TD><span class="optd">
+<input name="keywords" type="text" style="width:100%" class="lfield" value="$document.keywords" ^tabindex[]>
+</span></TD>
 </TR>
 <TR>
-<TD class=dsc><span title="^lang[142]" class=hnd>^lang[109]:</span> </TD>
-<TD>
-<input name="keywords" type="text" size="84" class="lfield" value="$document.keywords" ^tabindex[]>
-</TD>
+<TD class=dsc><span class="optd">
+<span title="^lang[143]" class=hnd>^lang[111]:</span> 
+</span></TD>
+<TD><span class="optd">
+<input name="description" class="lfield" ^tabindex[] value="$document.description" style="width:100%">
+</span></TD>
 </TR>
-<TR>
-<TD class=dsc><span title="^lang[143]" class=hnd>^lang[111]:</span> </TD>
-<TD>
-<input name="description" class="lfield" ^tabindex[] value="$document.description" size="84">
-</TD>
-</TR>
+<script>
+^$(".optd").hide("slow")^;
+^$("#optd_plus").html(" <a href='#'>ещЄ</a>").click(
+	function(e){
+		^$(".optd").show("slow")^;
+		^$(this).hide()^;
+		return false^;
+	}
+)^;
+function filltitle(input){
+	var pagetitle = ^$("#pagetitle").attr("value")^;
+	if(input.value == ''){input.value=pagetitle}
+}
+</script>
+
 <TR>
 <TD class=dsc>^lang[102]: </TD>
 <TD>
@@ -270,8 +290,8 @@ $result[]
 $topstr[^^${mod}_settings^[^]]
 $tab[^process0{$topstr}]
 $modval[^bmodval[$document.module;^hash::create[]]]
-
-<table cellspacing=0 cellpadding=0>
+<style></style>
+<table cellspacing=0 class=modtable cellpadding=0 width="100%">
 ^tab.menu{ 
 	<tr title="$tab.param==" ^if(^math:frac(^tab.offset[]/2)){bgcolor="#FFFFFF"}>
 	<td class=dsc width="200">$tab.descr</td>
@@ -284,7 +304,7 @@ title="Ѕудет ^taint[html]["^default[$modval.value;^lang[478]]"] ^lang[477]"}
 @mod_set_switch[tab;modset;mod][tm;rv]
 ^switch[$tab.type]{
   ^case[string;translit;option;num]{
-		<input ^tabindex[] type=text ^if($tab.type eq num){size=4}{class=modsetstr size=50} 
+		<input ^tabindex[] type=text ^if($tab.type eq num){size=4}{class=modsetstr} 
 	 	name="${mod}_$tab.param" ^mvpaint[$modval.[$tab.param];$tab.param;$tab.value]
 		 value="^default[$modset;$tab.default]" > 
   }

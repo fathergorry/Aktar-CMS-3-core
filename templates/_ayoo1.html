@@ -52,6 +52,19 @@ $aktar_version[^include[/login/config/version.txt]]
 </table>
 <table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F0F9FB">
   <tr>
+
+
+<td valign=top style="padding: 0 12px 0 3px">
+<strong><font size="4">^if(def $h_replacement){$h_replacement}{$h1}</font></strong>
+<!-- errmsg-->
+^if(def $body_replacement){$body_replacement}{$body}
+
+<p>&nbsp^;</p>
+</td>
+
+
+<td width=1 style="padding: 0px" bgcolor="^if(def $menu.0){#1486A2}"><img src="/img/spacer.gif" width=1></td>
+
 <td valign="top" width=1>
 ^if(def $form:p){
 <table border=0 cellspacing=0 cellpadding=1 style="margin-top: -2px" width="160">
@@ -70,17 +83,11 @@ $aktar_version[^include[/login/config/version.txt]]
 ^if(def $form:p && $form:p ne "/login"){<tr><td colspan=3><a href="/login/update.htm?add=$form:p">^lang[134] '$addname'</a></td></tr>}
 </table>
 }
-
-
 </td>
-<td width=1 style="padding: 0px" bgcolor="^if(def $menu.0){#1486A2}"><img src="/img/spacer.gif" width=1></td>
-<td valign=top style="padding-left: 8px">
-<strong><font size="4">^if(def $h_replacement){$h_replacement}{$h1}</font></strong>
-<!-- errmsg-->
-^if(def $body_replacement){$body_replacement}{$body}
 
-<p>&nbsp^;</p>
-</td>
+
+
+
   </tr>
 </table>
 <table width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F0F9FB">
