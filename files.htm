@@ -19,6 +19,15 @@ $pic_ext[$.jpg(1) $.gif(1) $.png(1)]
 }
 ^if($fco){^msg[^if(def $form:delete){^lang[332]}{^lang[331]}: $fco ]}
 ^if($loaded is table){^loaded.menu{^msg[<a href="$loaded.path">$loaded.path</a>]}}
+
+<script>
+function f2passport (fpath, fname){
+	var appstr = "<input type=hidden name=fpassport value="+fpath+"/"+fname+">+"+fname+"<br>"^;
+	^$("#passportfiles").append(appstr)^;
+	^$("#delsubmit").attr("value", "Удалить выбранное и обновить избранное")
+}
+</script>
+
 @loadfiles[][e;filem]
 $loaded[^table::create{path}]
 <form action="/login/files.htm" method=post enctype="multipart/form-data">
@@ -42,21 +51,46 @@ $loaded[^table::create{path}]
 @delfiles[]
 <form action="files.htm?delete=1" method=post>
 <table ^admin_tbl_design[]>
-<tr>^getfiles[img/a]^getfiles[img/b]^getfiles[files;add stat]</tr></table>
+<tr>^getfiles[img/a]^getfiles[img/b]^getfiles[files;add stat]
+^getmyfiles[]
+</tr></table>
 ^if($fco){^log[deleted files	(count: $fco)	!]}
-<input type=submit>
+<input type=submit value="Удалить выбранное" id="delsubmit">
 </form>
+
+@getmyfiles[][tmp]
+<td valign="top"><h3>Избранное</h3>
+$addfav[$form:tables.fpassport]
+^if($addfav is table){^addfav.menu{
+	^f2passport[$addfav.field;$user.id]
+}}
+
+^connect[$scs]{$myfiles[^table::sql{SELECT * FROM ^dtp[useroptions] WHERE id = '$user.id'}]}
+^myfiles.menu{
+	$tmp[d4p$myfiles.value]^if($form:$tmp eq del){
+		^delpassport[$myfiles.value;$user.id]
+	}{
+		<input type="checkbox" name="d4p$myfiles.value" value="del"> 
+		<a href="$myfiles.value">^file:basename[$myfiles.value]</a>
+		<br>
+	}
+}<span id="passportfiles"></span>
+</td>
 @getfiles[folder;fsize][list;ifo;fft]
 <td valign=top>
-<h3>$folder</h3>
-$list[^file:list[/my/$folder]]
+<h3>Файлы в $folder</h3>
+$list[^file:list[/my/$folder;\..+?^$]]
 ^list.sort{$list.name}[desc]
 ^if($env:REQUEST_METHOD eq "POST"){^if(def ^cando[delpic editor]){
 ^list.menu{$fft[${folder}$list.name]^if(def $form:$fft){$ifo[/my/$folder/$list.name]^file:delete[$ifo] ^delpassport[$ifo;$userid] ^fco.inc(1)}  }
-$list[^file:list[/my/$folder]]
+$list[^file:list[/my/$folder;\..+?^$]]
 }{^die[269;no delete!]}}
 
-^list.menu{^if($list.name ne ".htaccess"){<input type=checkbox name="${folder}$list.name" value="y"> <a href="/my/$folder/$list.name" target=_blank>$list.name</a>
- ^if(def $fsize){$tmp[^file::stat[/my/$folder/$list.name]] (^eval($tmp.size / 1000)[%.0f]Kb)}
-<br>}}
+^list.menu{^if($list.name ne ".htaccess"){
+	<input type=checkbox name="${folder}$list.name" value="y"> 
+	<a href="/my/$folder/$list.name" target=_blank>$list.name</a>
+	^if(def $fsize){$tmp[^file::stat[/my/$folder/$list.name]] (^eval($tmp.size / 1000)[%.0f]Kb)}
+	<a href="#" onClick="f2passport('/my/$folder', '$list.name')^;"><img src="/login/img/point.gif" border="0"></a>
+	<br>
+}}
 </td>

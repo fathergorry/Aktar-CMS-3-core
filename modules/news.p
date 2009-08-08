@@ -33,13 +33,13 @@ $cnews[^table::load[/my/dbs/news.txt]]
 @show1[i][rep]
 $new[^getnew[$i]] ^if(!def $new.content){$new.content[ ]}
 $rep[^table::create[nameless]{:more:	}]
-$new.content[^icontent[^new.content.replace[$rep];$new.autoformat]]
 $new.postdate[^dmy[$new.postdate]]
-  ^titlerep[$new.title]
-^if($new_design is junction){^new_design[]}{
+  
+^if($new_design is junction){^new_design[$new]}{
+^titlerep[$new.title]
 $document.content[]  
 <b class="newsb">$new.postdate</b><br>
-<span class=new>$new.content</span>
+<span class=new>^icontent[^new.content.replace[$rep];$new.autoformat]</span>
 <p>
 ^try{^comments[$new.id]}{^blad[]}
 }

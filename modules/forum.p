@@ -2,9 +2,9 @@
 2009-05-29	Рейтинги и внутриклассность
 2008-02-27	Добавлена поддержка премодерации и убрана каптча для зарегистрированных
 
-@forum_settings[options]
+@forum_settings[options][i]
 $result[^table::create{param	type	default	descr
-fid	string	$i[^uri.split[/;rh]]^i.0.left(32)	Идентификатор форума
+fid	string	$i[^uri.split[/;rh]]f_^i.0.left(29)	Идентификатор форума (строка, латинией)
 rpp	num	15	записей на странице
 #is_spec	bool		Этот форум является консультацией специалиста
 #file_ext	option		Расширения разрешенных файлов (через пробел)
@@ -176,7 +176,7 @@ $fans[^table::sql{SELECT * FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', 
 $forum.author</a>^if(def $forum.email){ (^email[$forum.email])},
 ^ufdate[$forum.mydate] ^ratingbox[f$forum.id]
 ^if(def $forum.content){<br>^forum.content.replace[^unbrul[]]} 
-<br>^if($canans){<a href="^urido[]fdisplay=$forum.id#msgForm"><img src="/login/img/edit.gif" border=0><b>Написать ответ</b></a>}
+<br>^if($canans){<a href="^urido[]fdisplay=$forum.id#msgForm" class="anslink"><img src="/login/img/edit.gif" border=0><b>Написать ответ</b></a>}
 
 	^if(^moder[]){
 	<a class="ajaxhandled" href="/login/modules/forum/moder.htm?a=screen&id=$forum.id&show=^if($forum.visiblity eq yes){off">скрыть;on"><img src="/login/img/eye.gif" border=0>показывать}</a>
@@ -194,7 +194,7 @@ $this_ans[^fans.select($fans.id == $forum.id)]
 
   <br><br>
 
-</span>}
+</span>}[<span class="interforum"></span>]
 
 ^pp.listpages[ | ;$.url[^urido[]]$.prescript[Страницы:]] <br><br>
 
@@ -244,7 +244,7 @@ $newpost.content
 ^if(!def $message){$message[ $t[^math:uid64[]]$.postid[^t.left(12)] $.author[$MAIN:user.name] $.email[$MAIN:user.email] $.fid[$seti.fid] ]}
 #mode forum ans spec_ans
 
-^if($seti.embedded && !def $form:fdisplay){<h3><a href="#" onClick="^$('#fpostbox').show('slow')^;return false">Оставить комментарий</a></h3><div id="fpostbox" style="display:none">}{<div id="fpostbox"}
+^if($seti.embedded && !def $form:fdisplay){<h3 class="left_comment"><a href="#" onClick="^$('#fpostbox').show('slow')^;return false">Оставить комментарий</a></h3><div id="fpostbox" style="display:none">}{<div id="fpostbox"}
 <h2>^if(def $form:fdisplay){Ваш ответ на}{Ваше} сообщение</h2>
 ^if(def $form:fdisplay && !$seti.embedded){ (<a href="^urido[]^rn[?]#msgForm">написать сообщение в форуме</a>) }
 <span id="forumpostmsg"></span>

@@ -448,20 +448,27 @@ $mmodules[^file:list[/my/autorun]]
 $allowed_modules[$allowed_modules myrecords comments var correctme email special program sitemap notlogin islogin translit nest redirect]
 $allowed_modules[^s2h[$allowed_modules]]
 
-
-@comments[dt;sm]
-^use[/login/modules/forum.p]$sm[$uri]
-$fid[^if(!def $dt || $dt eq hide){^sm.left(32);$dt}]
-^if($dt eq hide && !def $form:showallcomments){
-^connect[$scs]{$fcn[^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$fid'}]}
-<a href="$uri?showallcomments=1">Комментариев: $fcn</a>
-;
-^forum[
-	$.fid[$fid]
-	$.notify[$MAIN:globals.site_admin]
-	$.rpp[^if(def $form:showallcomments){100;5}]
-]
+@comments[set;etc]
+^if($set is hash){;$set[$.fid[$set]]}
+^if(!def $set.fid || $set.fid eq hide){$set.fid[^MAIN:uri.right(31)]}
+^if(def $set.reveal || def $form:showallcomments){
+	^use[/login/modules/forum.p]
+	^forum[
+		$.fid[$set.fid]
+		^if(def $set.notify){$.notify[$set.notify]}
+		$.rpp[^if(def $form:showallcomments){100;5}]
+	]
+}{
+	^connect[$scs]{
+		$etc(^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$set.fid'})
+	}
+	^if($set.asint){
+		$result($etc)
+	}{
+		$result[<a href="$request:uri^if(^request:uri.pos[?]>4){&;?}showallcomments=1" class="comments">Комментариев: $etc</a>]
+	}
 }
+
 
 @get_header[]
 <title>$document.title</title>

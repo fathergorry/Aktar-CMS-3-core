@@ -42,7 +42,7 @@ $add[^table::create{in	out	value
       <option value="5">h5</option>
 </select><input type=button onClick="surnd('<h' + this.form.hs.options[this.form.hs.selectedIndex].value + '>', '</h' + this.form.hs.options[this.form.hs.selectedIndex].value + '>', 0)" value="&gt^;">
 
-^connect[$scs]{$myfiles[^table::sql{SELECT * FROM ^dtp[useroptions] WHERE param = 'pic'}]}
+^connect[$scs]{$myfiles[^table::sql{SELECT * FROM ^dtp[useroptions] WHERE id = '$user.id' AND param = 'pic'}]}
 ^myfiles.sort{^if($myfiles.param eq file){zz}$myfiles.comment}[asc]
 <select class="files1" name="files1" onChange="instxt('<img src=\'' + this.form.files1.options[this.form.files1.selectedIndex].value + '\' border=0 align=\'\' />')">
 <option value="">^lang[24]</option>

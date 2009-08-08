@@ -24,7 +24,7 @@ $header
     <td bgcolor="#E0F3F9"><table width="100%" border="0" cellspacing="0" cellpadding="3">
         <tr>
           <td width="82" align="center" bgcolor="#D5EFF8"><a href="/"><img src="/login/img/logo2.gif" width="82" height="19" border=0></a></td>
-          <td align="right">
+          <td align="left" style="padding-left:12px">
 $aktar_version[^include[/login/config/version.txt]]
 ^ayoo_user_menu[]          
           </td>
@@ -35,10 +35,12 @@ $aktar_version[^include[/login/config/version.txt]]
     <td bgcolor="#E0F3F9"><table width="100%" border="0" cellspacing="0" cellpadding="3">
         <tr>
           <td width="82" align="center"  bgcolor="#D5EFF8"><b><small>v. $aktar_version</td>
-<td align="right">
+<td align="left" style="padding-left:12px">
 ^get_admin_menu[]
-#<a href="/login/">^lang[298]</a>
-^menu.a.menu{ &nbsp^;&nbsp^;&nbsp^;<a ^if($request:uri eq $menu.a.uri && $env:REQUEST_METHOD ne POST){title}{href}="$menu.a.uri">$menu.a.menutitle</a>}
+^menu.a.menu{
+	<a ^if($request:uri eq $menu.a.uri && $env:REQUEST_METHOD ne POST){title}{href}="$menu.a.uri">
+	$menu.a.menutitle</a>
+}[&nbsp^;&nbsp^;&nbsp^;]
 </td>
         </tr>
       </table> </td>

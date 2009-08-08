@@ -3,6 +3,7 @@ $("input#forumsubmit").click(function(){
 	$.ajax({
 		url: "/login/modules/forum/post.htm",
 		data: $("form#forumpost").serialize(),
+		type: "POST",
 		success: function(resp){
 				$("#forumpostmsg").html(resp);
 			}

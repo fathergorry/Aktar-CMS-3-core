@@ -65,15 +65,15 @@ $result[$path]
 }{$result[$path]}
 
 
-@populars[pp][frm;is;page]
-^cache[/cache/populars](5200){
+@tPopulars[days;limit][frm;is;page;pages]
 ^connect[$scs]{$frm[^table::sql{
 SELECT COUNT(fid) AS score, fid FROM ^dtp[forum] 
-WHERE $before[^date::now(-^pp.int(-21))] mydate >= '^before.sql-string[]'
-GROUP BY fid ORDER BY score DESC LIMIT 6
+WHERE $before[^date::now(-^days.int(-21))] mydate >= '^before.sql-string[]'
+AND fid ^if($limit ne forum){NOT} LIKE 'f_%'
+GROUP BY fid ORDER BY score DESC LIMIT ^limit.int(6)
 }]}
-
-^frm.menu{
+$pages[^table::create{path	name	score	fid}]
+^frm.menu{ 
 	^if(^frm.fid.int(0)){$is[news]}{
 		^if(^frm.fid.left(1) eq "/"){$is[structure]}{
 			$tmp[^frm.fid.trim[end;1234567890]] $tmp(^tmp.length[]) $sTable[^frm.fid.left($tmp)]
@@ -88,7 +88,7 @@ GROUP BY fid ORDER BY score DESC LIMIT 6
 		^case[adtab]{
 			^sr_out_name[$sTable]
 		}
-	}, '$frm.score' AS score
+	}, '$frm.score' AS score, '$frm.fid' AS fid
 	FROM ^dtp[^switch[$is]{^case[adtab]{$sTable}^case[DEFAULT]{$is}}] WHERE 
 	^switch[$is]{
 		^case[news]{id = '$frm.fid'}
@@ -101,12 +101,10 @@ GROUP BY fid ORDER BY score DESC LIMIT 6
 		^case[news]{ 1 }
 	}
 }]}}
-^if($pages is table){;$pages[^table::create{path	name	score}]}
 ^if($page is table){^pages.join[$page]}
 }
-^pages.menu{<a href="$pages.path" class="sided">$pages.name 
-($pages.score)<img src="/my/templates/mak/more.gif" class="morei"/></a>}[<br>]
-}
+$result[$pages]
+
 
 @tags[data;sm][kuc]
 $a[^table::sql{SELECT DISTINCT $data.column AS name, COUNT($data.column) AS score
