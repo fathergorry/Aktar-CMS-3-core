@@ -99,8 +99,10 @@ $result[^table::create{^untaint{^src.replace[$rep]}}]
 
 @path_splitter[path][p;r;s;pt] #returns result table and $max_level variable
 $p[^path.mid(1)] $pt[^p.split[/]] $r[^table::create{uri	level
-/	0}] $max_level(0)
-^pt.menu{$s[$s/$pt.piece] ^r.append{$s	^pt.line[]} $max_level(^pt.line[])}
+/	0}] 
+^pt.menu{
+	$s[$s/$pt.piece] $max_level(^pt.line[]) ^r.append{$s	$max_level} 
+}
 $result[$r]
 
 @pathlevel[path][pt]
@@ -515,8 +517,11 @@ $SQL.connect-string[$scs]
 ^manage_session[]
 $menu[^hash::create[]]
 ^if(def $path){$str[$path]}{$str[$request:uri] $tbl[^str.split[?;h]] $str[$tbl.0]}
-$str[^str.split[,;lh]] $main_argument[$str.1] $str[$str.0]
-$uri[^str.trim[end;/]] $iffile[^str.split[.;h]] $str[$iffile.1] ^if(def $uri){}{$uri[/]} 
+$str[^str.split[,;lh]] $argument2[^str.1.int(0)] $str[$str.0]
+$uri[^str.trim[end;/]] 
+$argument[^str.split[/;rh]]$MAIN:argument(^argument.0.int(0))
+^if($MAIN:argument){$uri[^uri.trim[end;0123456789/]]}
+$iffile[^str.split[.;h]] $str[$iffile.1] ^if(def $uri){}{$uri[/]} 
 ^create_document[$uri]
 $environment_created[y]
 
@@ -610,7 +615,7 @@ $path_t[^path_t.select($path_t.level < $invisible)]
 
 @manage_session[new][user0;newsid]
 ^sleep(0)
-^if(def $cookie:s){$sid[$cookie:s]}{^if(def $form:s){$sid[$form:s]}}
+^if(def $cookie:aks){$sid[$cookie:aks]}{^if(def $form:s){$sid[$form:s]}}
 ^if(def $new){$sid[$new]}
 ^if(def $sid && ^sid.length[] == 16){
 ^if($sessions is hashfile){;$sessions[^hashfile::open[/cache/set/sessions]]}
@@ -630,7 +635,7 @@ $usercando[^s2h[$user.rig $user.group_rig]] $userid($user.id) $username[$user.na
   ^sessions.delete[$sid] $sid[^math:uid64[]]
 }
 ^try{$sessions.$sid[$.value[$user.id]$.expires(^ses_exp[])]
-$cookie:s[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
+$cookie:aks[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
 }{$exception.handled(1)^die[^lang[^untaint[html]{$exception.comment} $exception.file^(${exception.lineno}:$exception.colno^)]] ^die[Если вас выбросило, зайдите снова и отключите обновление сессий в настройках.]}
 @ses_exp[]
 ^if(^hasrig[$globals.sessionlimit8]){$result(1/3)}{$result($globals.sessiontime)}
@@ -751,7 +756,7 @@ $result[$set]
 #Применяет глобальные настройки к подпрограмме
 @modpath[mod]
 ^if($system_modules is hash){;
-$system_modules[^s2h[sectionmap.p news.p forum.p swapcontent.p inbox.p userprofile.p search.p]]}
+$system_modules[^s2h[sectionmap.p news.p vote.p feedback.p forum.p swapcontent.p inbox.p userdata.p userprofile.p search.p]]}
 $result[^if(def $system_modules.$mod){/login/modules/$mod}{/modules/$mod}]
 @apply_globalsub[set;sub]
 $modval[^bmodval[$sub;$set]]
@@ -999,15 +1004,15 @@ $result[^if(def $MAIN:globals.addIndexHtml){$uri^if($uri ne "/"){/}index.html}{$
 #Cache definition
 $cache_time(^MAIN:globals.cache_time.int(0))
 $tmp[$env:REMOTE_ADDR]
-^if($env:REQUEST_METHOD eq POST || ^tmp.left(7) eq "192.168" || ^tmp.left(6) eq "127.0." || ^pathlevel[$uri] > ^globals.cache_level.int(3)){
+^if($env:REQUEST_METHOD eq POST || ^tmp.left(7) eq "192.168" || ^tmp.left(6) eq "_127.0." || ^pathlevel[$uri] > ^globals.cache_level.int(3)){
 	$cache_time(0)
 } 
 ^if(def $request:query){
 	$cache_time(0)
 }{
-	$cache_file[^md5[$uri]]
+	$cache_file[^saveable[$uri]]
 }
-^if(def $cookie:s){$cache_time(0)}
+^if(def $cookie:aks){$cache_time(0)}
 
 #macros is ON by default
 $MAIN:process_body(1)

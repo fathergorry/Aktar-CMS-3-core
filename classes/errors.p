@@ -3,8 +3,7 @@
 $errors_executed(1)
 
 @errorHandler[error]
-
-$cache_time(0)
+^try{^cache(0)}{^blad[]}
 $document.1[1]
 
 ^switch[$error]{

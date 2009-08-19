@@ -24,8 +24,10 @@ $ks[^s2h[text password; ]]
 ^ut.menu{$h[$ut.form_handler]^if(def $ks.$h){ $ut.column }}
 ^if(-f "/my/dbs/users1.txt"){;^die[540]}
 
+
 ################----######-----#####
 @userprofile[set]
+
 #Globalize settings
 $useropt[$set]
 ^use[datawork.p] 
@@ -67,7 +69,7 @@ $document.pagetitle[^default[$useropt.$with;$def]]
 ^if($act eq modify && $env:REQUEST_METHOD ne POST){$dw_cond[$.id($user.id)]}
 
 $userdesc[^datawork::create[users;$dw_cond;;
-	$.exclude[$useropt.hiddenfields rig extid groupid regdate ^if($upaction eq register){$useropt.reghidden } ^if($upaction eq modify){$useropt.modhidden} ]
+	$.exclude[$useropt.hiddenfields rig extid moderated groupid regdate ^if($upaction eq register){$useropt.reghidden } ^if($upaction eq modify){$useropt.modhidden} ]
 	^if(def $useropt.alt_1){$.alternate[1]}
 	^if(def $useropt.reqfields){$.required[$useropt.reqfields]}
 	^if($env:REQUEST_METHOD eq POST){$.from_form[instance_name]})
@@ -78,6 +80,8 @@ $userdesc[^datawork::create[users;$dw_cond;;
 	$user0[^userdesc.returnHash[]]
 	^if($upaction eq register){
 		$user0.rig[$useropt.defrig] $user0.regdate[^now.sql-string[]]
+		$user0.lastmodified[^now.sql-string[]]
+		$user0.moderated[^if(def $useropt.conf_email){no;yes}]
 		$user0.groupid(1) $textpassword[$user0.password]
 		$user0.password[^md5[$user0.password]]
 	}
@@ -131,7 +135,7 @@ $md5em[^md5[$mymail.email $useropt.conf_email]]
 ^if(!def $useropt.conf_email){$err(1) ^die[553]}
 ^if($em_conf_ok && !$err){
 	$rig[^s2h[$mymail.rig]]^rig.delete[unconf]$rig.conf(1)
-	^void:sql{UPDATE ^dtp[users] SET rig = '^rig.foreach[k;v]{$k }' WHERE email = '$mymail.email'}
+	^void:sql{UPDATE ^dtp[users] SET moderated = 'yes' WHERE email = '$mymail.email'}
 	^die[554]
 }
 
@@ -161,7 +165,7 @@ $datacloser
 }
 @logout[]
 ^if($sessions is hashfile){;$sessions[^hashfile::open[/cache/set/sessions]]}
-^sessions.delete[$sid] $cookie:s[]
+^sessions.delete[$sid] $cookie:aks[]
 $sid[] 
 ^redirect[^if(def $form:refto && $form:refto ne "/login"){$form:refto^rn[?];http://$env:SERVER_NAME/^rn[?]}]
 ###################################

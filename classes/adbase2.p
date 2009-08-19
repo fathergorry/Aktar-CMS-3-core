@@ -40,9 +40,9 @@ FROM ^dtp[$tab] WHERE moderated != 'no' ORDER BY lastmodified DESC LIMIT 3}]}
 @memories[q]
 ^if($adtabs is table){;$adtabs[^table::load[/my/config/adbase_tables.txt]]}
 ^use[adb_search.p] 
-^adtabs.menu{ 
+^adtabs.menu{^if(^adtabs.cls.pos[s]>=0){ 
 	^mem2[$q;$adtabs.adt] 
-}
+}}
 ^if(def $membase){$document.pagetitle[Результаты поиска '$q'] $membase}
 @mem2[qqq;tab][rest]
 $rest[^adbsearch:defquery[$qqq;$tab]]

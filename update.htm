@@ -91,7 +91,9 @@ $plmax(^int:sql{SELECT MAX(sect_order) FROM ^dtp[structure] WHERE path LIKE '$fo
 
 @addnewnode[]
 $newnode[^saveable[$form:newnode]]
+^if(^newnode.int(0)){$newnode[page$newnode]^msg[Имя раздела не должно быть числом, поэтому раздел автоматически переименован в $newnode]}
 $newnode[^newnode.lower[]] $newnode[$form:add^if($form:add ne "/"){/}$newnode]
+^if(^newnode.length[]>127){^throw[aktar.pageCreation.error;Path length exceeded 127 chars]}
 $already[^table::sql{SELECT path FROM ^dtp[structure] WHERE path = '$newnode'}]
 ^if(def $already){^die[Раздел $newnode уже есть]}{
 ^void:sql{INSERT INTO ^dtp[structure] (path, level, menutitle, visiblity, sect_order, created, parent, language) VALUES ('$newnode', '^pathlevel[$newnode]',
