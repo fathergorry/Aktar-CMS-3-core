@@ -69,7 +69,7 @@ $userrig[^s2h[$deluser.rig]]
 $r(^int:sql{SELECT COUNT(id) FROM ^dtp[users] })
 $pp[^pagination::create[$r;40]]
 
-$users[^table::sql{SELECT id, name, lastname, groupid, ^if(def ^cando[users]){email}{(0) AS email}, rig FROM ^dtp[users] ^if(def $form:usermatch){WHERE email LIKE '%$form:usermatch%' OR name LIKE '%$form:usermatch%'}
+$users[^table::sql{SELECT id, name, lastname, moderated, groupid, ^if(def ^cando[users]){email}{(0) AS email}, rig FROM ^dtp[users] ^if(def $form:usermatch){WHERE email LIKE '%$form:usermatch%' OR name LIKE '%$form:usermatch%'}
 ORDER BY ^if(def $form:order){$form:order ASC}{id DESC}}[^pp.q[limits]]]
 $groups[^table::sql{SELECT groupid, name, rig FROM ^dtp[usergroups]}]
 ^groups.append{-136	ÓÄÀËÈÒÜ ÏÎËÜÇÎÂÀÒÅËß	}
@@ -84,12 +84,14 @@ function grpsel(obv){
 <td><a href="users.htm?order=lastname">^lang[166]</a></td>
 <td><a href="users.htm?order=email">^lang[222]</a></td>
 <td><a href="users.htm?order=rig">^lang[223]</a></td>
+<td><a href="users.htm?order=moderated">Ïîäòâ.</a></td>
 <td><a href="users.htm?order=groupid">^lang[369]</a><br>
 <select><option>Äëÿ âñåõ:</option>^groups.menu{<option value="$groups.groupid" onClick="grpsel('$groups.groupid')">$groups.name</option>}</select>
 </td>
 </tr>
 ^users.menu{
 <tr><td>$users.id</td><td><a href="?uid=$users.id&^rn[]">$users.lastname $users.name </td><td>$users.email</td><td>$users.rig</td>
+<td>$users.moderated &nbsp^;</td>
 <td>
 $a[group_$users.id]
 $udrig[^s2h[$users.rig]]

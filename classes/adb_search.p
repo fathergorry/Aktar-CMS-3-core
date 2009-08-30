@@ -18,9 +18,11 @@ $qry[
 ]
 
 ^if(def $indexes.tab){
-	$result[^table::sql{
-		$qry
-	}]
+	^try{
+		$result[^table::sql{
+			$qry
+		}]
+	}{^blad[]$result[^table::create{}]}
 	}{$result[^table::create{}]}
 
 #^die[MATCH ($index.com) AGAINST ('$query') ^result.count[]]

@@ -12,7 +12,7 @@ $forum:ajaxcalled(1)
 ^$("input#forumsubmit").css("background", "")^if($forum:forum_err){.attr("disabled","")};
 ^if($forum:forum_err){
 var ic = ^$("img#captchaforum")^;
-ic.attr("src", ic.attr("src")+"?sdf")^;
+ic.attr("src", ic.attr("src")+"?recall")^;
 }{
 timerID=setTimeout('location.reload(true)',1000)^;
 }

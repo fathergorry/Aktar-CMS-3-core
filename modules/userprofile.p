@@ -115,7 +115,7 @@ $sid[^math:uid64[]] $userid($user.id)
 $useropt.mailmsg
 ^if(def $useropt.conf_email){
 ^lang[547]
-http://${env:SERVER_NAME}/$uri/?conf=^md5[$user_.email $useropt.conf_email]&email=$user_.email
+http://${env:SERVER_NAME}$uri/?conf=^md5[$user_.email $useropt.conf_email]&email=$user_.email
 ^lang[573]
 }
 ^lang[548] http://$env:SERVER_NAME

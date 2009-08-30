@@ -117,6 +117,7 @@ $author_want[^table::sql{SELECT email, author, iwantcomment FROM ^dtp[forum] WHE
 
 
 <!-- ^ans1.insertInstance[$ans_message] ^msg[Ответ добавлен]-->
+^delcache[]
 #^redirect[^urido[]fdisplay=$form:fdisplay^rn[&]]
 ^void:sql{UPDATE ^dtp[forum] SET answers = answers + 1 WHERE id = '^form:fdisplay.int(-1)'}
 
@@ -146,14 +147,17 @@ $result[$tmp.fields]
 
 
 @fsel[]
+$instance[^table::load[/my/dbs/forum.txt]]
 $r(^int:sql{SELECT COUNT(id) FROM ^dtp[forum] WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])})
 $pp[^pagination::create[$r;^seti.rpp.int(15)]]
 $forum[^table::sql{
-	SELECT * FROM ^dtp[forum] WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])
+	SELECT ^instance.menu{^if($instance.column ne content){$instance.column, }}
+	LEFT(content,80) AS content FROM ^dtp[forum] WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])
 	^if(!^moder[]){AND visiblity = 'yes'} 
 	ORDER BY mydate DESC
 }[^pp.q[limits]]]
-$fans[^table::sql{SELECT * FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', }'-1')
+
+$fans[^table::sql{SELECT *, LEFT(content,80) AS content FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', }'-1')
  ORDER BY mydate ASC}]
 
 @showall[]
@@ -172,10 +176,12 @@ $fans[^table::sql{SELECT * FROM ^dtp[ans] WHERE id IN (^forum.menu{'$forum.id', 
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
 ^if(^forum.userid.int(0)){<span class="isUser" onClick="userbox(this, $forum.userid, 'pmsend')"></span>}
 <a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
-^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}
+^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}{<a href="/user/$forum.userid">}
 $forum.author</a>^if(def $forum.email){ (^email[$forum.email])},
 ^ufdate[$forum.mydate] ^ratingbox[f$forum.id]
-^if(def $forum.content){<br>^forum.content.replace[^unbrul[]]} 
+^if(def $forum.content){
+	<br>^forum.content.replace[^unbrul[]] <a href="^urido[]fdisplay=$forum.id#msgForm">...</a>
+} 
 <br>^if($canans){<a href="^urido[]fdisplay=$forum.id#msgForm" class="anslink"><img src="/login/img/edit.gif" border=0><b>Написать ответ</b></a>}
 
 	^if(^moder[]){
@@ -187,7 +193,7 @@ $this_ans[^fans.select($fans.id == $forum.id)]
 	^this_ans.menu{
 		<div class="ans" ^if(^math:frac(^this_ans.line[]/2)){style="background-color:#$seti.ansbgr"}>
 		<b><span class="isUser"></span>$this_ans.title $this_ans.author</b>,   ^dmy[$this_ans.mydate] ^rating:box[a$this_ans.ansid]<br>
-		^this_ans.content.replace[^unbrul[]] ^ansadmin[$this_ans.ansid]
+		^this_ans.content.replace[^unbrul[]]... ^ansadmin[$this_ans.ansid]
 	</div>}
 }
 #<a href="^urido[]fdisplay=$forum.id">Ответов: $forum.answers</a>
@@ -217,6 +223,7 @@ $newpost.content[^utf2win[$form:content]]
 ^fcapchk[]
 ^if(!$forum_err){
   $msgId(^forum1.insertInstance[$newpost])
+  ^delcache[]
 ^if(!$ajaxcalled){
   ^redirect[^urido[]fdisplay=$msgId^rn[&]&msg=Ваша запись добавлена.^if(def $seti.premod){Она появится после проверки модератором.}&noform=true]]
 }{^die[Сообщение добавлено]}
@@ -254,7 +261,7 @@ $newpost.content
 <input type=hidden name="id" value="$message.id">
 <input type=hidden name="postid" value="$message.postid">
 <input type=hidden name="fid" value="$message.fid">
-<input type=hidden name="subst_url" value="$request:uri"
+<input type=hidden name="subst_url" value="$request:uri">
 ^if(!def $form:fdisplay){* Заголовок сообщения<br>
 <input type=text size=60 name="title" value="$message.title"><br>}
 * Ваше имя<br>

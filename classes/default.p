@@ -2,10 +2,6 @@
 2009-04-13	v 3/1
 2008-08-09	defselect, mailsend (for connect errors), qbuild(request builder)
 2008-07-20	str2tbl, tbl2str
-2008-07-11	@tagcloud - class "tag" et minora
-Git staging test
-2 test
-Branch
 
 @auto[]
 $CLASS_PATH[^table::create{path
@@ -36,6 +32,10 @@ $check[$c] ^if(!def $usercando){$usercando[^hash::create[]]}
 #$result[1]
 @resmeter[process;msg][locals]
 $g[$globals.debug_load_msg]^if($g eq all || $g eq $process){$v[$status:rusage]^msg[$v.utime/$v.stime sec, $v.maxrss/$status:memory.used kb at "$msg"]}
+@delcache[url][curl]
+$curl[^saveable[^default[$url;$MAIN:uri]]]
+^try{^file:delete[/cache/www/$curl]}{$exception.handled(1)}
+
 
 @hasrig[c][check]
 $check[$c]
@@ -520,7 +520,7 @@ $menu[^hash::create[]]
 $str[^str.split[,;lh]] $argument2[^str.1.int(0)] $str[$str.0]
 $uri[^str.trim[end;/]] 
 $argument[^str.split[/;rh]]$MAIN:argument(^argument.0.int(0))
-^if($MAIN:argument){$uri[^uri.trim[end;0123456789/]]}
+^if($MAIN:argument){$uri[^uri.trim[end;0123456789/]]^try{^cache(0);^blad[]}}
 $iffile[^str.split[.;h]] $str[$iffile.1] ^if(def $uri){}{$uri[/]} 
 ^create_document[$uri]
 $environment_created[y]
