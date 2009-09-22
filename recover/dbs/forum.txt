@@ -1,4 +1,4 @@
-column	sql_type	comment	key	form_handler	special_handler
+column	sql_type	comment	key	form_handler	onedit	onshow	onsave	special_handler
 id	INT(8) NOT NULL AUTO_INCREMENT	id	primary	hidden	
 fid	VARCHAR(32) NOT NULL	Forum id	key1	special	
 mydate	DATETIME NOT NULL	Creation date	key1	special	

@@ -5,8 +5,14 @@ $document[^hash::create[]]
 ^use[/login/modules/forum.p]
 $forum:ajaxcalled(1)
 ^connect[$scs]{
-^if(def $form:fdisplay){^forum:post_answer[];^forum:post_message[]}
+	^if(^form:seti_src.int(0)){^try{
+		$doc_src[^string:sql{SELECT module_settings FROM ^dtp[sections] WHERE sect_key = '$form:seti_src'}]
+		$forum:seti[^sets_collector[forum;$doc_src]]
+		^forum:seti.delete[asmain]
+	}{^blad[huinia]}}
+	^if(def $form:fdisplay){^forum:post_answer[];^forum:post_message[]}
 }
+
 <script>
 
 ^$("input#forumsubmit").css("background", "")^if($forum:forum_err){.attr("disabled","")};

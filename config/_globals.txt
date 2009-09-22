@@ -9,7 +9,6 @@ numerate_msgs		Numerate system messages	bool
 nodepicsizex		480	num
 _	481		
 timezone	3	436	text
-ue		437	text
 language	rus	439	language
 mailcharset	windows-1251	302	charsets
 _	482		

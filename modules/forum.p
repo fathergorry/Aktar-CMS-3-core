@@ -80,9 +80,10 @@ $answers[^table::sql{SELECT * FROM ^dtp[ans] WHERE id = '$id'}]
 }{<h2>^default[$message.title;Сообщение]</h2>}
   Пишет <b>$message.author</b> (^dmy[$message.mydate]) <br>
   ^process_content[$message.content]
+  ^if($MAIN:forum_onshow is junction){^forum_onshow[]}
   <h3>Ответы на «${message.title}»</h3>
   ^answers.menu{<span id="forumbox$answers.ansid"><hr size="1">
-    ^if(def $answers.title){<b>$answers.title</b> - }$answers.author^if(def $answers.email){ (^email[$answers.email])},   ^dmy[$answers.mydate]<br>
+    ^if(def $answers.title){<b>$answers.title</b> - }$answers.author,   ^dmy[$answers.mydate]<br>
     
     ^process_content[$answers.content]
     <br>
@@ -151,8 +152,10 @@ $instance[^table::load[/my/dbs/forum.txt]]
 $r(^int:sql{SELECT COUNT(id) FROM ^dtp[forum] WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])})
 $pp[^pagination::create[$r;^seti.rpp.int(15)]]
 $forum[^table::sql{
-	SELECT ^instance.menu{^if($instance.column ne content){$instance.column, }}
-	LEFT(content,80) AS content FROM ^dtp[forum] WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])
+	SELECT ^instance.menu{^if($instance.column ne content){f.$instance.column, }}
+	LEFT(f.content,80) AS content, u.rig FROM ^dtp[forum] f
+	LEFT JOIN ^dtp[users] u ON f.userid = u.id
+	WHERE fid IN (^allid.foreach[k;v]{'$k'}[, ])
 	^if(!^moder[]){AND visiblity = 'yes'} 
 	ORDER BY mydate DESC
 }[^pp.q[limits]]]
@@ -174,10 +177,10 @@ $fans[^table::sql{SELECT *, LEFT(content,80) AS content FROM ^dtp[ans] WHERE id 
 ^forum.sort(^rating:box[f$forum.id;-1])[desc]
 }
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
-^if(^forum.userid.int(0)){<span class="isUser" onClick="userbox(this, $forum.userid, 'pmsend')"></span>}
+^if(^forum.userid.int(0) || 1){<span class="$forum.rig" onClick="userbox(this, $forum.userid, 'pmsend')"></span>}
 <a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
 ^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}{<a href="/user/$forum.userid">}
-$forum.author</a>^if(def $forum.email){ (^email[$forum.email])},
+$forum.author</a>,
 ^ufdate[$forum.mydate] ^ratingbox[f$forum.id]
 ^if(def $forum.content){
 	<br>^forum.content.replace[^unbrul[]] <a href="^urido[]fdisplay=$forum.id#msgForm">...</a>
@@ -210,13 +213,14 @@ $this_ans[^fans.select($fans.id == $forum.id)]
 @post_message[]
 ^use[collection.p]
 $forum1[^collection::create[forum]]
-$newpost[^forum1.createInstance[postid title author content email fid visiblity has_answer answers iwantcomment]]
+$newpost[^forum1.createInstance[postid title author content email fid visiblity has_answer answers iwantcomment custom1 custom2]]
 $newpost.userid($MAIN:user.id)
 $newpost.mydate[^MAIN:now.sql-string[]]
 $newpost.title[^utf2win[$form:title]]
 $newpost.author[^utf2win[$form:author]]
 $newpost.content[^utf2win[$form:content]]
 ^if(def $seti.premod){$newpost.visiblity[no]}
+$newpost.custom1[$form:custom1]
 
 ^if(def ^string:sql{SELECT postid FROM ^dtp[forum] WHERE postid = '$form:postid'}[$.default{}]){^die[Вы уже отправили это сообщение]$forum_err(1)}
 ^if(!def $newpost.author || !def $newpost.title){^die[Необходимо заполнить Заголовок сообщения и Ваше имя]$forum_err(1)}
@@ -228,11 +232,11 @@ $newpost.content[^utf2win[$form:content]]
   ^redirect[^urido[]fdisplay=$msgId^rn[&]&msg=Ваша запись добавлена.^if(def $seti.premod){Она появится после проверки модератором.}&noform=true]]
 }{^die[Сообщение добавлено]}
 ^if(def $seti.notify){$notify[^s2h[$seti.notify]]^notify.foreach[k;v]{
-  ^mail:send[
-  $.from["$env:SERVER_NAME Forum" <$globals.site_admin>]      $.to["$env:SERVER_NAME Forum supervisor" <$k>]
-    $.subject[Новое сообщение в форуме]    $.charset[$globals.mailcharset]
+  ^mailsend[
+  $.from["$env:SERVER_NAME Forum" <$MAIN:globals.site_admin>]      $.to["$env:SERVER_NAME Forum supervisor" <$k>]
+    $.subject[Новое сообщение в форуме]    $.charset[$MAIN:globals.mailcharset]
     $.text[В форум поступило сообщение от $newpost.author
-http://${env:SERVER_NAME}/$form:subst_url
+http://${env:SERVER_NAME}$form:subst_url
 
 $newpost.title
 $newpost.content
@@ -262,6 +266,7 @@ $newpost.content
 <input type=hidden name="postid" value="$message.postid">
 <input type=hidden name="fid" value="$message.fid">
 <input type=hidden name="subst_url" value="$request:uri">
+<input type=hidden name="seti_src" value="$MAIN:document.sect_key">
 ^if(!def $form:fdisplay){* Заголовок сообщения<br>
 <input type=text size=60 name="title" value="$message.title"><br>}
 * Ваше имя<br>
@@ -269,6 +274,7 @@ $newpost.content
 Ваш e-mail (будет защищен от спама^; может быть использован для дальнейшей связи с Вами):<br>
 <input type=text size=30 name="email" value="$message.email">
 ^if(!def $form:fdisplay){<input type=checkbox name=iwantcomment value="yes">уведомить меня об ответе}<br>
+^if(!def $form:fdisplay && $MAIN:forum_onedit is junction){^forum_onedit[]}
 Текст сообщения: <br>
 ^if($mode eq spec_ans){^carea[]}{<textarea name=content cols=50 rows=10>^if(def $form:content && !def $message.content){$form:content}$message.content</textarea>}
 ^fcapshow[]

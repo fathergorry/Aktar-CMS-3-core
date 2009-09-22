@@ -41,7 +41,7 @@ $document.content[]
 <b class="newsb">$new.postdate</b><br>
 <span class=new>^icontent[^new.content.replace[$rep];$new.autoformat]</span>
 <p>
-^try{^comments[$new.id]}{^blad[]}
+^try{^comments[$new.id]}{^blad[huinia]}
 }
 @icontent[text;auto][pc]
 $pc[^try{^process{^untaint[as-is]{$text}}}{$exception.handled(1)^if(^is_j[]){ошибка в данных}}]

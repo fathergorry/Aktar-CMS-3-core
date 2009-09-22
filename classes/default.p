@@ -116,6 +116,8 @@ $result[^if(def $a){$a}{$b}]
 @md5[str][tmp]
 $tmp[^math:md5[$str]]$result[^tmp.lower[]]
 
+@redirect0[url;code;time;msg]
+
 @redirect[url;code;time;msg]
 $response:content-type[$.value[text/html]$.charset[$response:charset]]
 #под виндой 301 глючит
@@ -460,14 +462,14 @@ $allowed_modules[^s2h[$allowed_modules]]
 		^if(def $set.notify){$.notify[$set.notify]}
 		$.rpp[^if(def $form:showallcomments){100;5}]
 	]
-}{
+}{ 
 	^connect[$scs]{
 		$etc(^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$set.fid'})
 	}
 	^if($set.asint){
 		$result($etc)
 	}{
-		$result[<a href="$request:uri^if(^request:uri.pos[?]>4){&;?}showallcomments=1" class="comments">Комментариев: $etc</a>]
+		$result[<a href="$request:uri^if(^request:uri.pos[?]>0){&;?}showallcomments=1" class="comments">Комментариев: $etc</a>]
 	}
 }
 
@@ -635,7 +637,7 @@ $usercando[^s2h[$user.rig $user.group_rig]] $userid($user.id) $username[$user.na
   ^sessions.delete[$sid] $sid[^math:uid64[]]
 }
 ^try{$sessions.$sid[$.value[$user.id]$.expires(^ses_exp[])]
-$cookie:aks[$.value[$sid] $.expires(^globals.sessiontime.int(90))]
+$cookie:aks[$.value[$sid] $.expires(^globals.sessiontime.int(90))] 
 }{$exception.handled(1)^die[^lang[^untaint[html]{$exception.comment} $exception.file^(${exception.lineno}:$exception.colno^)]] ^die[Если вас выбросило, зайдите снова и отключите обновление сессий в настройках.]}
 @ses_exp[]
 ^if(^hasrig[$globals.sessionlimit8]){$result(1/3)}{$result($globals.sessiontime)}
@@ -742,9 +744,7 @@ $exception.handled(0)
 $sub[^file:justname[$sub]]
 ^try{
 ^use[^modpath[${sub}.p]]
-$set[^sub_hSet[$set]]
-$set[^apply_globalsub[$set;$sub]]
-$b[$$sub] $result[^b[$set]]
+$b[$$sub] $result[^self.[$sub][^sets_collector[$sub;$set]]]
 }{^if(def $form:p){$exception.handled(1)^die[^lang[461]]}}
 #Создает хэш данных подпрограммы из стандартной==строки,, или таблицы
 @sub_hSet[set]
@@ -753,6 +753,9 @@ $b[$$sub] $result[^b[$set]]
   ^set.menu{$sp[$set.param]$set1.$sp[$set.value]} $set[$set1]
 }
 $result[$set]
+@sets_collector[sub;set]
+$set[^sub_hSet[$set]]
+$result[^apply_globalsub[$set;$sub]]
 #Применяет глобальные настройки к подпрограмме
 @modpath[mod]
 ^if($system_modules is hash){;
