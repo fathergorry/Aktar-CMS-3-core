@@ -83,7 +83,7 @@ $iii[^iii.select(^list0.locate[tname;$iii.tab])]
 </div>
 <a href="$uri?reinstall=1" onClick="return confirm('Are you sure you want to reinstall this site?')">Reinstall site</a>
 ^if(def $form:reinstall && def ^cando[]){
-	^try{^file:delete[/login/install/.htaccess]}{^blad[]}
+	^try{^file:delete[/login/install/.htaccess]}{^blad[gdeeto]}
 	^redirect[/login/install/^rn[?]]
 }
 @backup[][alltables;bkp;bkptbl]

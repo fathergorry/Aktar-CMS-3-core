@@ -13,7 +13,7 @@ $pic_ext[^s2h[gif jpg jpeg png]]
 	^if(^globals.nodepicsizex.int(0)){^imgresize[/my/img/node_pics/$pcname;$globals.nodepicsizex]}
 }{^die[$form:picture.name  ^lang[412]]}}{
 	^if(def $form:delpic){ ^updpict1[]
-	^try{^file:delete[/my/img/node_pics/$document.picture]}{$exception.handled(1)}}
+	^try{^file:delete[/my/img/node_pics/$document.picture]}{^blad[gdeeto]}}
 }
 @updpict1[arg]
 ^void:sql{UPDATE ^dtp[sections] SET picture = '$arg' WHERE sect_key = '$document.sect_key'} $document.picture[$arg]
@@ -44,7 +44,7 @@ $isext[^s2h[html shtml; ]]
 ^if(def $form:module){$sef.module_settings[^mod_set_compact[^file:justname[$form:module]]]}
 $stf.rpermission[ ^stf.rpermission.trim[both; ] ]$stf.epermission[ ^stf.epermission.trim[both; ] ]
 
-^try{^file:delete[/cache/www/^md5[$form:p]]}{$exception.handled(1)}
+^try{^file:delete[/cache/www/^saveable[$form:p]]}{^blad[gdeeto]}
 
 ^updn[structure;$stf]
 ^updn[sections;$sef]

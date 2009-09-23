@@ -64,7 +64,7 @@ GROUP BY n.id ORDER BY n.postdate DESC}[^if(!def $seti.nopages){^pp.q[limits]}]]
 ^news.menu{
   <h3>$news.title </h3>
   ^dmy[$news.postdate]
-  (<a href="^default[$seti.more;$uri]?displaynew=$news.id&akcomm=open#comf">^if(^news.comments.int(0)){комментариев: $news.comments}{оставить комментарий}</a>)
+  (<a href="^default[$seti.more;$uri]?displaynew=$news.id&showallcomments=1#comf">^if(^news.comments.int(0)){комментариев: $news.comments}{оставить комментарий}</a>)
   ^if(^is_j[]){<input type=checkbox name=dd value="$news.id">удалить <a href="$uri?displaynew=$news.id">редактировать</a> }
   <br>  <span class="new"> ^content_in_new[$news.content;$news.autoformat]</span>
 

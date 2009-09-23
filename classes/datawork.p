@@ -220,7 +220,9 @@ $conditions[$$primary_key($last_insert)]
 		$fdf[del_${instance_name}_$instance.column]
 		^if(!def $datav.[$instance.column]){
 			^if(def $form:$fdf){
-				^try{^file:delete[^string:sql{SELECT $instance.column FROM ^dtp[$instance_name] WHERE ^parse_cond[$conditions]}]}{}
+				^try{
+					^file:delete[^string:sql{SELECT $instance.column FROM ^dtp[$instance_name] WHERE ^parse_cond[$conditions]}]
+				}{^blad[gdeeto]}
 			}{^datav.delete[$instance.column]}
 		}
 	}

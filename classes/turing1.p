@@ -63,7 +63,7 @@ $tmp(0)
 
 #удаляет пользовательский ключ
 @clear_userkey[]
-^try{^file:delete[/cache/captcha/${cookie:captchaid}.gif]}{$exception.handled(1)}
+^try{^file:delete[/cache/captcha/${cookie:captchaid}.gif]}{^blad[gdeeto]}
 $cookie:captchaid[]
 
 @rnd[num]

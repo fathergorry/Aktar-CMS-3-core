@@ -34,7 +34,7 @@ $check[$c] ^if(!def $usercando){$usercando[^hash::create[]]}
 $g[$globals.debug_load_msg]^if($g eq all || $g eq $process){$v[$status:rusage]^msg[$v.utime/$v.stime sec, $v.maxrss/$status:memory.used kb at "$msg"]}
 @delcache[url][curl]
 $curl[^saveable[^default[$url;$MAIN:uri]]]
-^try{^file:delete[/cache/www/$curl]}{$exception.handled(1)}
+^try{^file:delete[/cache/www/$curl]}{^blad[gdeeto]}
 
 
 @hasrig[c][check]
@@ -59,7 +59,34 @@ $tmp[^expand[$params;=;&]]
 		^ff.delete[$tmp.param]
 	}
 }
-$result[$qfile?^ff.foreach[k;v]{$k=$v}[&] ]
+$result[$qfile?^ff.foreach[k;v]{$k=$v}[&]]
+
+
+@ifform[set][cond;rep1;rep2;cond_ok]
+$cond[$set.cond]
+$rep1[^table::create{from	to
+&(	hereand123^[^$form:
+& (	hereand123^[^$form:
+|(	hereor123^[^$form:
+| (	hereor123^[^$form:}]
+$rep2[^table::create{from	to
+^^	^^^^
+!=	 ne 
+=	 eq 
+|	 || ^$form:
+&	 && ^$form:
+(	(^$form:
+hereand123^[	&& (
+hereor123^[	|| (}]
+$cond[^cond.replace[$rep1]]
+^try{
+$cond_ok(  
+	^process0{
+		^^if( ^if(^cond.pos[(]==0){;^$form:}^cond.replace[$rep2] ){1}{0}
+	}
+)
+	^if( $cond_ok){$set.text}{$set.falsetext}
+}{^blad[huinia]}
 
 @fdhash[vn;has][tmp]
 ^if(!def $caller.$vn){$caller.$vn[^if(def $has){$has;^hash::create[]}]}
@@ -162,13 +189,18 @@ $result[$tree]
 
 
 @wisetrim[str;len;match][locals]
+^if(^str.length[]>$len){
+
 ^if(def $match){$str[^str.match[(<[^^>])([^^>]*>|^$)][ig]{}]}
 $str1[^str.left($len)]
 $str2[^str.mid($len;23)]
 $sadd[]
 ^for[i](0;23){$tmp[^str2.mid($i;1)]^if($tmp eq " "){^break[]}{$sadd[${sadd}$tmp]}}
-$result[${str1}$sadd]
+$preresult[${str1}$sadd]
+^if(^preresult.length[]<^str.length[]){$multipoint[...]}
+$result[${preresult}$multipoint]
 
+}{$result[$str]}
 @sitemap[set;d][eye;pic]
 ^if($set is hash){}{$set[^hash::create[]]}^if(!def $set.path){$set.path[$uri]} $set.path[^set.path.trim[end;/]/]
 ^connect[$scs]{
@@ -410,6 +442,27 @@ $extxt[@blad-> $caller.exception.type $caller.exception.source <br>^untaint[html
 	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
 }}
 
+@comments[set;etc]
+^if($set is hash){;$set[$.fid[$set]]}
+^if(!def $set.fid || $set.fid eq hide){$set.fid[^MAIN:uri.right(31)]}
+^if(def $set.reveal || def $form:showallcomments){
+	^use[/login/modules/forum.p]
+	^forum[
+		$.fid[$set.fid]
+		^if(def $set.notify){$.notify[$set.notify]}
+		$.rpp[^if(def $form:showallcomments){100;5}]
+	]
+}{ 
+	^connect[$scs]{
+		$etc(^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$set.fid'})
+	}
+	^if($set.asint){
+		$result($etc)
+	}{
+		$result[<a href="^qbuild[showallcomments=1]" class="comments">Комментариев: $etc</a>]
+	}
+}
+
 #########################################
 
 
@@ -449,29 +502,8 @@ $mmodules[^file:list[/my/autorun]]
  ^use[/my/autorun/$mmodules.name]
  ^try{$allowed_modules[$allowed_modules ^allowed[]]}{$exception.handled(1)}
 }
-$allowed_modules[$allowed_modules myrecords comments var correctme email special program sitemap notlogin islogin translit nest redirect]
+$allowed_modules[$allowed_modules myrecords ifform comments var correctme email special program sitemap notlogin islogin translit nest redirect]
 $allowed_modules[^s2h[$allowed_modules]]
-
-@comments[set;etc]
-^if($set is hash){;$set[$.fid[$set]]}
-^if(!def $set.fid || $set.fid eq hide){$set.fid[^MAIN:uri.right(31)]}
-^if(def $set.reveal || def $form:showallcomments){
-	^use[/login/modules/forum.p]
-	^forum[
-		$.fid[$set.fid]
-		^if(def $set.notify){$.notify[$set.notify]}
-		$.rpp[^if(def $form:showallcomments){100;5}]
-	]
-}{ 
-	^connect[$scs]{
-		$etc(^int:sql{SELECT COUNT(*) FROM ^dtp[forum] WHERE fid LIKE '$set.fid'})
-	}
-	^if($set.asint){
-		$result($etc)
-	}{
-		$result[<a href="$request:uri^if(^request:uri.pos[?]>0){&;?}showallcomments=1" class="comments">Комментариев: $etc</a>]
-	}
-}
 
 
 @get_header[]

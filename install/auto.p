@@ -36,6 +36,9 @@ dbs/forum.txt
 dbs/ans.txt
 dbs/rating.txt
 dbs/usergroups.txt
+dbs/useroptions.txt
+dbs/gallery.txt
+dbs/mails.txt
 .htaccess
 ;obligate]
 
