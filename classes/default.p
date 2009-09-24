@@ -826,7 +826,10 @@ $process_body(1)
 @ihavenotime[][d3;mytime]
 $mytime(^globals.timeout.double[]) ^if(def $usercando.deity){^mytime.mul(8)}
 $d3[^date::now[]]
-^if(^eval(^d3.unix-timestamp[] - ^now.unix-timestamp[]) > $mytime){^throw[parser.interrupted;^lang[462]]}
+^if(^eval(^d3.unix-timestamp[] - ^now.unix-timestamp[]) > $mytime){
+	^throw[parser.interrupted;^lang[462]]
+#	^die[^d3.unix-timestamp[] - ^now.unix-timestamp[] secs]
+}
 
 @program[unuseful_data;d]
 $module_already_executed[y]

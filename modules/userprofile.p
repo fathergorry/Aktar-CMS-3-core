@@ -251,6 +251,7 @@ $result[${p}^math:random(99)]
 <input type="password" name="users_password"><br>
 ^if($upaction eq modify){Новый пароль}{Повторите пароль}<br>
 <input type="password" name="users_password_confirm"><p>
+^if($document.module eq "akbd.p"){$result[]}
 
 @check_password[p][pc] notice that in 'register' there is entered string, in 'modify' - MD5
 $pc[$form:users_password_confirm] $result[$p]
@@ -275,3 +276,4 @@ $pc[$form:users_password_confirm] $result[$p]
 		^msg[Пароль не был изменен]
 	}
 }
+^if(!def $result){^throw[ignore;;Пароль не должен быть пустым.]}

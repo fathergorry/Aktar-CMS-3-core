@@ -59,7 +59,7 @@ function rate(objId, obj, color, caller){
 	var marks = eval(obj);
 	var c="";
 	for (var i in marks){c+='<a href="javascript:void(0)" onClick="rateme(\''+objId+'\','+i+','+color+')">'+marks[i][color]+'</a><br/>'};
-	$("#rateBox").html(c);
+	$("#rateBox").css("z-index", "1000").html(c);
 	PDdialog(caller, 1, '#rateBox');
 	return false;
 }
@@ -77,7 +77,12 @@ function rateme(objId, markId, color){
 }
 
 function userbox(caller, id, wintype){
-		openModal('Отправить сообщение пользователю', 
+	if(wintype == "pmsend")
+	wintitle = "Отправить сообщение пользователю";
+	else if(wintype == "userinfo"){
+	wintitle = "Информация о пользователе";
+	}
+		openModal(wintitle, 
 		'<span id="userboxResult" />', caller)
 		$("#userboxResult").html('<img src="/login/img/progress_dark.gif">');
 		$.ajax({

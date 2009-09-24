@@ -57,7 +57,7 @@ $rest[^adbsearch:defquery[$qqq;$tab]]
 
 $result[$path]
 ^if($adtabs is table){;$adtabs[^table::load[/my/config/adbase_tables.txt]]}
-^if(^adtabs.locate[adt;$table] && def $adtabs.uri){
+^if(^adtabs.locate[adt;$table] && def $adtabs.uri){ 
 	^if(^path.pos[?]>=0){
 		$tmp[^path.split[?;lh]]
 		^if(^tmp.0.length[] <= 1){$result[$adtabs.uri?$tmp.1]}{$result[$path]}

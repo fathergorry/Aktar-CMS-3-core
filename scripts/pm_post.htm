@@ -1,17 +1,14 @@
 @main[]
 #^sleep(6)
 ^manage_session[]
-^if(def $user.id){
+
 	^connect[$scs]{^m2[]}
-}{
-	Не авторизован.
-}
 @m2[]
 ^switch[$form:pmaction]{
-	^case[movemsg]{^movemsg[$form:msgid;$form:fld;$user.id]}
-	^case[pmsend]{^userinfo[]^pmsend[]}
+	^case[movemsg]{^if(def $user.id){^movemsg[$form:msgid;$form:fld;$user.id]}}
+	^case[pmsend]{^userinfo[$form:uid;pm]^if(def $usr && def $user.id){^pmsend[]}{Пользователь не существует.}}
 	^case[DEFAULT]{
-		^if(def $form:uid){^userinfo[$form:uid];Что Вы хотели? $request:uri}
+		^if(def $form:uid){^userinfo[$form:uid;about];Что Вы хотели? $request:uri}
 	}
 }
 
@@ -37,9 +34,19 @@ $pm[^datawork::create[privmsg;;title content recipe;
 <br><input type=submit class=sbm onClick="sendPM('pmform')^; return false" value="Отправить"/>
 </form>
 }
-@userinfo[id][locals]
+@userinfo[id;type][rig]
 ^connect[$scs]{$usr[^table::sql{SELECT * FROM ^dtp[users] WHERE id = '$id'}]}
-$usr.lastname $usr.name $usr.rig
+^switch[$type]{
+	^case[pm]{Получатель: $usr.lastname $usr.name<p>}
+	^case[DEFAULT]{
+		$usr.lastname $usr.name ($rig[^s2h[$usr.rig]]^if(def $rig.user){пользователь;специалист})<br>
+		<a href="/user?action=show&id=$usr.id">Смотреть профиль</a>
+		^use[rating.p]
+		<br>Голосовать за ^if(def $rig.user){пользователя;специалиста}: ^rating:box[user$usr.id]
+
+	}
+}
+
 @movemsg[msg;tofld;user]
 ^void:sql{UPDATE ^dtp[privmsg] SET folder = '$tofld' WHERE id = '$msg' AND recipe = '$user'}
 Перемещено.

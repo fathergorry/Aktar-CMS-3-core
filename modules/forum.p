@@ -1,4 +1,5 @@
 @version[]
+2009-09-23	Голосования и личка внутри поста
 2009-05-29	Рейтинги и внутриклассность
 2008-02-27	Добавлена поддержка премодерации и убрана каптча для зарегистрированных
 
@@ -71,19 +72,26 @@ $result[$request:uri^if(^request:uri.pos[?]>0){&;?}]
 
 $message[^getmessage[$id]]
 ^if(def $message.content){$message.content[^message.content.replace[^unbrul[]]]}
-$answers[^table::sql{SELECT * FROM ^dtp[ans] WHERE id = '$id'}]
+$answers[^table::sql{SELECT a.*, u.rig FROM ^dtp[ans] a 
+LEFT JOIN ^dtp[users] u ON a.userid = u.id
+WHERE a.id = '$id'}]
 ^if($MAIN:message_design is junction){^message_design[]}{
  $MAIN:document.title[$message.title - $message.author - $MAIN:document.title]
 ^if(def $seti.asmain){
 ^MAIN:crumbs.append{$MAIN:uri?fdisplay=$form:fdisplay	^wisetrim[$message.title;16]}
  $MAIN:document.pagetitle[^default[$message.title;Сообщение] - $MAIN:document.pagetitle] $MAIN:document.keywords[$message.title] $MAIN:document.content[]
 }{<h2>^default[$message.title;Сообщение]</h2>}
-  Пишет <b>$message.author</b> (^dmy[$message.mydate]) <br>
+^use[rating.p]
+^rating:addrange[f$message.id
+^answers.menu{a$answers.ansid}[
+]]
+  Пишет <span class="$message.rig" onClick="userbox(this, $message.userid, 'userinfo')"></span><b>$message.author</b> (^dmy[$message.mydate])^ratingbox[f$message.id] <br>
   ^process_content[$message.content]
   ^if($MAIN:forum_onshow is junction){^forum_onshow[]}
   <h3>Ответы на «${message.title}»</h3>
+  
   ^answers.menu{<span id="forumbox$answers.ansid"><hr size="1">
-    ^if(def $answers.title){<b>$answers.title</b> - }$answers.author,   ^dmy[$answers.mydate]<br>
+    ^if(def $answers.title){<b>$answers.title</b> - }<span onClick="userbox(this, $answers.userid, 'userinfo')" class="$answers.rig"></span>$answers.author,   ^dmy[$answers.mydate]^ratingbox[a$answers.ansid]<br>
     
     ^process_content[$answers.content]
     <br>
@@ -109,6 +117,7 @@ $ans_message.whois[^if(^moder[]){spec}{user}]
 $ans_message.id[^form:fdisplay.int(-1)]
 $ans_message.content[^utf2win[$ans_message.content]]
 $ans_message.author[^utf2win[$ans_message.author]]
+$ans_message.userid($MAIN:user.id)
 ^fcapchk[]
 ^if(!def $form:author){$forum_err(1)^die[Необходимо заполнить Ваше имя]}
 ^if(def ^string:sql{SELECT postid FROM ^dtp[ans] WHERE postid = '$form:postid'}[$.default{} $.limit(1)]){^die[Вы уже отправили это сообщение]$forum_err(1)}
@@ -118,7 +127,7 @@ $author_want[^table::sql{SELECT email, author, iwantcomment FROM ^dtp[forum] WHE
 
 
 <!-- ^ans1.insertInstance[$ans_message] ^msg[Ответ добавлен]-->
-^delcache[]
+^delcache[$form:subst_url]
 #^redirect[^urido[]fdisplay=$form:fdisplay^rn[&]]
 ^void:sql{UPDATE ^dtp[forum] SET answers = answers + 1 WHERE id = '^form:fdisplay.int(-1)'}
 
@@ -143,7 +152,9 @@ $.charset[$response:charset]
 }
 
 @getmessage[id][tmp]
-$tmp[^table::sql{SELECT * FROM ^dtp[forum] WHERE id = '$id'}]
+$tmp[^table::sql{SELECT f.*, u.rig FROM ^dtp[forum] f 
+LEFT JOIN ^dtp[users] u ON f.userid = u.id
+WHERE f.id = '$id'}]
 $result[$tmp.fields]
 
 
@@ -177,7 +188,7 @@ $fans[^table::sql{SELECT *, LEFT(content,80) AS content FROM ^dtp[ans] WHERE id 
 ^forum.sort(^rating:box[f$forum.id;-1])[desc]
 }
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
-^if(^forum.userid.int(0) || 1){<span class="$forum.rig" onClick="userbox(this, $forum.userid, 'pmsend')"></span>}
+^if(^forum.userid.int(0) || 1){<span class="$forum.rig" onClick="userbox(this, $forum.userid, 'userinfo')"></span>}
 <a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
 ^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}{<a href="/user/$forum.userid">}
 $forum.author</a>,
@@ -227,7 +238,7 @@ $newpost.custom1[$form:custom1]
 ^fcapchk[]
 ^if(!$forum_err){
   $msgId(^forum1.insertInstance[$newpost])
-  ^delcache[]
+  ^delcache[$form:subst_url]
 ^if(!$ajaxcalled){
   ^redirect[^urido[]fdisplay=$msgId^rn[&]&msg=Ваша запись добавлена.^if(def $seti.premod){Она появится после проверки модератором.}&noform=true]]
 }{^die[Сообщение добавлено]}
@@ -265,13 +276,13 @@ $newpost.content
 <input type=hidden name="id" value="$message.id">
 <input type=hidden name="postid" value="$message.postid">
 <input type=hidden name="fid" value="$message.fid">
-<input type=hidden name="subst_url" value="$request:uri">
+<input type=hidden name="subst_url" value="$MAIN:uri">
 <input type=hidden name="seti_src" value="$MAIN:document.sect_key">
 ^if(!def $form:fdisplay){* Заголовок сообщения<br>
 <input type=text size=60 name="title" value="$message.title"><br>}
-* Ваше имя<br>
-<input type=text size=30 name="author" value="^if(def $form:author && !def $message.author){$form:author}$message.author"><br>
-Ваш e-mail (будет защищен от спама^; может быть использован для дальнейшей связи с Вами):<br>
+* Ваше имя <span id="author_name"></span><br>
+<input type=text size=30 name="author" value="^if(def $form:author && !def $message.author){$form:author}$message.author"><span></span><br>
+Ваш e-mail (будет скрыт):<br>
 <input type=text size=30 name="email" value="$message.email">
 ^if(!def $form:fdisplay){<input type=checkbox name=iwantcomment value="yes">уведомить меня об ответе}<br>
 ^if(!def $form:fdisplay && $MAIN:forum_onedit is junction){^forum_onedit[]}
@@ -284,11 +295,5 @@ $newpost.content
 ^if(def $seti.premod && !def $form:fdisplay){<br>Ваше сообщение появится после проверки модератором}
 </form>
 </div>
-@carea[]
-<script language="JavaScript" src="/login/scripts/ss.js">
-</script>
- ^include[/login/_controls.html]
-<textarea cols=50 rows=10 name="content" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">^taint[as-is][^content_foredit[$exmp.content]]</textarea><a href="javascript:emoticon(':more:')">разбивка</a>
-
 @moder[]
 ^if(def ^cando[$epermission] || (def ^cando[$rpermission] && def ^cando[$.moder(1)])){$result(1)}{$result(0)}

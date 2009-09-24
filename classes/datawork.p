@@ -88,6 +88,7 @@ $result[$d] ^process[$datawork:CLASS]{^$column_name[$k]^$instance_name[$instance
 				$result[^if($d is file){;$d}]
 				$exception.handled(1)
 			}
+			^if($exception.type eq ignore){$keylist.$k.error(2)^blad[]}
 		}
 	}
 }
@@ -159,7 +160,7 @@ $d[$div.div]
   $ic[$instance.column] $ii[${instance_name}_$ic] 
   $val[^proc[$datatable.$ic;$instance.onedit;$instance.column]]
   $lg[^if(def $required.$ic){*}^untaint{^lang[$instance.comment]}] 
-  ^if($keylist.$ic.errtype eq check || $keylist.$ic.error){$lg[<span class="error">$lg  <b>^untaint{$keylist.$ic.comment}</b></span>]}
+  ^if($keylist.$ic.errtype eq check || $keylist.$ic.error == 1){$lg[<span class="error">$lg  <b>^untaint{$keylist.$ic.comment}</b></span>]}
 <span id="$ii" class="formpiece">
 ^switch[$instance.form_handler]{
   ^case[text]{${lg}$d<input type="text" class="dw_text $instance.special_handler" name="$ii" style="$div.tstyle" value="$val" /> $d}
@@ -227,6 +228,7 @@ $conditions[$$primary_key($last_insert)]
 		}
 	}
 }
+^keylist.foreach[k;v]{^if($keylist.$k.error == 2){^datav.delete[$k]}}
 ^void:sql{UPDATE $tbl_name SET ^datav.foreach[k;v]{$k = '^taint[sql][$v]'}[, ] 
 WHERE ^parse_cond[$conditions]
 }
