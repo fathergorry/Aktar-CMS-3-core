@@ -323,7 +323,7 @@ id	rus	en	exist
 321	Какие из этих таблиц вы хотите резервно сохранить?	Which tables you want to <b>back-up</b>?	
 322	Резервные копии можно также отправить по e-mail:	These back-ups can also be emailed (enter email)	
 323	Какие из этих таблиц вы хотите востановить?	Which tables you want to restore?	
-324	Какие индексы нужно восстановить?	Which indexes you want to (re-)create after restore?	
+324	Какие <a href=/login/tableed.htm?ttype=file&table=/my/config/indexes.txt>индексы</a> нужно восстановить?	Which <a href=/login/tableed.htm?ttype=file&table=/my/config/indexes.txt>indexes</a> you want to (re-)create after restore?	
 325	Добавить картинки, загруженные с полным доступом	Include pictures added with full access	
 326	Добавить файлы	Include files	
 327	и	and	

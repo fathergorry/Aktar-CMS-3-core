@@ -7,9 +7,7 @@
 ^if(def $user.id){
 $watchin[^table::load[/my/config/adbase_tables.txt]]
 $watchin[^watchin.select(^watchin.cls.pos[u]>=0)]
-$serep[^table::create{a	b
-action=show	action=edit
-id=0	id=$myt.id}]
+
 ^use[modinfo.p]
 $newad[^modinfo::create[akbd.p]]
 ^watchin.menu{
@@ -20,6 +18,9 @@ $newad[^modinfo::create[akbd.p]]
 }]}
 <h3>$watchin.name</h3>
 	^myt.menu{
+$serep[^table::create{a	b
+action=show	action=edit
+id=0	id=$myt.id}]
 	<a href="^myt.path.replace[$serep]"><img src="/login/img/edit.gif" border=0></a>
 	<a href="^myt.path.match[id=0][ig]{id=$myt.id}">^untaint{$myt.name} $myt.id 
 	^if($myt.moderated ne yes){<img src="/login/img/eye.gif" title="Не модерировано" border=0>}
@@ -57,7 +58,7 @@ $rest[^adbsearch:defquery[$qqq;$tab]]
 
 $result[$path]
 ^if($adtabs is table){;$adtabs[^table::load[/my/config/adbase_tables.txt]]}
-^if(^adtabs.locate[adt;$table] && def $adtabs.uri){ 
+^if(^adtabs.locate[adt;$table] && def $adtabs.uri){
 	^if(^path.pos[?]>=0){
 		$tmp[^path.split[?;lh]]
 		^if(^tmp.0.length[] <= 1){$result[$adtabs.uri?$tmp.1]}{$result[$path]}
@@ -199,16 +200,6 @@ $result[^if($yes ne yes){no;yes}]
 $dd[^date::now[]]
 $result[^dd.sql-string[]]
 
-@savefile[file0;exts;prname;path]
-$result[]
-^if($file0 is file && ^form:id.int(0)){
-	$exts[^s2h[$exts]]$r[^file:justext[$file0.name]]
-	^if(def $exts.$r){
-		$fprname[${prname}_^form:id.int(0).$r]
-		^file0.save[binary;$path/$fprname]
-		$result[$path/$fprname]
-	}{^die[Неверный формат файла "$prname". Допускаются ^exts.foreach[k;v]{$k}[, ]]}
-}
 
 #vt - predefined values as 1-column 'ad' table
 @edit_set[val;vt] #Edit set

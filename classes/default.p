@@ -336,8 +336,9 @@ $result[^table::create{param	value	value2
 @db_fld2showinlist[tab][t] #убрать в adbase
 ^if($dw_$tab is table){;$dw_$tab[^table::load[/my/dbs/${tab}.txt]]}
 $t[$dw_$tab]
+$t[^t.select($t.form_handler eq text || $t.form_handler eq num)]
 $result[
-^t.offset[set](1)
+#^t.offset[set](1)
 $.1[$t.column]
 ^t.offset(1)
 $.2[$t.column]
@@ -386,10 +387,6 @@ $result[^if($auto eq no){$pc}{^pc.replace[^unbrul[]]}]
 @fradio[name;listvalues;checkvalue][vl]
 $vl[^listvalues.split[ ;v]]
 ^vl.menu{<input type=radio name="$name" value="$vl.piece"^if("$vl.piece" eq "^default[$checkvalue;$form:$name]"){ checked}> $vl.piece}
-@defselect[tab;value]
-$tab[^table::create{n	v
-^untaint{$tab}}]
-^tab.menu{<option value="$tab.n"^if($value eq $tab.n){ selected}>^default[$tab.v;$tab.n]</option>}
 
 @is_email[email]
 $result(^if(def $email && ^email.match[^^\w+([.-]?\w+)+\@\w+([.-]?\w+)*\.[a-z]{2,4}^$][i]){1}{0})
@@ -439,7 +436,7 @@ $extxt[@blad-> $caller.exception.type $caller.exception.source <br>^untaint[html
 	^case[pizdec]{^use[/login/install/auto.p]^pizdec[]^die[Случилась по-настоящему критическая ошибка.]^die[$msg]^die[$extxt]}
 	^case[huinia]{$extxt}
 	^case[gdeeto]{^if($caller.exception.type ne "file.missing"){$caller.exception.handled(0)}}
-	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){$extxt}}
+	^case[DEFAULT]{^msg[^default[$msg;$oi]]^if(def ^cando[editor]){admin:$extxt}}
 }}
 
 @comments[set;etc]
@@ -681,13 +678,14 @@ $ftx[^file::load[text;$file]]
 ^process0{^taint[as-is][$ftx.text]}
 
 @unbrul[]
-$result[^table::create{from	to
+^if($unbrul_table0094 is table){;$unbrul_table0094[^table::create{from	to
 </p>^taint[^#0A]	</p>
 r>^taint[^#0A]	r>
 l>^taint[^#0A]	l>
 ^taint[^#0A]^taint[^#0A]	 <p>
 ^taint[^#0A]*	 <li>
-^taint[^#0A]	 <br> }]
+^taint[^#0A]	 <br> }]}
+$result[$unbrul_table0094]
 
 @placeholder[id;comment;settings][k;xec]
 ^if($settings is hash){}{$settings[^hash::create[]]}

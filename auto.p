@@ -72,7 +72,7 @@ $indexes[^table::load[/my/config/indexes.txt]]
 ^connect[$scs]{ $errind[^hash::create[]]
 ^indexes.menu{^if(def $ind.[$indexes.index]){
  ^try{^void:sql{ALTER TABLE ^dtp[$indexes.tab] DROP index $indexes.index}}{$exception.handled(1) $m[$m ${indexes.tab}:$indexes.index]}
- ^try{^void:sql{ALTER TABLE ^dtp[$indexes.tab] ADD FULLTEXT $indexes.index ($indexes.com)}}{$exception.handled(1) $errind.[$indexes.index][1]}
+ ^try{^void:sql{ALTER TABLE ^dtp[$indexes.tab] ADD FULLTEXT $indexes.index ($indexes.com)}}{^blad[huinia] $errind.[$indexes.index][1]}
 }}
 } ^die[Indexes restored with  ^if(^errind._count[] > 0){errors on ^errind.foreach[k;v]{$k}[, $errflg(1)]}{no errors}]
 ^if(def $m){<br>не было этих индексов: $m <br>}

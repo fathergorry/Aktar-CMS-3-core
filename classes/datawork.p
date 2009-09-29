@@ -5,6 +5,30 @@
 2008-07-21	Поддержка сообщений об ошибках, сгенерированных обработчиком
 2008-06-25	Спаны полей
 
+@edit_set0[val;vt]
+^if(def $val){
+$val[^expand[$val;; ]]
+$val[^val.menu{$.[$val.param][1]}]
+}{$val[^hash::create[]]}
+^vt.menu{<input type=checkbox name="_fieldname_" value="$vt.column" ^if(def $val.[$vt.column]){checked}>
+$vt.comment<br>}
+
+@defselect[tab;value]
+$tab[^table::create{n	v
+^untaint{$tab}}]
+^tab.menu{<option value="$tab.n"^if($value eq $tab.n){ selected}>^default[$tab.v;$tab.n]</option>}
+
+@savefile[file0;exts;prname;path]
+$result[]
+^if($file0 is file && ^form:id.int(0)){
+	$exts[^s2h[$exts]]$r[^file:justext[$file0.name]]
+	^if(def $exts.$r){
+		$fprname[${prname}_^form:id.int(0).$r]
+		^file0.save[binary;$path/$fprname]
+		$result[$path/$fprname]
+	}{^die[Неверный формат файла "$prname". Допускаются ^exts.foreach[k;v]{$k}[, ]]}
+}
+
 #заменяет устаревший collection.p (обратной совместимости нет!)
 
 @CLASS
@@ -172,7 +196,7 @@ $d[$div.div]
   ^case[enum]{$lg $d $tmp1[^enum::parse[$instance.sql_type;;$ii]] ^tmp1.form[$val] $d}
   ^case[special]{$lg $d $val $d}
   ^case[special2]{$val}
-  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){^default[$div.nofilemsg;загрузка файла будет доступна после отправки формы]}{^if(def $val){<input type="checkbox" name="del_$ii" value="yes">Удалить}} $d $val $d}
+  ^case[file]{$lg $d<input type="file" name="$ii"^if(!def $datatable){ disabled} /> ^if(!def $datatable){^default[$div.nofilemsg;загрузка файла будет доступна после отправки формы]}{^if(def $val){<a href="$val">смотреть</a> <input type="checkbox" name="del_$ii" value="yes">Удалить}} $d}
   ^case[set]{${lg}${d}^val.replace[^table::create{from	to
 _fieldname_	$ii}] $d}
   ^case[DEFAULT]{^if($div.reveal){${lg}$d <em>$val</em> $d}

@@ -9,7 +9,7 @@
 #modalHeader {margin-top:0px; float:left;}
 
 .dialogbox{border: 1px solid #d08d3c; background:#f7f1e8; 
-padding:3px; position:absolute; display:none;}
+padding:3px; position:absolute; display:none; width:110px;}
 
 .errmsg{display:block; border:1px solid red; font-family:courier new; font-size:16px; color:#FF0000}
 .errmsg1{color:#880000}

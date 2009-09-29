@@ -22,7 +22,7 @@ ratesort	bool	yes	Сортировать сообщения на странице по рейтингу}]
 Права на модерирование: moder
 ^try{
 $inf[^table::sql{SELECT DISTINCT fid , COUNT(fid) AS coun 
-FROM ^dtp[forum] GROUP BY fid ORDER BY coun DESC LIMIT 10}]
+FROM ^dtp[forum] GROUP BY fid ORDER BY coun DESC LIMIT 7}]
 <br> Имеющиеся идентификаторы (непустые): ^inf.menu{$inf.fid ($inf.coun)}[, ].
 }{^blad[huinia]}
 @forum[set]
