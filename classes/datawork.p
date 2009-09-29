@@ -138,7 +138,9 @@ $result[^if(def $datatable){$datatable}{^table::create{^keylist.foreach[k;v]{$k}
 		^if(!def $rkey){
 			$result[^hash::create[]]^die[Hash key for $tbl_name is not defined!]
 		}{
-			$result[^datatable.hash[$rkey][$values][$.distinct(1)]]
+			^if(^datatable.count[] > 1){
+				$result[^datatable.hash[$rkey][$values][$.distinct(1)]]
+			}{$result[$datatable.fields]}
 		}
 	}{
 		$result[$datatable.fields]

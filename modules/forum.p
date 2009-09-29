@@ -18,12 +18,26 @@ specans	string		Права, разрешающие ответ (пустое поле - отвечают все)
 ansbgr	string		Цвет фона для ответов
 norate	bool	yes	Отключить голосования
 ratesort	bool	yes	Сортировать сообщения на странице по рейтингу}]
-@forum_info[set]
+@forum_info[set][inf;allinf;al2]
 Права на модерирование: moder
 ^try{
-$inf[^table::sql{SELECT DISTINCT fid , COUNT(fid) AS coun 
-FROM ^dtp[forum] GROUP BY fid ORDER BY coun DESC LIMIT 7}]
+$inf[^table::sql{SELECT DISTINCT fid , COUNT(fid) AS coun, '' AS title
+FROM ^dtp[forum] GROUP BY fid ORDER BY coun DESC LIMIT 13}]
 <br> Имеющиеся идентификаторы (непустые): ^inf.menu{$inf.fid ($inf.coun)}[, ].
+^if($env:REQUEST_METHOD eq POST){
+	^if(!-f "/my/deriv/forums.txt"){
+		^inf.save[/my/deriv/forums.txt]
+		$allinf[$inf]
+	}{$allinf[^table::load[/my/deriv/forums.txt]]}
+	$ffid[^form:forum_fid.split[ ;lh]]$ffid[$ffid.0]
+	$al2[^allinf.select($allinf.fid eq $ffid)]
+	$allinf[^allinf.select($allinf.fid ne $ffid)]
+	^allinf.append{$ffid	$al2.coun	$document.menutitle}
+	^allinf.sort($allinf.coun)[desc]$allinf[^allinf.select(^allinf.line[] < 15)]
+	^allinf.sort{${allinf.title}$allinf.fid}[asc]
+	^allinf.save[/my/deriv/forums.txt]
+}
+
 }{^blad[huinia]}
 @forum[set]
 
@@ -190,7 +204,7 @@ $fans[^table::sql{SELECT *, LEFT(content,80) AS content FROM ^dtp[ans] WHERE id 
 ^forum.menu{<span id="forumbox$forum.id" class="forumbox">
 ^if(^forum.userid.int(0) || 1){<span class="$forum.rig" onClick="userbox(this, $forum.userid, 'userinfo')"></span>}
 <a href="^urido[]fdisplay=$forum.id"><b>$forum.title</b></a> - 
-^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}{<a href="/user/$forum.userid">}
+^if($forum.userid && ^moder[]){<a href="/login/users.htm?uid=$forum.userid">}
 $forum.author</a>,
 ^ufdate[$forum.mydate] ^ratingbox[f$forum.id]
 ^if(def $forum.content){
@@ -201,6 +215,7 @@ $forum.author</a>,
 	^if(^moder[]){
 	<a class="ajaxhandled" href="/login/modules/forum/moder.htm?a=screen&id=$forum.id&show=^if($forum.visiblity eq yes){off">скрыть;on"><img src="/login/img/eye.gif" border=0>показывать}</a>
 	<a href="/login/modules/forum/moder.htm?a=del&id=$forum.id" class="ajaxhandled" title="Точно удалить это сообщение и все ответы?">удалить</a> 
+	<a class="pmop" href="#" id="move$forum.id" onClick="PDdialog(this, $forum.id, '#fMoveBox')">переместить</a> 
 	}
 $this_ans[^fans.select($fans.id == $forum.id)]
 ^if(^this_ans.count[]>0){
@@ -217,6 +232,11 @@ $this_ans[^fans.select($fans.id == $forum.id)]
 </span>}[<span class="interforum"></span>]
 
 ^pp.listpages[ | ;$.url[^urido[]]$.prescript[Страницы:]] <br><br>
+
+^if(^moder[]){<div id="fMoveBox" style="position:absolute^;display:none^;z-index:9000^;background:#FFDDFF">^try{
+$finfos[^table::load[/my/deriv/forums.txt]]
+^finfos.menu{<a href="#" onClick="moveTopic('$finfos.fid')">^default[$finfos.title;$finfos.fid]</a><br>}
+}{^blad[huinia]}</div>}
 
 @ratingbox[id]
 ^if(!def $seti.norate){^rating:box[$id]}

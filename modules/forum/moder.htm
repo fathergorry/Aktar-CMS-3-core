@@ -27,6 +27,10 @@
 		XurlInit()^;
 		</script>
 	}}
+	^case[movetopic]{^connect[$scs]{
+		^void:sql{UPDATE ^dtp[forum] SET fid = '^taint[sql][$form:fid]' WHERE id = '^form:msgid.int(-1)'}
+		->$form:fid
+	}}
 }}{No permission}
 
 @al[arg]

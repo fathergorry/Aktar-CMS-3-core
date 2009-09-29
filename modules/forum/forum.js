@@ -10,3 +10,15 @@ $("input#forumsubmit").click(function(){
 	});
 	return false;
 })
+
+function moveTopic(fid){
+	$("#toFolder").slideUp("fast");
+		$.ajax({
+		url: "/login/modules/forum/moder.htm",
+		data: "msgid="+PMovingId+"&a=movetopic&fid="+fid,
+		success: function(resp){
+				$("#move"+PMovingId).append(resp);
+			}
+		});
+	return false;
+}
