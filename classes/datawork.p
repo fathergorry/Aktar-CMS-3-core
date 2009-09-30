@@ -14,8 +14,8 @@ $val[^val.menu{$.[$val.param][1]}]
 $vt.comment<br>}
 
 @defselect[tab;value]
-$tab[^table::create{n	v
-^untaint{$tab}}]
+^if($tab is table){;$tab[^table::create{n	v
+^untaint{$tab}}]}
 ^tab.menu{<option value="$tab.n"^if($value eq $tab.n){ selected}>^default[$tab.v;$tab.n]</option>}
 
 @savefile[file0;exts;prname;path]
@@ -149,7 +149,7 @@ $result[^if(def $datatable){$datatable}{^table::create{^keylist.foreach[k;v]{$k}
 	^if(def $datahash){
 		$result[$datahash]
 	}{
-		$result[$keylist]
+		$result[^keylist.foreach[k;v]{$.$k[]}]
 	}
 }
 

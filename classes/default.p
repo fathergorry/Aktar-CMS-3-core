@@ -286,7 +286,7 @@ $pre
 <b>^lang[456]</b>$div
 <a href="/login/update.htm?p=$uri^rn[&]">^lang[210]</a>$div
 ^if($uri ne "/"){<a href=$uri?editcontent=on^rn[&]>^lang[294]</a>$div}
-^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]">^lang[457]</a> $div}
+^if(def ^cando[editor]){<a href="/login/update.htm?add=^cut_end[$uri]^rn[&]&amp^;sect_order=^eval($document.sect_order + 1)">^lang[457]</a> $div}
 <a href="/login/update.htm?add=$uri^rn[&]">^lang[458] &quot^;$document.menutitle&quot^;</a> $div
 ^menu.a.menu{^if(^menu.a.line[]<9){<a href="$menu.a.uri">$menu.a.menutitle</a>}}[$div]
 ^if($menu.b is table){<br><b>^menu.b.menu{$div<a href="$menu.b.uri">$menu.b.menutitle</a>}</b>}
@@ -548,9 +548,9 @@ $SQL.connect-string[$scs]
 ^manage_session[]
 $menu[^hash::create[]]
 ^if(def $path){$str[$path]}{$str[$request:uri] $tbl[^str.split[?;h]] $str[$tbl.0]}
-$str[^str.split[,;lh]] $argument2[^str.1.int(0)] $str[$str.0]
+$str[^str.split[,;lh]] $argument2[$str.1] $str[$str.0]
 $uri[^str.trim[end;/]] 
-$argument[^str.split[/;rh]]$MAIN:argument(^argument.0.int(0))
+$argument[^str.split[/;rh]]$MAIN:argument(^argument.0.double(0)) 
 ^if($MAIN:argument){$uri[^uri.trim[end;0123456789/]]^try{^cache(0);^blad[]}}
 $iffile[^str.split[.;h]] $str[$iffile.1] ^if(def $uri){}{$uri[/]} 
 ^create_document[$uri]
